@@ -1,6 +1,6 @@
 @extends('layouts.login')
 
-@section('title ')
+@section('title')
     <title>Aplikasi BOP KORKOT</title>    
 @endsection
 
