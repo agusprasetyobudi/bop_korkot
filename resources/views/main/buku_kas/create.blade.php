@@ -18,13 +18,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Tambah Data Buku Bank</h1>
+                    <h1>Tambah Data Buku Kas</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">Buku Kas</a></li>
-                        <li class="breadcrumb-item active">Tambah Data Buku Bank</li>
+                        <li class="breadcrumb-item active">Tambah Data Buku Kas</li>
                     </ol>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="card">
                     <form class="search-forms">
                         <div class="card-header">
-                            <h5>Form Buku Bank</h5> 
+                            <h5>Form Buku Kas</h5> 
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -146,16 +146,16 @@
             $('.search-data').click(()=>{
                 let bulan = $('.bulan-korkot').children("option:selected").val(),
                 tahun = $('.tahun-korkot').children("option:selected").val(),
-                pushed = {
+                pushed = { 
                     id_user: {{ Auth::user()->id}},
                     kota_id: 1,
                     bulan : bulan,
                     tahun: tahun
                 }
-                // console.log(data)
+                console.log(pushed) 
                 $.ajax({
                     type: 'POST',
-                    url:"{!! route('bukuBankStore') !!}",
+                    url:"{!! route('bukuKasStore') !!}",
                     headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
                     dataType: 'json',
                     data : pushed

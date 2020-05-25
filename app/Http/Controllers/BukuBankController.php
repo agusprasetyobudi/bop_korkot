@@ -34,7 +34,9 @@ class BukuBankController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->ajax()){
+            dd($request->all());
+        }
     }
 
     /**

@@ -35,6 +35,11 @@ Route::group(['prefix'=>'buku-bank','middleware' => ['auth']], function () {
     Route::get('create','BukuBankController@create')->name('bukuBankCreate');
     Route::post('create','BukuBankController@store')->name('bukuBankStore');
 });
+Route::group(['prefix' => 'kontrak','middleware' => ['auth']], function () {
+    Route::get('/', 'KontrakController@index')->name('KontrakHome');
+    Route::get('create', 'KontrakController@create')->name('KontrakCreate');
+    Route::post('create', 'KontrakController@store')->name('KontrakStore');
+});
 Route::group(['prefix' => 'firm'], function () {
     Route::get('/', 'FirmController@index')->name('firmView');
     Route::get('/create', 'FirmController@create')->name('firmCreateView');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BukuKasController extends Controller
+class KontrakController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class BukuKasController extends Controller
     public function index()
     {
         //
-        return view('main.buku_kas.index');
+        return view('main.kontrak.index');
     }
 
     /**
@@ -24,16 +24,10 @@ class BukuKasController extends Controller
      */
     public function create()
     {
-        return view('main/buku_kas.create');
+        //
+        return view('main.kontrak.create');
     }
 
-    /**
-     * Get Data on API
-     */
-    public function GetDataAPI(Request $request)
-    {
-        dd($request->all());
-    }
     /**
      * Store a newly created resource in storage.
      *
@@ -43,9 +37,6 @@ class BukuKasController extends Controller
     public function store(Request $request)
     {
         //
-        if($request->ajax()){
-            dd($request->all());
-        }
     }
 
     /**

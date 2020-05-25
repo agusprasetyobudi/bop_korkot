@@ -77,7 +77,7 @@
           </li>
           <!-- Kontrak -->
           <li class="nav-item">
-            <a href="#" class="nav-link @if(Request::segment(1)=='kontrak') active @endif">
+            <a href="{!! route('KontrakHome') !!}" class="nav-link @if(Request::segment(1)=='kontrak') active @endif">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
                 Kontrak 

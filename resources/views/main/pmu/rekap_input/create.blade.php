@@ -30,8 +30,7 @@
     </section>
 @endsection
 
-@section('body')
-
+@section('body') 
 @endsection
 
 @section('addtionalJS')
