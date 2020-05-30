@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Master;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PenggunaController extends Controller
+class JabatanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,8 @@ class PenggunaController extends Controller
      */
     public function index()
     {
-        return view('main.pengguna.pengguna.index');
+        //
+        return view('main.data_master.jabatan.index');
     }
 
     /**
@@ -23,7 +25,7 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        return view('main.pengguna.pengguna.create'); 
+        return view('main.data_master.jabatan.create');
     }
 
     /**

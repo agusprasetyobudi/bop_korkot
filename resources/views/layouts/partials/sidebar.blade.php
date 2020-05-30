@@ -125,25 +125,25 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='firm-transfer') active @endif">
+                <a href="{!! route('firmTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='firm-transfer') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Firm Transfer</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='penerimaan-transfer') active @endif">
+                <a href="{!! route('penerimaTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='penerimaan-transfer') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Penerimaan Transfer</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='pengeluaran-transfer') active @endif">
+                <a href="{!! route('pengeluaranTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='pengeluaran-transfer') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Pengeluaran Transfer</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='buku-bank') active @endif">
+                <a href="{!! route('bukuBankReporting') !!}" class="nav-link @if(Request::segment(2)=='buku-bank') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Buku Bank</p>
                 </a>
@@ -161,43 +161,43 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='provinsi') active @endif">
+                <a href="{!! route('provinsiView') !!}" class="nav-link @if(Request::segment(2)=='provinsi') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Provinsi</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='kota') active @endif">
+                <a href="{!! route('KabupatenKotaView') !!}" class="nav-link @if(Request::segment(2)=='kabupaten') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Kabupaten / Kota</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='osp') active @endif">
+                <a href="{!! route('OSPView') !!}" class="nav-link @if(Request::segment(2)=='osp') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>OSP</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='kantor') active @endif">
+                <a href="{!! route('KantorView') !!}" class="nav-link @if(Request::segment(2)=='kantor') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Kantor</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='jabatan') active @endif">
+                <a href="{!! route('JabatanView') !!}" class="nav-link @if(Request::segment(2)=='jabatan') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jabatan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='komponen') active @endif">
+                <a href="{!! route('KomponenBiayaView') !!}" class="nav-link @if(Request::segment(2)=='komponen') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Komponen Biaya</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
+                <a href="{!! route('AktifitasView') !!}" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Aktifitas</p>
                 </a>
@@ -215,13 +215,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
+                <a href="{!! route('KelompokPenggunaView') !!}" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Kelompok Pengguna</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link @if(Request::segment(2)=='user') active @endif">
+                <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='user') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Pengguna</p>
                 </a>

@@ -36,6 +36,60 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                        <div class="card-header">
+                            <h5>
+                                Rekapitulasi Sisa Kontrak
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="" class="text-uppercase">osp</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select name="" id="" class="form-control">
+                                            <option value="">1</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select name="" id="" class="form-control">
+                                            <option value="">1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="text-uppercase">periode invoice</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select name="" id="" class="form-control">
+                                            <option value="">2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select name="" id="" class="form-control">
+                                            <option value="">3</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select name="" id="" class="form-control">
+                                            <option value="">4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-warning">View</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>
+                                Komponen Biaya Kontrak
+                            </h5>
+                        </div>
                         <div class="card-body text-right"></div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableRekapKontrak">

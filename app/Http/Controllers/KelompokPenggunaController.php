@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PenggunaController extends Controller
+class KelompokPenggunaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,8 @@ class PenggunaController extends Controller
      */
     public function index()
     {
-        return view('main.pengguna.pengguna.index');
+        //
+        return view('main.pengguna.kelompok_pengguna.index');
     }
 
     /**
@@ -23,7 +24,8 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        return view('main.pengguna.pengguna.create'); 
+        //
+        return view('main.pengguna.kelompok_pengguna.create');
     }
 
     /**

@@ -83,4 +83,13 @@ class BukuBankController extends Controller
     {
         //
     }
+
+    /**
+     * Report section on page reporting
+     */
+    public function report(Request $request)
+    {
+        //
+        return view('main.report.buku_bank.index');
+    }
 }

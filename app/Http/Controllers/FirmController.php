@@ -81,4 +81,13 @@ class FirmController extends Controller
     {
         //
     }
+
+    /**
+     * Report Section on page reporting
+     */
+    public function report(Request $request)
+    {
+        return view('main.report.firm_transfer.index');
+    }
 }
+
