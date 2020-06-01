@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
                         <li class="breadcrumb-item active">List Kabupaten</li>
                     </ol>
                 </div>
@@ -39,15 +39,15 @@
                         <h5>Data Kabupaten</h5>
                     </div>
                     <div class="card-body text-right">
-                        <a href="#" class="btn btn-warning">Tambah Kabupaten</a>
+                        <a href="{!! route('KabupatenKotaCreate') !!}" class="btn btn-warning">Tambah Kabupaten</a>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table-hover" id="tableKabupaten">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-center">id</th>
-                                    <th class="text-uppercase text-center">nama propinsi</th>
-                                    <th class="text-uppercase text-center">nama kabupaten</th>
+                                    <th class="text-uppercase text-center">nama kota/kabupaten</th>
+                                    <th class="text-uppercase text-center">kota/kabupaten</th>
                                     <th class="text-uppercase text-center">opsi</th>
                                 </tr>
                             </thead>

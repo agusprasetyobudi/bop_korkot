@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ProvinsiModels;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProvinsiController extends Controller
 {
@@ -12,8 +14,19 @@ class ProvinsiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $data = ProvinsiModels::latest()->get();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $btn = '<a href="'.route('provinsiEditView').'" class="btn btn-warning">Update Date</a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
         return view('main.data_master.provinsi.index');
     }
 
@@ -37,6 +50,16 @@ class ProvinsiController extends Controller
     public function store(Request $request)
     {
         //
+        foreach ( $request->post('provinsi_name') as $key) {
+            // dd($key);
+            $data_push[] = [
+                'provinsi_name'=> $key
+            ];
+        } 
+        $data = ProvinsiModels::insert($data_push);
+        // dd($data);
+        return redirect()->route('provinsiView');
+
     }
 
     /**

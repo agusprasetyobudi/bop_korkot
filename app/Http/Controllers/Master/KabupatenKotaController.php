@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\KabupatenModels;
+use Yajra\DataTables\Facades\DataTables;
 
 class KabupatenKotaController extends Controller
 {
@@ -12,9 +14,17 @@ class KabupatenKotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        if($request->ajax()){
+            $data = KabupatenModels::latest()->get();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action')
+            ->rawColumns([])
+            ->make(true);
+        }
         return view('main.data_master.kabupaten_kota.index');
     }
 
@@ -36,7 +46,21 @@ class KabupatenKotaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         //
+
+        $data = [];
+        foreach ($request->input('name_kabupate_kota') as $key => $values) {
+            # code...
+            $data[$key] = [
+                'nama_kabupaten' => $values, 
+            ]; 
+        }
+        foreach ($request->post('type_kabupate_kota') as $key=> $values) {
+            # code...
+            $data[$key]['type_kabupaten'] =  $values; 
+        } 
+        dd($data); 
     }
 
     /**

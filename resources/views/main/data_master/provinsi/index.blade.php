@@ -70,9 +70,17 @@
     <script>
     $(()=>{
         let tables = $('#tableProvinsi').DataTable({
-            pagging: true,
+            paging: true,
             lengthChange:true,
-            searching: true
+            searching: true,
+            ajax: "{!! route('provinsiView') !!}",
+            columns:[
+                {data: 'DT_RowIndex', className:'text-center'},
+                {data: 'provinsi_name', className:'text-center'},
+                {data: 'action', className:'text-center'}
+            ],
+            // columnDefs: [
+            // {"className": "text-center", "targets": "_all"},
         })
     })
     </script>
