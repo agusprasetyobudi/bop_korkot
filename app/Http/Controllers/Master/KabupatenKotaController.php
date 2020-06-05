@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KabupatenModels;
+use App\Models\ProvinsiModels;
 use Yajra\DataTables\Facades\DataTables;
 
 class KabupatenKotaController extends Controller
@@ -15,14 +16,20 @@ class KabupatenKotaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        //
+    { 
         if($request->ajax()){
-            $data = KabupatenModels::latest()->get();
+            $data = KabupatenModels::latest()->get(); 
             return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action')
-            ->rawColumns([])
+            ->addColumn('provinsi_name',function($row){
+                $res = $row->provinsi->provinsi_name;
+                return $res;
+            })
+            ->addColumn('action',function($row){ 
+                $btn = '<a href="'.route('KabupatenKotaEditView').'" class="btn btn-warning">Update Date</a>';
+                return $btn;
+            })
+            ->rawColumns(['action','provinsi_name'])
             ->make(true);
         }
         return view('main.data_master.kabupaten_kota.index');
@@ -35,7 +42,8 @@ class KabupatenKotaController extends Controller
      */
     public function create()
     {
-        return view('main.data_master.kabupaten_kota.create');
+        $provinsi = ProvinsiModels::all(); 
+        return view('main.data_master.kabupaten_kota.create',['province'=>$provinsi]);
     }
 
     /**
@@ -45,22 +53,25 @@ class KabupatenKotaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // dd($request->all());
-        //
+    { 
 
         $data = [];
         foreach ($request->input('name_kabupate_kota') as $key => $values) {
             # code...
             $data[$key] = [
-                'nama_kabupaten' => $values, 
+                'kabupaten_name' => $values, 
             ]; 
         }
-        foreach ($request->post('type_kabupate_kota') as $key=> $values) {
+        foreach ($request->post('provinsi_id') as $key=> $values) {
             # code...
-            $data[$key]['type_kabupaten'] =  $values; 
-        } 
-        dd($data); 
+            $data[$key]['provinsi_id'] =  $values; 
+        }   
+        $status = KabupatenModels::insert($data);
+        if($status){
+            return redirect()->route('KabupatenKotaView');
+        }else{
+            return redirect()->back();
+        }
     }
 
     /**

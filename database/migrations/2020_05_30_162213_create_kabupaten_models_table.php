@@ -13,8 +13,10 @@ class CreateKabupatenModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('kabupaten_models', function (Blueprint $table) {
+        Schema::create('kabupaten', function (Blueprint $table) {
             $table->id();
+            $table->integer('provinsi_id');
+            $table->string('kabupaten_name');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateKabupatenModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kabupaten_models');
+        Schema::dropIfExists('kabupaten');
     }
 }

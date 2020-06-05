@@ -47,7 +47,7 @@
                                 <tr>
                                     <th class="text-uppercase text-center">id</th>
                                     <th class="text-uppercase text-center">nama kota/kabupaten</th>
-                                    <th class="text-uppercase text-center">kota/kabupaten</th>
+                                    <th class="text-uppercase text-center">nama provinsi</th>
                                     <th class="text-uppercase text-center">opsi</th>
                                 </tr>
                             </thead>
@@ -68,9 +68,16 @@
       <script>
       $(()=>{
           let tables = $('#tableKabupaten').DataTable({
-              pagging: true,
-              lengthChange:true,
-              searching: true
+                pagging: true,
+                lengthChange:true,
+                searching: true,
+                ajax: "{!! route('KabupatenKotaView') !!}",
+                columns:[
+                    {data: 'DT_RowIndex', className:'text-center'},
+                    {data: 'kabupaten_name', className:'text-center'},
+                    {data: 'provinsi_name', className:'text-center'},
+                    {data: 'action', className:'text-center'}
+                ],
           })
       })
       </script>
