@@ -98,19 +98,17 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('/','Master\ProvinsiController@index')->name('provinsiView');
         Route::get('create','Master\ProvinsiController@create')->name('provinsiCreate');
         Route::post('create','Master\ProvinsiController@store')->name('provinsiPost');
-        Route::get('edit', 'Master\ProvinsiController@edit')->name('provinsiEditView');
+        Route::get('edit/{id}', 'Master\ProvinsiController@edit')->name('provinsiEditView');
         Route::post('edit', 'Master\ProvinsiController@update')->name('provinsiEditpost');
-        Route::get('delete', 'Master\ProvinsiController@destory')->name('provinsiDeleteSoft');
-        Route::get('destroy', 'Master\ProvinsiController@destory')->name('provinsiDestroy');
+        Route::get('delete/{id}', 'Master\ProvinsiController@destroy')->name('provinsiDestroy');
     });
     Route::group(['prefix' => 'kabupaten'], function () {
         Route::get('/','Master\KabupatenKotaController@index')->name('KabupatenKotaView');
         Route::get('create','Master\KabupatenKotaController@create')->name('KabupatenKotaCreate');
         Route::post('create','Master\KabupatenKotaController@store')->name('KabupatenKotaPost');
-        Route::get('edit', 'Master\KabupatenKotaController@edit')->name('KabupatenKotaEditView');
+        Route::get('edit/{id}', 'Master\KabupatenKotaController@edit')->name('KabupatenKotaEditView');
         Route::post('edit', 'Master\KabupatenKotaController@update')->name('KabupatenKotaEditpost');
-        Route::get('delete', 'Master\KabupatenKotaController@destory')->name('KabupatenKotaDeleteSoft');
-        Route::get('destroy', 'Master\KabupatenKotaController@destory')->name('KabupatenKotaDestroy');
+        Route::get('delete/{id}', 'Master\KabupatenKotaController@destroy')->name('KabupatenKotaDestroy');
     });
     Route::group(['prefix' => 'osp'], function () {
         Route::get('/','Master\OSPController@index')->name('OSPView');

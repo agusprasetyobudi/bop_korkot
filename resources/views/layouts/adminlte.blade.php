@@ -65,6 +65,7 @@
 <script src="{!! asset('assets/adminlte/dist/js/demo.js') !!}"></script>
 @yield('addtionalJS')
 
+@include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]) 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
 <script src="{!! asset('assets/adminlte/plugins/jquery-mousewheel/jquery.mousewheel.js') !!}"></script>

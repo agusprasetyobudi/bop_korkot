@@ -66,7 +66,7 @@
       <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}"></script>
       <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
       <script>
-      $(()=>{
+      $(()=>{ 
           let tables = $('#tableKabupaten').DataTable({
                 pagging: true,
                 lengthChange:true,
@@ -78,7 +78,15 @@
                     {data: 'provinsi_name', className:'text-center'},
                     {data: 'action', className:'text-center'}
                 ],
-          })
+          }) 
+          $('#tableKabupaten tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('KabupatenKotaDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+        })
       })
       </script>
 @endsection

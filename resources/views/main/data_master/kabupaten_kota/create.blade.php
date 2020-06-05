@@ -45,11 +45,11 @@
                         <form id="addFomrs">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="" class="text-uppercase">Nama Kabuptaen/Kota</label>
+                                    <label for="" class="text-uppercase">Nama Kabupaten/Kota</label>
                                     <input type="text" name="" id="nama-kota-kabupaten" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="text-uppercase">Type Kabuptaen/Kota</label>
+                                    <label for="" class="text-uppercase">Nama Provinsi</label>
                                     <select name="" id="nama-provinsi" class="form-control nama-provinsi-select2">
                                         <option selected disabled value>Pilih Provinsi</option>
                                         @foreach ($province as $item)

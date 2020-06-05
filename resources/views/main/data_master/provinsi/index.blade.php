@@ -78,9 +78,17 @@
                 {data: 'DT_RowIndex', className:'text-center'},
                 {data: 'provinsi_name', className:'text-center'},
                 {data: 'action', className:'text-center'}
-            ],
+            ], 
             // columnDefs: [
             // {"className": "text-center", "targets": "_all"},
+        })
+        $('#tableProvinsi tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('provinsiDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
         })
     })
     </script>

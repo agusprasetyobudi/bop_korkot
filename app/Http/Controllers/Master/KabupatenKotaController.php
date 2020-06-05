@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KabupatenModels;
 use App\Models\ProvinsiModels;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
+use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
 class KabupatenKotaController extends Controller
@@ -25,8 +28,10 @@ class KabupatenKotaController extends Controller
                 $res = $row->provinsi->provinsi_name;
                 return $res;
             })
-            ->addColumn('action',function($row){ 
-                $btn = '<a href="'.route('KabupatenKotaEditView').'" class="btn btn-warning">Update Date</a>';
+            ->addColumn('action',function($row){                 
+                $btn = '';
+                $btn .= '<a href="'.route('KabupatenKotaEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Update Data</a>  '; 
+                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
                 return $btn;
             })
             ->rawColumns(['action','provinsi_name'])
@@ -68,8 +73,10 @@ class KabupatenKotaController extends Controller
         }   
         $status = KabupatenModels::insert($data);
         if($status){
+            Alert::success('Data Telah Diupdate'); 
             return redirect()->route('KabupatenKotaView');
         }else{
+            Alert::error('Data Gagal Ditambahkan'); 
             return redirect()->back();
         }
     }
@@ -93,7 +100,14 @@ class KabupatenKotaController extends Controller
      */
     public function edit($id)
     {
-        //
+         try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            dd($e);
+        }
+        $kabupaten = KabupatenModels::find($decrypted);
+        $provinsi = ProvinsiModels::all();
+        return view('main.data_master.kabupaten_kota.update',['province'=>$provinsi,'kabupaten'=>$kabupaten]);
     }
 
     /**
@@ -103,9 +117,26 @@ class KabupatenKotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request){
+        
+        try {
+            $decrypted = Crypt::decrypt($request->post('urlData'));
+        } catch (DecryptException $e) {
+            dd($e);
+        }
+        $pushData = [
+            'kabupaten_name'=> $request->post('nama-kota-kabupaten'),
+            'provinsi_id' => $request->post('nama-provinsi')
+        ];
+        $ResData = KabupatenModels::where('id',$decrypted)
+                                    ->update($pushData);
+        if($ResData){
+            Alert::success('Data Telah Diupdate');
+            return redirect()->route('KabupatenKotaView');
+        }else{
+            Alert::error('Terjadi Kesalahan !!','Silahakn Hubungi Admin');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -116,6 +147,14 @@ class KabupatenKotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $decrypt = Crypt::decrypt($id); 
+        $data = KabupatenModels::destroy($decrypt); 
+        if($data){
+            Alert::success('Data Berhasil Dihapus')->persistent('Confirm');
+            return redirect()->route('KabupatenKotaView'); 
+        }else{
+            Alert::error('Data Gagal Dihapus','Harap Kontak Superadmin');
+            return redirect()->back(); 
+        }
     }
 }
