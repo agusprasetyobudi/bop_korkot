@@ -114,10 +114,9 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('/','Master\OSPController@index')->name('OSPView');
         Route::get('create','Master\OSPController@create')->name('OSPCreate');
         Route::post('create','Master\OSPController@store')->name('OSPPost');
-        Route::get('edit', 'Master\OSPController@edit')->name('OSPEditView');
+        Route::get('edit/{id}', 'Master\OSPController@edit')->name('OSPEditView');
         Route::post('edit', 'Master\OSPController@update')->name('OSPEditpost');
-        Route::get('delete', 'Master\OSPController@destory')->name('OSPDeleteSoft');
-        Route::get('destroy', 'Master\OSPController@destory')->name('OSPDestroy');
+        Route::get('delete/{id}', 'Master\OSPController@destroy')->name('OSPDestroy');
     });
     Route::group(['prefix' => 'kantor'], function () {
         Route::get('/','Master\KantorController@index')->name('KantorView');

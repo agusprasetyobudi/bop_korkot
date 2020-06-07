@@ -95,13 +95,17 @@ $(()=>{
     $('#tambah-provinsi').click(()=>{
         let GetData = $('#nama-provinsi').val()  
         if(GetData != null && GetData != ""){
-            tables.row.add([
+            if(count < 21){
+                tables.row.add([
                 `${count}`,
                 `${GetData}<input name='provinsi_name[]' type='hidden' value='${GetData}' />`,
                 `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`,
             ]).draw(false)
             count++
             $('#nama-provinsi').val('')
+            }else{
+                alert('Data Telah Mencapai Maksimum')
+            }
         }else{
           alert('Data Tidak Boleh Kosong')
         }

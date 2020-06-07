@@ -125,22 +125,19 @@
         let GetJenis = $('#nama-provinsi').find('option:selected').val()  
         // console.log({GetNama,GetJenis}) 
         if($.trim(GetNama) !='' && $.trim(GetJenis) != '' && GetJenis != 'Pilih Provinsi'){
-            tables.row.add([
-                `${count}`,
-                `${$('#nama-kota-kabupaten').val()}<input name='name_kabupate_kota[]' type='hidden' value='${GetNama}' />`,
-                `${$('#nama-provinsi option:selected').html()}<input name='provinsi_id[]' type='hidden' value='${GetJenis}' />`,
-                `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`,
-            ]).draw(false)
-            count++ 
-            $('#nama-kota-kabupaten').val(null)
-            // $('#nama-provinsi option').prop('selected', function(){
-            //     return this.defaultSelected;
-            // }).attr('disabled','disabled'); 
-            // $('.nama-provinsi-select2 option').prop('selected', function() {
-            //     return this.defaultSelected;
-            // });
-            $('.nama-provinsi-select2').val('').trigger('change')
-
+            if(count < 21){
+                    tables.row.add([
+                    `${count}`,
+                    `${$('#nama-kota-kabupaten').val()}<input name='name_kabupate_kota[]' type='hidden' value='${GetNama}' />`,
+                    `${$('#nama-provinsi option:selected').html()}<input name='provinsi_id[]' type='hidden' value='${GetJenis}' />`,
+                    `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`,
+                ]).draw(false)
+                count++ 
+                $('#nama-kota-kabupaten').val(null) 
+                $('.nama-provinsi-select2').val('').trigger('change')
+            }else{
+                alert('Data Yang Ditambahkan Mencapai Maksimum')
+            }
         }else if(GetNama == null || GetNama == ""){
           alert('Nama Kota/Kabupaten Tidak Boleh Kosong')
         }else if(GetJenis == null || GetJenis == "" || GetJenis == "Pilih Kota/Kabupaten"){

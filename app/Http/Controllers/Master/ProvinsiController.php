@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProvinsiModels;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
@@ -54,23 +58,20 @@ class ProvinsiController extends Controller
     public function store(Request $request)
     {
         //
-        foreach ( $request->post('provinsi_name') as $key) {
-            // dd($key);
-            $data_push[] = [
-                'provinsi_name'=> $key
-            ];
-        } 
-        $data = ProvinsiModels::insert($data_push);
-        // dd($data);
-
-        if($data){
+        try {
+            foreach ( $request->post('provinsi_name') as $key) { 
+                $data_push[] = [
+                    'provinsi_name'=> $key
+                ];
+            } 
+            ProvinsiModels::insert($data_push); 
             Alert::success('Data Telah Ditambahkan');
             return redirect()->route('provinsiView');
-        }else{
+        } catch (QueryException $e) {
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id);
             Alert::error('Data Gagal Ditambahkan'); 
             return redirect()->back();
         }
-
     }
 
     /**
@@ -90,12 +91,18 @@ class ProvinsiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         //
-        $decrypt = Crypt::decrypt($id);
-        $getData = ProvinsiModels::find($decrypt); 
-        return view('main.data_master.provinsi.update',['data'=>$getData]);
+        try {
+            $decrypted = Crypt::decrypt($id);
+            $getData = ProvinsiModels::find($decrypted); 
+            return view('main.data_master.provinsi.update',['data'=>$getData]);
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home');
+        }
     }
 
     /**
@@ -107,18 +114,25 @@ class ProvinsiController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request->all());
-        $decrypt = Crypt::decrypt($request->post('url_data'));
-        $pushData = ['provinsi_name'=>$request->post('provinsi_name')];
-        $resData = ProvinsiModels::where('id',$decrypt)
-                                ->update($pushData);
-        if($resData){
+        try {
+            $decrypt = Crypt::decrypt($request->post('url_data')); 
+        } catch (DecryptException $e) { 
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home'); 
+        }
+
+        try {
+            $pushData = ['provinsi_name'=>$request->post('provinsi_name')];
+            $resData = ProvinsiModels::where('id',$decrypt)
+                                    ->update($pushData);
             Alert::success('Data Telah Diupdate');
             return redirect()->route('provinsiView');
-        }else{
+        } catch (QueryException $e) {
+            ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id); 
             Alert::error('Terjadi Kesalahan !!','Silahakn Hubungi Admin');
             return redirect()->back();
-        }
+        } 
     }
 
     /**
@@ -127,14 +141,22 @@ class ProvinsiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     { 
-        $decrypt = Crypt::decrypt($id); 
-        $data = ProvinsiModels::destroy($decrypt); 
-        if($data){
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) { 
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home'); 
+        } 
+        
+        try {
+            ProvinsiModels::destroy($decrypted); 
             Alert::success('Data Berhasil Dihapus');
             return redirect()->route('provinsiView'); 
-        }else{
+        } catch (QueryException $e) {
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id);
             Alert::error('Data Gagal Dihapus','Harap Kontak Superadmin');
             return redirect()->back(); 
         }

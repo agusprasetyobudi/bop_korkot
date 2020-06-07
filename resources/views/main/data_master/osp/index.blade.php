@@ -40,14 +40,14 @@
                             <h5>Data OSP</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah OSP</a>
+                            <a href="{!! route('OSPCreate') !!}" class="btn btn-warning">Tambah OSP</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableOSP">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-center">id</th>
-                                        <th class="text-uppercase text-center">osp</th>
+                                        <th class="text-uppercase text-center">#</th>
+                                        <th class="text-uppercase text-center">osp name</th>
                                         <th class="text-uppercase text-center">opsi</th>
                                     </tr>
                                 </thead>
@@ -68,11 +68,25 @@
     <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}"></script>
     <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
     <script>
-    $(()=>{
+    $(()=>{ 
         let tables = $('#tableOSP').DataTable({
             pagging: true,
             lengthChange:true,
-            searching: true
+            searching: true,
+            ajax: "{!! route('OSPView') !!}",
+                columns:[
+                    {data: 'DT_RowIndex', className:'text-center'},
+                    {data: 'osp_name', className:'text-center'}, 
+                    {data: 'action', className:'text-center'}
+                ],
+        })
+        $('#tableOSP tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('OSPDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
         })
     })
     </script>

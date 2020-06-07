@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KabupatenModels;
 use App\Models\ProvinsiModels;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
@@ -19,7 +22,7 @@ class KabupatenKotaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    { 
+    {  
         if($request->ajax()){
             $data = KabupatenModels::latest()->get(); 
             return DataTables::of($data)
@@ -60,25 +63,26 @@ class KabupatenKotaController extends Controller
     public function store(Request $request)
     { 
 
-        $data = [];
-        foreach ($request->input('name_kabupate_kota') as $key => $values) {
-            # code...
-            $data[$key] = [
-                'kabupaten_name' => $values, 
-            ]; 
-        }
-        foreach ($request->post('provinsi_id') as $key=> $values) {
-            # code...
-            $data[$key]['provinsi_id'] =  $values; 
-        }   
-        $status = KabupatenModels::insert($data);
-        if($status){
-            Alert::success('Data Telah Diupdate'); 
+        try {
+            $data = [];
+            foreach ($request->input('name_kabupate_kota') as $key => $values) {
+                # code...
+                $data[$key] = [
+                    'kabupaten_name' => $values, 
+                ]; 
+            }
+            foreach ($request->post('provinsi_id') as $key=> $values) {
+                # code...
+                $data[$key]['provinsi_id'] =  $values; 
+            }   
+            $status = KabupatenModels::insert($data);
+            Alert::success('Data Telah Ditambahkan'); 
             return redirect()->route('KabupatenKotaView');
-        }else{
+        } catch (QueryException $e) {
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
             Alert::error('Data Gagal Ditambahkan'); 
             return redirect()->back();
-        }
+        } 
     }
 
     /**
@@ -98,12 +102,14 @@ class KabupatenKotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
          try {
             $decrypted = Crypt::decrypt($id);
         } catch (DecryptException $e) {
-            dd($e);
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);  
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home');
         }
         $kabupaten = KabupatenModels::find($decrypted);
         $provinsi = ProvinsiModels::all();
@@ -122,21 +128,24 @@ class KabupatenKotaController extends Controller
         try {
             $decrypted = Crypt::decrypt($request->post('urlData'));
         } catch (DecryptException $e) {
-            dd($e);
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home'); 
         }
-        $pushData = [
-            'kabupaten_name'=> $request->post('nama-kota-kabupaten'),
-            'provinsi_id' => $request->post('nama-provinsi')
-        ];
-        $ResData = KabupatenModels::where('id',$decrypted)
-                                    ->update($pushData);
-        if($ResData){
-            Alert::success('Data Telah Diupdate');
-            return redirect()->route('KabupatenKotaView');
-        }else{
+        try { 
+            $pushData = [
+                'kabupaten_name'=> $request->post('nama-kota-kabupaten'),
+                'provinsi_id' => $request->post('nama-provinsi')
+            ];
+            $ResData = KabupatenModels::where('id',$decrypted)
+                                        ->update($pushData);
+                    Alert::success('Data Telah Diupdate');
+                    return redirect()->route('KabupatenKotaView');
+        } catch (QueryException $e) {
+            ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id);
             Alert::error('Terjadi Kesalahan !!','Silahakn Hubungi Admin');
             return redirect()->back();
-        }
+        } 
     }
 
     /**
@@ -145,16 +154,24 @@ class KabupatenKotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $decrypt = Crypt::decrypt($id); 
-        $data = KabupatenModels::destroy($decrypt); 
-        if($data){
+    public function destroy(Request $request,$id)
+    { 
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);              
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');            
+            return redirect()->back();
+        }
+
+        try { 
+            $data = KabupatenModels::destroy($decrypted); 
             Alert::success('Data Berhasil Dihapus')->persistent('Confirm');
             return redirect()->route('KabupatenKotaView'); 
-        }else{
-            Alert::error('Data Gagal Dihapus','Harap Kontak Superadmin');
+        } catch (QueryException $e) { 
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');
             return redirect()->back(); 
-        }
+        } 
     }
 }
