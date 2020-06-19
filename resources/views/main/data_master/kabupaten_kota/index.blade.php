@@ -68,7 +68,9 @@
       <script>
       $(()=>{ 
           let tables = $('#tableKabupaten').DataTable({
-                pagging: true,
+                responsive: true,
+                autoWidth: false,
+                paging: true,
                 lengthChange:true,
                 searching: true,
                 ajax: "{!! route('KabupatenKotaView') !!}",

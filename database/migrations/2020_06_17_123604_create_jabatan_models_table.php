@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKabupatenModelsTable extends Migration
+class CreateJabatanModelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateKabupatenModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_kabupaten', function (Blueprint $table) {
+        Schema::create('master_jabatan', function (Blueprint $table) {
             $table->id();
-            $table->integer('provinsi_id');
-            $table->string('kabupaten_name');
+            $table->string('kode_jabatan');
+            $table->string('nama_jabatan');
+            $table->string('posisi_kantor'); 
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateKabupatenModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_kabupaten');
+        Schema::dropIfExists('master_jabatan');
     }
 }

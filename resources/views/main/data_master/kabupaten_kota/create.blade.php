@@ -104,12 +104,15 @@
 <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}"></script>
 <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
 <script src="{!! asset('assets/adminlte/plugins/select2/js/select2.full.min.js') !!}"></script>
-<script src="{!! asset('assets/adminlte/plugins/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
+<script src="{!! asset('assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> --}}
 {{-- <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script> --}}
 <script>
       $(function () {
-        $(".nama-provinsi-select2").select2()
+        $(".nama-provinsi-select2").select2({
+            theme: 'bootstrap4',
+            width: '100%'
+            })
         // $(".nama-provinsi-select2").select2("val", "", "placeholder", "Select a Contact Group")
       let tables = $('#tableKabupatenKotaTambah').DataTable({
         paging: false,

@@ -10,6 +10,7 @@
 
 @section('addtionalCSS')
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css') !!}">
+    
 @endsection
 
 @section('page_header')
@@ -70,6 +71,8 @@
     <script>
     $(()=>{
         let tables = $('#tableProvinsi').DataTable({
+            responsive: true,
+            autoWidth: false,
             paging: true,
             lengthChange:true,
             searching: true,

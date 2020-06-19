@@ -91,9 +91,12 @@ class KabupatenKotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Request $request)
+    {        
+        $id = $request->post('id');
+        return KabupatenModels::where('provinsi_id',$id)
+        ->select(['id','kabupaten_name'])
+        ->get();
     }
 
     /**
@@ -123,7 +126,8 @@ class KabupatenKotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         
         try {
             $decrypted = Crypt::decrypt($request->post('urlData'));

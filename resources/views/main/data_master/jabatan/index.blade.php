@@ -10,6 +10,7 @@
 
 @section('addtionalCSS')
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') !!}">
 @endsection
 
 @section('page_header')
@@ -40,10 +41,10 @@
                             <h5>Data Jabatan</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah Data Jabatan</a>
+                            <a href="{!! route('JabatanCreate') !!}" class="btn btn-warning">Tambah Data Jabatan</a>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-hover" id="tableJabatan">
+                            <table class="table table-bordered table-hover dataTable dtr-inline" id="tableJabatan">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-center">#</th>
@@ -70,10 +71,28 @@
 <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
 <script>
 $(()=>{
-    let tables = $('#tableJabatan').DataTable({
+    let tables = $('#tableJabatan').DataTable({ 
+        responsive: true,
+        autoWidth: false,
         pagging: true,
         lengthChange:true,
-        searching: true
+        searching: true,
+        ajax:"{!! route('JabatanView') !!}",
+        columns:[
+            {data:'DT_RowIndex', className: 'text-center text-uppercase'},
+            {data:'kode_jabatan', className: 'text-center text-uppercase'},
+            {data:'nama_jabatan', className: 'text-center text-uppercase'},
+            {data:'posisi_kantor', className: 'text-center text-uppercase'}, 
+            {data:'action', className: 'text-center'},
+        ]
+    })
+    $('#tableJabatan tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('JabatanDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
     })
 })
 </script>

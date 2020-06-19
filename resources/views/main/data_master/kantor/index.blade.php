@@ -13,7 +13,21 @@
 @endsection
 
 @section('page_header')
-    
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kantor</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li> 
+                        <li class="breadcrumb-item active">Kantor</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
 
 @section('body')
@@ -26,7 +40,7 @@
                             <h5>Data Kantor</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah Data Kantor</a>
+                            <a href="{!! route('KantorCreate') !!}" class="btn btn-warning">Tambah Data Kantor</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableKantor">
@@ -61,7 +75,25 @@ $(()=>{
     let tables = $('#tableKantor').DataTable({
         pagging: true,
         lengthChange:true,
-        searching: true
+        searching: true,
+        ajax:"{!! route('KantorView') !!}",
+        columns:[
+            {data:'DT_RowIndex', className: 'text-center'},
+            {data:'kode_kantor', className: 'text-center'},
+            {data:'osp', className: 'text-center'},
+            {data:'provinsi', className: 'text-center'},
+            {data:'kabupaten', className: 'text-center'},
+            {data:'nama_kantor', className: 'text-center'},
+            {data:'action', className: 'text-center'},
+        ]
+    })
+    $('#tableKantor tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('KantorDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
     })
 })
 </script>

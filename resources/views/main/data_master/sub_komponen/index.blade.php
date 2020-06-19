@@ -22,7 +22,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
-                        <li class="breadcrumb-item active">List Komponen Biaya</li>
+                        <li class="breadcrumb-item"><a href="{!! route('KomponenBiayaView') !!}">List Komponen Biaya</a></li>
+                        <li class="breadcrumb-item active">List Sub Komponen Biaya</li>
                     </ol>
                 </div>
             </div>
@@ -47,8 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
-                                        <th class="text-center text-uppercase">Komponen biaya</th>
-                                        <th class="text-center text-uppercase">read only</th>
+                                        <th class="text-center text-uppercase">Sub Komponen biaya</th> 
                                         <th class="text-center text-uppercase">opsi</th>
                                     </tr>
                                 </thead>

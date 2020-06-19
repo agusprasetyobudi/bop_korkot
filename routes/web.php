@@ -109,6 +109,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('edit/{id}', 'Master\KabupatenKotaController@edit')->name('KabupatenKotaEditView');
         Route::post('edit', 'Master\KabupatenKotaController@update')->name('KabupatenKotaEditpost');
         Route::get('delete/{id}', 'Master\KabupatenKotaController@destroy')->name('KabupatenKotaDestroy');
+        Route::post('get', 'Master\KabupatenKotaController@show')->name('GetKabupatenKota');
     });
     Route::group(['prefix' => 'osp'], function () {
         Route::get('/','Master\OSPController@index')->name('OSPView');
@@ -122,37 +123,43 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('/','Master\KantorController@index')->name('KantorView');
         Route::get('create','Master\KantorController@create')->name('KantorCreate');
         Route::post('create','Master\KantorController@store')->name('KantorPost');
-        Route::get('edit', 'Master\KantorController@edit')->name('KantorEditView');
+        Route::get('edit/{id}', 'Master\KantorController@edit')->name('KantorEditView');
         Route::post('edit', 'Master\KantorController@update')->name('KantorEditpost');
-        Route::get('delete', 'Master\KantorController@destory')->name('KantorDeleteSoft');
-        Route::get('destroy', 'Master\KantorController@destory')->name('KantorDestroy');
+        Route::get('destroy/{id}', 'Master\KantorController@destroy')->name('KantorDestroy');
     });
     Route::group(['prefix' => 'jabatan'], function () {
         Route::get('/','Master\JabatanController@index')->name('JabatanView');
         Route::get('create','Master\JabatanController@create')->name('JabatanCreate');
         Route::post('create','Master\JabatanController@store')->name('JabatanPost');
-        Route::get('edit', 'Master\JabatanController@edit')->name('JabatanEditView');
-        Route::post('edit', 'Master\JabatanController@update')->name('JabatanEditpost');
-        Route::get('delete', 'Master\JabatanController@destory')->name('JabatanDeleteSoft');
-        Route::get('destroy', 'Master\JabatanController@destory')->name('JabatanDestroy');
+        Route::get('edit/{id}', 'Master\JabatanController@edit')->name('JabatanEditView');
+        Route::post('edit', 'Master\JabatanController@update')->name('JabatanEditpost'); 
+        Route::get('destroy/{id}', 'Master\JabatanController@destroy')->name('JabatanDestroy');
     });
     Route::group(['prefix' => 'komponen'], function () {
         Route::get('/','Master\KomponenBiayaController@index')->name('KomponenBiayaView');
         Route::get('create','Master\KomponenBiayaController@create')->name('KomponenBiayaCreate');
         Route::post('create','Master\KomponenBiayaController@store')->name('KomponenBiayaPost');
-        Route::get('edit', 'Master\KomponenBiayaController@edit')->name('KomponenBiayaEditView');
-        Route::post('edit', 'Master\KomponenBiayaController@update')->name('KomponenBiayaEditpost');
-        Route::get('delete', 'Master\KomponenBiayaController@destory')->name('KomponenBiayaDeleteSoft');
-        Route::get('destroy', 'Master\KomponenBiayaController@destory')->name('KomponenBiayaDestroy');
+        Route::get('edit/{id}', 'Master\KomponenBiayaController@edit')->name('KomponenBiayaEditView');
+        Route::post('edit', 'Master\KomponenBiayaController@update')->name('KomponenBiayaEditpost'); 
+        Route::get('destroy/{id}', 'Master\KomponenBiayaController@destroy')->name('KomponenBiayaDestroy');
+        Route::get('readonly/{id}', 'Master\KomponenBiayaController@readonly')->name('KomponenBiayaReadonly');
+        Route::get('unreadonly/{id}', 'Master\KomponenBiayaController@unreadonly')->name('KomponenBiayaUnReadonly');
+        Route::group(['prefix' => 'sub'], function () {
+            Route::get('{id}/', 'Master\SubKomponenController@index')->name('SubKomponenView');            
+            Route::get('{id}/create', 'Master\SubKomponenController@create')->name('SubKomponenCreateView');            
+            Route::post('/create', 'Master\SubKomponenController@store')->name('SubKomponenCreatePost');            
+            Route::get('{id}/edit/{sub_id}', 'Master\SubKomponenController@edit')->name('SubKomponenUpdateView');            
+            Route::post('/edit', 'Master\SubKomponenController@update')->name('SubKomponenUpdatePost');            
+            Route::get('{id}/delete/{sub_id}', 'Master\SubKomponenController@destroy')->name('SubKomponenDelete');            
+        });
     });
     Route::group(['prefix' => 'aktifitas'], function () {
         Route::get('/','Master\AktifitasController@index')->name('AktifitasView');
         Route::get('create','Master\AktifitasController@create')->name('AktifitasCreate');
         Route::post('create','Master\AktifitasController@store')->name('AktifitasPost');
-        Route::get('edit', 'Master\AktifitasController@edit')->name('AktifitasEditView');
+        Route::get('edit/{id}', 'Master\AktifitasController@edit')->name('AktifitasEditView');
         Route::post('edit', 'Master\AktifitasController@update')->name('AktifitasEditpost');
-        Route::get('delete', 'Master\AktifitasController@destory')->name('AktifitasDeleteSoft');
-        Route::get('destroy', 'Master\AktifitasController@destory')->name('AktifitasDestroy');
+        Route::get('destroy/{id}', 'Master\AktifitasController@destroy')->name('AktifitasDestroy');
     });
 });
 

@@ -22,8 +22,9 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{!! route('KomponenBiayaView') !!}">Komponen Biaya</a></li>
-                        <li class="breadcrumb-item active">Tambah Komponen Biaya</li>
+                        <li class="breadcrumb-item"><a href="{!! route('KomponenBiayaView') !!}">List Komponen Biaya</a></li>
+                        <li class="breadcrumb-item"><a href="{!! route('SubKomponenView',['id'=>Request::segment('4')]) !!}">List Sub Komponen Biaya</a></li>
+                        <li class="breadcrumb-item active">Tambah Sub Komponen Biaya</li>
                     </ol>
                 </div>
             </div>
@@ -43,6 +44,9 @@
                                 <label for="" class="text-uppercase">Komponen Biaya</label>
                                 <input type="text" name="" id="" class="form-control komponen-biaya">
                             </div>
+                            <div class="form-group">
+                                <label for="" class="text-uppercase"></label>
+                                <input type="text" name="" id=""></div>
                         </div>
                         <div class="card-footer text-right">
                             <button type="submit" class="btn btn-warning btn-add">Tambah Komponen Biaya</button>

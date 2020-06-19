@@ -113,6 +113,8 @@
 <script> 
   $(()=>{
     let tables = $("#example2").DataTable({
+      responsive: true,
+      autoWidth: false,
       paging: true,
       lengthChange: true,
       searching: true, 

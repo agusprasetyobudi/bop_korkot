@@ -13,7 +13,7 @@ class CreateProvinsiModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('provinsi', function (Blueprint $table) {
+        Schema::create('master_provinsi', function (Blueprint $table) {
             $table->id();
             $table->string('provinsi_name');
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateProvinsiModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('provinsi');
+        Schema::dropIfExists('master_provinsi');
     }
 }

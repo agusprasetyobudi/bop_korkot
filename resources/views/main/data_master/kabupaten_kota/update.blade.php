@@ -71,6 +71,8 @@
 @section('addtionalJS')
 <script src="{!! asset('assets/adminlte/plugins/select2/js/select2.full.min.js') !!}"></script>
     <script>
-         $(".nama-provinsi-select2").select2()
+         $(".nama-provinsi-select2").select2({
+            theme: 'bootstrap4'
+         })
     </script>
 @endsection

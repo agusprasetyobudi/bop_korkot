@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProvinsiModels extends Model
 {
     //
-    protected $table = 'provinsi'; 
+    protected $table = 'master_provinsi'; 
     protected $fillabel = ['id','provinsi_name'];
 
     public function kabupaten()

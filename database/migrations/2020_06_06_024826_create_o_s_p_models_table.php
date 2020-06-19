@@ -13,7 +13,7 @@ class CreateOSPModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('osp', function (Blueprint $table) {
+        Schema::create('master_osp', function (Blueprint $table) {
             $table->id(); 
             $table->string('osp_name');
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateOSPModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('osp');
+        Schema::dropIfExists('master_osp');
     }
 }
