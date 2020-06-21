@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class JabatanModel extends Model
 {
     //
-    public $timestamp=true;
+    public $timestamp=false;
     protected $table = 'master_jabatan';
 }

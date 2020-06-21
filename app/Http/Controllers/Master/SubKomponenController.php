@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
 use App\Models\KomponenBiaya;
+use App\Models\SubKomponenActivityModels;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -207,7 +208,8 @@ class SubKomponenController extends Controller
         }
  
         try { 
-            KomponenBiaya::destroy($id); 
+            KomponenBiaya::destroy($id);
+            SubKomponenActivityModels::where('id_subkomponen',$id)->delete();
             Alert::success('Data Berhasil Dihapus')->persistent('Confirm');
             return redirect()->route('SubKomponenView',['id'=>$sub_id]);
         } catch (QueryException $e) { 

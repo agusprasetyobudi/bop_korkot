@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KantorModels extends Model
 {
+    public $timestamp= false;
     protected $table = 'master_kantor';
     protected $fillable = ['kode_kantor','id_osp','id_provinsi','id_kabupaten','nama_kantor'];
     

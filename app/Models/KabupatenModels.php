@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KabupatenModels extends Model
 {
+    protected $timestamp = false;
     protected $table ='master_kabupaten';
     protected $fillable = ['provinsi_id','provinsi_name'];
 

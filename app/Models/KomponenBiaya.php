@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class KomponenBiaya extends Model
 {
     protected $table = 'master_komponen';
-    public $timestamp = true;
+    public $timestamp = false;
     protected $fillable = ['id','parent_id','komponen_biaya'];
 }

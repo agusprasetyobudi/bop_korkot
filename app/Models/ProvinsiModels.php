@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProvinsiModels extends Model
 {
     //
+    public $timestamp= false;
     protected $table = 'master_provinsi'; 
     protected $fillabel = ['id','provinsi_name'];
 
