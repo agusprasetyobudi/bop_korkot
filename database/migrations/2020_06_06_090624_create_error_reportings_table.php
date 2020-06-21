@@ -19,7 +19,8 @@ class CreateErrorReportingsTable extends Migration
             $table->text('message_error');
             $table->text('url');
             $table->string('user_id');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

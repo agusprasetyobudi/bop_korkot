@@ -16,7 +16,8 @@ class CreateProvinsiModelsTable extends Migration
         Schema::create('master_provinsi', function (Blueprint $table) {
             $table->id();
             $table->string('provinsi_name');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

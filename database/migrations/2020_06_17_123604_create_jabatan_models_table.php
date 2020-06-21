@@ -18,7 +18,8 @@ class CreateJabatanModelsTable extends Migration
             $table->string('kode_jabatan');
             $table->string('nama_jabatan');
             $table->string('posisi_kantor'); 
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

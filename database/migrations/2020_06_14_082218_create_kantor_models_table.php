@@ -20,7 +20,8 @@ class CreateKantorModelsTable extends Migration
             $table->string('id_provinsi');
             $table->string('id_kabupaten');
             $table->string('nama_kantor');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 
