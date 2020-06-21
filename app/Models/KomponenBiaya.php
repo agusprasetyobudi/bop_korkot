@@ -8,4 +8,5 @@ class KomponenBiaya extends Model
 {
     protected $table = 'master_komponen';
     public $timestamp = true;
+    protected $fillable = ['id','parent_id','komponen_biaya'];
 }

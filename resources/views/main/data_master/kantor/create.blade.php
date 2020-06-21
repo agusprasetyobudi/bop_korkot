@@ -131,8 +131,8 @@
         width: '100%'
         }) 
         $('.kabupaten-select').select2({
-        theme: 'bootstrap4',,
-        width: '100%'
+        theme: 'bootstrap4',
+        width: '100%',
         ajax:{
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: "{!! route('GetKabupatenKota') !!}",

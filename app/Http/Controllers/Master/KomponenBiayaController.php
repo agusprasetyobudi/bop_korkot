@@ -23,12 +23,12 @@ class KomponenBiayaController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = KomponenBiaya::latest()->get();
+            $data = KomponenBiaya::where('parent_id',0)->latest()->get();
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('nama_komponen', function($row){
                 $btn = '';
-                if($row->parent_id == $row->id){
+                if($row->is_parent > 0 && $row->read_only == 0){
                     $btn .= '<a href="'.route('SubKomponenView',['id'=>Crypt::encrypt($row->id)]).'">'.$row->komponen_biaya.'</a>';
                 }else{
                     $btn .= $row->komponen_biaya;
@@ -46,7 +46,7 @@ class KomponenBiayaController extends Controller
             })
             ->addColumn('action',function($row){
                 $btn = '';
-                if($row->parent_id != $row->id){ $btn .= '<a href="'.route('SubKomponenCreateView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-info">Tambah Sub Komponen</a>  ';}
+                if($row->is_parent == 0){ $btn .= '<a href="'.route('SubKomponenCreateView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-info">Tambah Sub Komponen</a>  ';}
                 $btn .= '<a href="'.route('KomponenBiayaEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Update Data</a>  '; 
                 $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
                 return $btn;
@@ -124,7 +124,8 @@ class KomponenBiayaController extends Controller
             Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
             return redirect()->route('home');
         }
-        return view('main.data_master.komponen_biaya.update');
+        $data = KomponenBiaya::find($decrypted); 
+        return view('main.data_master.komponen_biaya.update',['data'=>$data]);
     }
 
     /**
@@ -134,8 +135,8 @@ class KomponenBiayaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request)
+    { 
         try {
             $decrypted = Crypt::decrypt($request->post('urldata'));     
         } catch (DecryptException $e) {
@@ -145,6 +146,7 @@ class KomponenBiayaController extends Controller
         }
         try { 
             $pushData = [  
+                'komponen_biaya'=> $request->post('komponen_biaya')
             ];
             // dd($pushData);
             KomponenBiaya::where('id',$decrypted)

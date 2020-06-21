@@ -37,7 +37,7 @@ class OSPController extends Controller
             ->rawColumns(['action'])
             ->make(true);
         }   
-        return view('main.data_master.OSP.index');
+        return view('main.data_master.osp.index');
     }
 
     /**
@@ -47,7 +47,7 @@ class OSPController extends Controller
      */
     public function create()
     {
-        return view('main.data_master.OSP.create');
+        return view('main.data_master.osp.create');
     }
 
     /**
@@ -117,7 +117,7 @@ class OSPController extends Controller
         //
         // dd($request->all());
         try {
-            $decrypted = Crypt::decrypt($request->urlData); 
+            $decrypted = Crypt::decrypt($request->post('urlData')); 
             try {
                 $pushdata = [
                     'osp_name' => $request->post('nama-osp')
@@ -126,14 +126,14 @@ class OSPController extends Controller
                             ->update($pushdata);
                 Alert::success('Data Telah Diupdate');
                 return redirect()->route('OSPView');
-            } catch (QueryExecuted $e) { 
+            } catch (QueryException $e) { 
                 ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id);
                 Alert::error('Terjadi Kesalahan!!','Silahkan Hubungi Administrator/Superadministrator');
                 return redirect()->back();
             }
 
         } catch (DecryptException $e) {
-            ErrorReports::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
             Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');            
             return redirect()->route('OSPView');
         }
@@ -161,7 +161,7 @@ class OSPController extends Controller
                 return redirect()->back();
             }
         } catch (DecryptException $e) { 
-            ErrorReports::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
             Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');            
             return redirect()->route('OSPView');
         }

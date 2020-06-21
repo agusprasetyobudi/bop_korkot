@@ -160,6 +160,14 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('edit/{id}', 'Master\AktifitasController@edit')->name('AktifitasEditView');
         Route::post('edit', 'Master\AktifitasController@update')->name('AktifitasEditpost');
         Route::get('destroy/{id}', 'Master\AktifitasController@destroy')->name('AktifitasDestroy');
+        Route::group(['prefix' => 'sub-komponen'], function () {
+            Route::get('{id}/{sub_id}','Master\SubKomponenAktifitasController@index')->name('AktifitasSubKomponen');
+            Route::get('add/{id}/{sub_id}','Master\SubKomponenAktifitasController@create')->name('AktifitasSubKomponenAdd');
+            Route::post('add','Master\SubKomponenAktifitasController@store')->name('AktifitasSubKomponenStore');
+            Route::get('edit/{id}/{sub_id}','Master\SubKomponenAktifitasController@edit')->name('AktifitasSubKomponenEdit');
+            Route::post('edit','Master\SubKomponenAktifitasController@update')->name('AktifitasSubKomponenUpdate');
+            Route::get('destroy/{id}/{sub_id}','Master\SubKomponenAktifitasController@destroy')->name('AktifitasSubKomponenDestroy');
+        });
     });
 });
 
@@ -170,17 +178,15 @@ Route::group(['prefix' => 'pengguna', 'middleware'=>['auth']], function () {
         Route::get('create','PenggunaController@create')->name('PenggunaCreate');
         Route::post('create','PenggunaController@store')->name('PenggunaPost');
         Route::get('edit', 'PenggunaController@edit')->name('PenggunaEditView');
-        Route::post('edit', 'PenggunaController@update')->name('PenggunaEditpost');
-        Route::get('delete', 'PenggunaController@destory')->name('PenggunaDeleteSoft');
-        Route::get('destroy', 'PenggunaController@destory')->name('AktifitasDestroy');
+        Route::post('edit', 'PenggunaController@update')->name('PenggunaEditpost'); 
+        Route::get('destroy', 'PenggunaController@destory')->name('PenggunaDestroy');
     });
     Route::group(['prefix' => 'kelompok-pengguna'], function () {
         Route::get('/','KelompokPenggunaController@index')->name('KelompokPenggunaView');
         Route::get('create','KelompokPenggunaController@create')->name('KelompokPenggunaCreate');
         Route::post('create','KelompokPenggunaController@store')->name('KelompokPenggunaPost');
         Route::get('edit', 'KelompokPenggunaController@edit')->name('KelompokPenggunaEditView');
-        Route::post('edit', 'KelompokPenggunaController@update')->name('KelompokPenggunaEditpost');
-        Route::get('delete', 'KelompokPenggunaController@destory')->name('KelompokPenggunaDeleteSoft');
+        Route::post('edit', 'KelompokPenggunaController@update')->name('KelompokPenggunaEditpost'); 
         Route::get('destroy', 'KelompokPenggunaController@destory')->name('KelompokPenggunaDestroy');
     });
 });

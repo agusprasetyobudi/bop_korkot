@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>List Komponen Biaya</h1>
+                    <h1>List Sub Komponen Biaya</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -38,10 +38,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Data Komponen Biaya</h5>
+                            <h5>Data Sub Komponen Biaya</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="{!! route('KomponenBiayaCreate') !!}" class="btn btn-warning">Tambah Komponen Biaya</a>
+                            <a href="{!! route('SubKomponenCreateView',['id'=> Request::segment(4)])!!}" class="btn btn-warning">Tambah Sub Komponen</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableKomponenBiaya">
@@ -75,19 +75,20 @@ $(()=>{
         pagging: true,
         lengthChange:true,
         searching: true,
-        ajax:"{!! route('KomponenBiayaView') !!}",
+        ajax:"{!! route('SubKomponenView',['id'=> Request::segment(4)]) !!}",
         columns:[
             {data:'DT_RowIndex', className: 'text-center text-uppercase'},
-            {data:'nama_komponen', className: 'text-center text-uppercase'},
-            {data:'read_only', className: 'text-center text-uppercase'},
+            {data:'nama_komponen', className: 'text-center text-uppercase'}, 
             {data:'action', className: 'text-center text-uppercase'},
         ]
     })
     $('#tableKomponenBiaya tbody').on('click', 'button', tables, function () { 
             if(confirm('Anda yakin mau menghapus item ini ?')){
-                    const id = $(this).data('name');
-                    let url = "{{ route('KomponenBiayaDestroy', ':id') }}";
-                        url = url.replace(':id', id);
+                    const sub_id = $(this).data('name');
+                    const id = $(this).data('id');
+                    let url = "{{ route('SubKomponenDelete', ['id'=>':id','sub_id'=>':sub_id']) }}";
+                    url = url.replace(':id', id);
+                    url = url.replace(':sub_id', sub_id);
                         document.location.href=url; 
                 } 
     })

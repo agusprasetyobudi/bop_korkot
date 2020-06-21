@@ -21,6 +21,7 @@ class CreateKomponenBiayasTable extends Migration
             $table->integer('allow_provinsi')->nullable()->default(0);
             $table->integer('allow_korkot')->nullable()->default(0);
             $table->integer('allow_assisten')->nullable()->default(0);
+            $table->integer('is_parent')->nullable()->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

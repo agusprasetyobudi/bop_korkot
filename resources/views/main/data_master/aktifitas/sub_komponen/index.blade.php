@@ -17,12 +17,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>List Aktifitas</h1>
+                    <h1>List Sub Komponen Aktifitas</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">List Provinsi</li>
+                        <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{!! route('SubKomponenView',['id'=>$id]) !!}">List Sub Komponen</a></li>
+                        <li class="breadcrumb-item active">List Sub Komponen Aktifitas</li>
                     </ol>
                 </div>
             </div>
@@ -37,10 +38,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Data Aktifitas</h5>
+                            <h5>Data Sub Komponen Aktifitas</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah Data Aktifitas</a>
+                            <a href="{!! route('AktifitasSubKomponenAdd',['id'=>$id, 'sub_id'=>$parent_id]) !!}" class="btn btn-warning">Tambah Sub Komponen Aktifitas</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableAktifitas">
@@ -69,28 +70,27 @@
     <script>
     $(()=>{
         let tables = $('#tableAktifitas').DataTable({
-            responsive: true,
-            autoWidth: false,
             pagging: true,
             lengthChange:true,
-            searching: true,
-            ajax:"{!! route('AktifitasView')!!}",
-            columns:[
-                {data:'DT_RowIndex', className: 'text-center text-uppercase'},
-                {data:'nama_aktifitas', className: 'text-center text-uppercase'}, 
-                {data:'action', className: 'text-center text-uppercase'},
-            ]
+            ajax: "{!! route('AktifitasSubKomponen',['id'=>Request::segment(4),'sub_id'=>Request::segment(5)]) !!}",
+                columns:[
+                    {data: 'DT_RowIndex', className:'text-center'},
+                    {data: 'nama_aktifitas', className:'text-center'}, 
+                    {data: 'action', className:'text-center'}
+                ],
         })
-        $('#tableKomponenBiaya tbody').on('click', 'button', tables, function () { 
-                if(confirm('Anda yakin mau menghapus item ini ?')){
-                        const sub_id = $(this).data('name');
-                        const id = $(this).data('id');
-                        let url = "{{ route('SubKomponenDelete', ['id'=>':id','sub_id'=>':sub_id']) }}";
+        $('#tableAktifitas tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    const sub_id = $(this).data('name');
+                    let url = "{{ route('AktifitasSubKomponenDestroy', ['id'=>':id','sub_id'=>':sub_id']) }}";
                         url = url.replace(':id', id);
                         url = url.replace(':sub_id', sub_id);
-                            document.location.href=url; 
-                    } 
+                        // alert(url);
+                        // console.log(url)
+                        document.location.href=url; 
+                } 
         })
-        })
+    })
     </script>  
 @endsection

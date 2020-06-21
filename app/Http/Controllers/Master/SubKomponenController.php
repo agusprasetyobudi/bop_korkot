@@ -2,8 +2,16 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
+use App\Models\KomponenBiaya;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class SubKomponenController extends Controller
 {
@@ -14,7 +22,34 @@ class SubKomponenController extends Controller
      */
     public function index(Request $request, $id)
     {
-        //
+        // 
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Ditambahkan');
+            return redirect()->back();
+        }
+        if($request->ajax()){
+            $data = KomponenBiaya::where('parent_id',$decrypted)->latest()->get();
+            // dd($data);
+            return DataTables::of($data)
+            ->addIndexColumn()  
+            ->addColumn('nama_komponen',function($row){
+                return $row->komponen_biaya;
+            })
+            ->addColumn('action',function($row){
+                $btn = '';
+                $btn .= '<a href="'.route('AktifitasSubKomponen',['id'=>Crypt::encrypt($row->id),'sub_id'=>Crypt::encrypt($row->parent_id)]).'" class="btn btn-info">Aktifitas</a>  '; 
+                $btn .= '<a href="'.route('SubKomponenUpdateView',['id'=>Crypt::encrypt($row->parent_id),'sub_id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Update Data</a>  '; 
+                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->parent_id).'" data-id="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
+                return $btn;
+            })
+            ->rawColumns(['action','nama_komponen'])
+            ->make(true);
+        }
+        return view('main.data_master.sub_komponen.index');
+
     }
 
     /**
@@ -36,7 +71,55 @@ class SubKomponenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        try {
+        $decrypted = Crypt::decrypt($request->post('urldata'));
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+            return redirect()->route('home');
+        }
+        $data = [];
+        foreach ($request->post('sub_komponen') as $key => $value) {
+            $data[$key]['komponen_biaya'] = $value;
+            $data[$key]['parent_id'] = $decrypted;
+            $data[$key]['read_only'] = 0;
+        }
+        foreach ($request->post('p') as $key => $value) {
+         if($value){
+            $data[$key]['allow_provinsi'] = 1;
+         }else{
+         $data[$key]['allow_provinsi'] = 0; 
+         }
+        }
+        foreach ($request->post('a') as $key => $value) {
+         if($value){
+            $data[$key]['allow_assisten'] = 1;
+         }else{
+         $data[$key]['allow_assisten'] = 0;
+         }
+        }
+        foreach ($request->post('k') as $key => $value) {
+         if($value){
+            $data[$key]['allow_korkot'] = 1;
+         }else{
+         $data[$key]['allow_korkot'] = 0;
+         }
+
+        } 
+        // dd($decrypted);
+        try {
+            KomponenBiaya::insert($data);
+            KomponenBiaya::where('id',$decrypted)
+            ->update(['is_parent'=>1]);
+            Alert::success('Data Telah Ditambahkan');
+            return redirect()->route('SubKomponenView',['id'=>$request->post('urldata')]);
+        } catch (QueryException $e) { 
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
+            // dd($e);
+            Alert::error('Data Gagal Ditambahkan');
+            return redirect()->back(); 
+        }
     }
 
     /**
@@ -58,7 +141,13 @@ class SubKomponenController extends Controller
      */
     public function edit($id, $sub_id)
     {
-        //
+        try { 
+            $sub_ids = Crypt::decrypt($sub_id);  
+            $data = KomponenBiaya::find($sub_ids); 
+            return view('main.data_master.sub_komponen.update',['id'=> $id,'sub_id'=>$sub_id, 'data'=>$data]);
+        } catch (DecryptException $e) {
+            
+        }
     }
 
     /**
@@ -68,9 +157,33 @@ class SubKomponenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try { 
+            $parent_id = Crypt::decrypt($request->post('urldata')); 
+            $id = Crypt::decrypt($request->post('sub_urldata')); 
+            try { 
+                KomponenBiaya::where('id',$id)
+                            ->where('parent_id',$parent_id)
+                            ->update(['komponen_biaya'=>$request->post('sub_komponen'),
+                                    'allow_provinsi'=>$request->post('p'),
+                                    'allow_assisten'=>$request->post('a'),
+                                    'allow_korkot'=>$request->post('k')]);
+                Alert::success('Data Telah Diupdate');
+                return redirect()->route('SubKomponenView',['id'=>$request->post('urldata')]);
+            } catch (QueryException $e) { 
+                ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id);
+                Alert::error('Terjadi Kesalahan!!','Silahkan Hubungi Administrator/Superadministrator');
+                return redirect()->back();
+                // dd($e);
+            }
+
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');            
+            return redirect()->route('home');
+        }
+        dd($request->all());
     }
 
     /**
@@ -79,8 +192,28 @@ class SubKomponenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id,$sub_id)
     {
-        //
+        // dd([
+        //     'sub_id' => Crypt::decrypt($sub_id),
+        //     'id'    => Crypt::decrypt($id)
+        // ]);
+        try {
+            $id = Crypt::decrypt($id); 
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');
+            return redirect()->back(); 
+        }
+ 
+        try { 
+            KomponenBiaya::destroy($id); 
+            Alert::success('Data Berhasil Dihapus')->persistent('Confirm');
+            return redirect()->route('SubKomponenView',['id'=>$sub_id]);
+        } catch (QueryException $e) { 
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');
+            return redirect()->back(); 
+        }
     }
 }
