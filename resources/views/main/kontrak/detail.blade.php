@@ -20,13 +20,14 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Tambah Data Kontrak</h1>
+                    <h1>Tambah Data Komponen Biaya Kontrak</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{!! route('KontrakHome') !!}">Kontrak</a></li>
-                        <li class="breadcrumb-item active">Tambah Data Kontrak</li>
+                        <li class="breadcrumb-item"><a href="{!! route('KontrakViewDetail',['id'=> Request::segment(2)]) !!}">Kontrak Detail</a></li>
+                        <li class="breadcrumb-item active">Tambah Data Komponen Biaya Kontrak</li>
                     </ol>
                 </div>
             </div>
@@ -39,7 +40,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-sm-12">
+                    {{-- <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">Form Kontrak</div>
                             <div class="card-body">
@@ -67,7 +68,7 @@
                                 </div>
                             </div> 
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">Komponen Biaya Kontrak</div>
@@ -165,11 +166,9 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <form action="{!! route('KontrakCreateStore') !!}" method="post">
+                        <form action="{!! route('KontrakDetailCreatePost',['id'=>Request::segment(2)]) !!}" method="post">
                             @csrf
-                            <input type="hidden" name="kode_kontrak" class="kode-kontrak-post">
-                            <input type="hidden" name="kontrak_mulai" class="kontrak-mulai-post">
-                            <input type="hidden" name="kontrak_akhir" class="kontrak-akhir-post">
+                            <input type="hidden" name="urldata" class="kode-kontrak-post" value="{!! Request::segment(2) !!}"> 
                             <div class="card"> 
                                 <div class="card-header">
                                     List Data Kontrak

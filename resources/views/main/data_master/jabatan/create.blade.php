@@ -42,15 +42,15 @@
                     <div class="card">
                         <div class="card-header">Tambah Data Jabatan</div>
                         <div class="card-body">
-                            <div class="fomr-group">
+                            <div class="form-group">
                                 <label for="" class="text-uppercase">kode jabatan</label>
                                 <input type="text" class="form-control kode-jabatan">
                             </div>
-                            <div class="fomr-group">
+                            <div class="form-group">
                                 <label for="" class="text-uppercase">nama jabatan</label>
                                 <input type="text" class="form-control nama-jabatan">
                             </div>
-                            <div class="fomr-group">
+                            <div class="form-group">
                                 <label for="" class="text-uppercase">posisi kantor</label>
                                 <select class="form-control posisi-kantor text-uppercase">
                                     <option selected disabled class="text-uppercase">pilih posisi kantor</option>

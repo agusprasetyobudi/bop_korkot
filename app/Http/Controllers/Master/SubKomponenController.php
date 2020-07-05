@@ -129,9 +129,16 @@ class SubKomponenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function get(Request $request)
     {
-        //
+        // dd(KomponenBiaya::where('parent_id',$request->post('id'))->get());
+        $data = KomponenBiaya::where('parent_id',$request->post('id'))->where('komponen_biaya','like','%'.$request->post('q').'%')->get(); 
+        $results = [];
+        foreach ($data as $key => $value) {
+            $results[$key]['id'] = $value->id;
+            $results[$key]['nama_komponen'] = $value->komponen_biaya;
+        }
+        return response()->json($results);
     }
 
     /**
@@ -194,11 +201,7 @@ class SubKomponenController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request,$id,$sub_id)
-    {
-        // dd([
-        //     'sub_id' => Crypt::decrypt($sub_id),
-        //     'id'    => Crypt::decrypt($id)
-        // ]);
+    { 
         try {
             $id = Crypt::decrypt($id); 
         } catch (DecryptException $e) {

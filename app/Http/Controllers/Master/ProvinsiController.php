@@ -80,9 +80,16 @@ class ProvinsiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function get(Request $request)
     {
-        //
+        // $data = ProvinsiModels::all();
+        $data = ProvinsiModels::where('provinsi_name','like','%'.$request->post('q').'%')->get();
+        $results = [];
+        foreach ($data as $key => $value) {
+            $results[$key]['id'] = $value->id;
+            $results[$key]['provinsi'] = $value->provinsi_name;
+        }
+        return response()->json($results);
     }
 
     /**

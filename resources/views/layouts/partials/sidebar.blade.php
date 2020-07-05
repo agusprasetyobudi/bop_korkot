@@ -197,6 +197,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{!! route('AmandemenView') !!}" class="nav-link @if(Request::segment(2)=='amandemen') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Amandemen</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{!! route('AktifitasView') !!}" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Aktifitas</p>

@@ -103,9 +103,39 @@ class SubKomponenAktifitasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function get(Request $request)
     {
-        //
+        $results = []; 
+        if($request->post('q')){
+            // Declare Aktifitas get ID
+            $varAct = AktifitasModels::where('nama_aktifitas','like','%'.$request->post('q').'%')->get();     
+            $var = [];
+            foreach ($varAct as $key => $value) {  
+                $var[$key] = $value->id;
+            } 
+            // Declare sub komponen activity by id aktifitas
+            $data=[];
+            foreach ($var as $key => $value) {   
+                $data[$key] = SubKomponenActivityModels::where('id_subkomponen',$request->post('id'))
+                        ->where('id_aktifitas','like','%'.$value.'%')->get(); 
+            }  
+            // Double Foreach Processing
+            $loops = [];  
+            foreach ($data as $key => $value) {   
+                $loops[$key] = $value[0];   
+            } 
+            foreach ($loops as $key => $values) {  
+                $results[$key]['id'] = $values->id;
+                $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
+            }
+        }else{
+            $data = SubKomponenActivityModels::where('id_subkomponen',$request->post('id'))->get();
+            foreach ($data as $key => $values) {  
+                $results[$key]['id'] = $values->id;
+                $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
+            }
+        }  
+        return response()->json($results);
     }
 
     /**

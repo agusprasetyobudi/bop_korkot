@@ -104,9 +104,15 @@ class KomponenBiayaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function get(Request $request)
     {
-        //
+        $data = KomponenBiaya::where('parent_id',0)->where('komponen_biaya','like','%'.$request->post('q').'%')->get(); 
+        $results = [];
+        foreach ($data as $key => $value) {
+            $results[$key]['id'] = $value->id;
+            $results[$key]['nama_komponen'] = $value->komponen_biaya;
+        }
+        return response()->json($results);
     }
 
     /**

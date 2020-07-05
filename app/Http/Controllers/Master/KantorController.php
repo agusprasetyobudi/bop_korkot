@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Facades\ErrorReport;
-use App\Http\Controllers\Controller;
-use App\Models\KabupatenModels;
+use App\Http\Controllers\Controller; 
 use Illuminate\Http\Request;
 use App\Models\KantorModels;
 use App\Models\OSPModels;
@@ -116,9 +115,21 @@ class KantorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function get(Request $request)
+    { 
+        $data = $request->post('q'); 
+        preg_match('/\d+/', $data, $string); 
+        if($string){
+            $res = KantorModels::where('id_osp',$request->post('id'))->where('kode_kantor','like','%'.$data.'%')->get();
+        }else{
+            $res = KantorModels::where('id_osp',$request->post('id'))->where('nama_kantor','like','%'.$data.'%')->get();
+        } 
+        foreach ($res as $key => $value) {
+            $results[$key]['id'] = $value->id;
+            $results[$key]['kode_kantor'] = $value->kode_kantor;
+            $results[$key]['nama_kantor'] = $value->nama_kantor; 
+        }
+        return response()->json($results);
     }
 
     /**

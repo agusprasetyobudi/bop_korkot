@@ -81,9 +81,17 @@ class OSPController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function get(Request $request)
     {
-        //
+        $data = OSPModels::where('osp_name','like','%'.$request->post('q').'%')->get();
+        // dd($data);
+        $result = [];
+        foreach ($data as $key => $value) { 
+            $result[$key]['id'] = $value->id;
+            $result[$key]['nama_osp'] = $value->osp_name;            
+        }
+        // dd($result);
+        return response()->json($result);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +44,14 @@ Route::group(['prefix'=>'buku-bank','middleware' => ['auth']], function () {
 #Kontrak Route
 Route::group(['prefix' => 'kontrak','middleware' => ['auth']], function () {
     Route::get('/', 'KontrakController@index')->name('KontrakHome');
-    Route::get('create', 'KontrakController@create')->name('KontrakCreate');
-    Route::post('create', 'KontrakController@store')->name('KontrakStore');
+    Route::get('create', 'KontrakController@create')->name('KontrakCreateView');
+    Route::post('create', 'KontrakController@store')->name('KontrakCreateStore');
+    Route::get('destroy/{id}', 'KontrakController@destroy')->name('KontrakDestroy');
+    Route::get('/{id}','KontrakController@show')->name('KontrakViewDetail');
+    Route::get('/{id}/tambah','KontrakController@detail')->name('KontrakDetailCreate');
+    Route::post('/{id}/tambah','KontrakController@post_detail')->name('KontrakDetailCreatePost');
+    Route::get('destroy/detail/{id}', 'KontrakController@destroy_detail')->name('KontrakDestroyDetail');
+
 });
 
 #Firm Route
@@ -95,6 +102,7 @@ Route::group(['prefix' => 'report', 'middleware'=>['auth']], function () {
 #Master Route
 Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
     Route::group(['prefix' => 'provinsi'], function () {
+        Route::get('get','Master\ProvinsiController@get')->name('GetProvinsiAPI');
         Route::get('/','Master\ProvinsiController@index')->name('provinsiView');
         Route::get('create','Master\ProvinsiController@create')->name('provinsiCreate');
         Route::post('create','Master\ProvinsiController@store')->name('provinsiPost');
@@ -112,6 +120,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::post('get', 'Master\KabupatenKotaController@show')->name('GetKabupatenKota');
     });
     Route::group(['prefix' => 'osp'], function () {
+        Route::get('get', 'Master\OSPController@get')->name('OSPGetAPI');
         Route::get('/','Master\OSPController@index')->name('OSPView');
         Route::get('create','Master\OSPController@create')->name('OSPCreate');
         Route::post('create','Master\OSPController@store')->name('OSPPost');
@@ -120,6 +129,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('delete/{id}', 'Master\OSPController@destroy')->name('OSPDestroy');
     });
     Route::group(['prefix' => 'kantor'], function () {
+        Route::post('get','Master\KantorController@get')->name('KantorGetAPI');
         Route::get('/','Master\KantorController@index')->name('KantorView');
         Route::get('create','Master\KantorController@create')->name('KantorCreate');
         Route::post('create','Master\KantorController@store')->name('KantorPost');
@@ -144,7 +154,9 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('destroy/{id}', 'Master\KomponenBiayaController@destroy')->name('KomponenBiayaDestroy');
         Route::get('readonly/{id}', 'Master\KomponenBiayaController@readonly')->name('KomponenBiayaReadonly');
         Route::get('unreadonly/{id}', 'Master\KomponenBiayaController@unreadonly')->name('KomponenBiayaUnReadonly');
+        Route::get('get','Master\KomponenBiayaController@get')->name('GetKomponenAPI');
         Route::group(['prefix' => 'sub'], function () {
+            Route::post('get','Master\SubKomponenController@get')->name('GetSubKomponenAPI');
             Route::get('{id}/', 'Master\SubKomponenController@index')->name('SubKomponenView');            
             Route::get('{id}/create', 'Master\SubKomponenController@create')->name('SubKomponenCreateView');            
             Route::post('/create', 'Master\SubKomponenController@store')->name('SubKomponenCreatePost');            
@@ -161,6 +173,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::post('edit', 'Master\AktifitasController@update')->name('AktifitasEditpost');
         Route::get('destroy/{id}', 'Master\AktifitasController@destroy')->name('AktifitasDestroy');
         Route::group(['prefix' => 'sub-komponen'], function () {
+            Route::post('get','Master\SubKomponenAktifitasController@get')->name('GetSubAktifitasAPI');
             Route::get('{id}/{sub_id}','Master\SubKomponenAktifitasController@index')->name('AktifitasSubKomponen');
             Route::get('add/{id}/{sub_id}','Master\SubKomponenAktifitasController@create')->name('AktifitasSubKomponenAdd');
             Route::post('add','Master\SubKomponenAktifitasController@store')->name('AktifitasSubKomponenStore');
@@ -168,6 +181,15 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
             Route::post('edit','Master\SubKomponenAktifitasController@update')->name('AktifitasSubKomponenUpdate');
             Route::get('destroy/{id}/{sub_id}','Master\SubKomponenAktifitasController@destroy')->name('AktifitasSubKomponenDestroy');
         });
+    });
+    Route::group(['prefix' => 'amandemen'], function () {
+        Route::get('get','Master\AmandemenController@get')->name('AmandemenGetAPI');
+        route::get('/','Master\AmandemenController@index')->name('AmandemenView');
+        route::get('create','Master\AmandemenController@create')->name('AmandemenCreateView');
+        route::post('create','Master\AmandemenController@store')->name('AmandemenCreatePost');
+        route::get('update/{id}','Master\AmandemenController@edit')->name('AmandemenUpdateView');
+        route::post('update','Master\AmandemenController@update')->name('AmandemenUpdatePost');
+        route::get('destroy/{id}','Master\AmandemenController@destroy')->name('AmandemenDestroy');
     });
 });
 

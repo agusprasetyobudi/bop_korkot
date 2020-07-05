@@ -37,7 +37,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body text-right">
-                            <a href="{!! route('KontrakCreate') !!}" class="btn btn-warning">Tambah Data Kontrak</a>
+                            <a href="{!! route('KontrakCreateView') !!}" class="btn btn-warning">Tambah Data Kontrak</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableKontrak">
@@ -70,10 +70,29 @@
   <script>
       $(()=>{
           let tables = $('#tableKontrak').DataTable({
-              pagging: true,
-              lengthChange:true,
-              searching: true
+              responsive: true,
+              autoWidth: false,
+              paging: true,
+              lengthChange: true,
+              searching: true,
+              ajax: "{!! route('KontrakHome') !!}",
+              columns:[
+                  {data:'DT_RowIndex', className: 'text-center text-uppercase'},
+                  {data:'kode_kontrak', className: 'text-center text-uppercase'},
+                  {data:'tanggal_kontrak', className: 'text-center text-uppercase'},
+                  {data:'tanggal_kontrak_mulai', className: 'text-center text-uppercase'},
+                  {data:'tanggal_kontrak_akhir', className: 'text-center text-uppercase'},
+                  {data:'action', className: 'text-center text-uppercase'},
+              ]
           })
+          $('#tableKontrak tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('KontrakDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+            })
       })
   </script>
 @endsection

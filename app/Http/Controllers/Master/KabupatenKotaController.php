@@ -92,11 +92,24 @@ class KabupatenKotaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
-    {        
-        $id = $request->post('id');
-        return KabupatenModels::where('provinsi_id',$id)
-        ->select(['id','kabupaten_name'])
-        ->get();
+    {   
+        // dd($request->post('q'));
+        try {
+            if($request->post('q')){
+                $id = $request->post('id');
+                return KabupatenModels::where('provinsi_id',$id)
+                ->where('kabupaten_name','like','%'.$request->post('q').'%')
+                ->select(['id','kabupaten_name'])
+                ->get();            
+            }else{
+                $id = $request->post('id');
+                return KabupatenModels::where('provinsi_id',$id)
+                ->select(['id','kabupaten_name'])
+                ->get();
+            }
+        } catch (QueryException $e) {
+            return response()->json($e);
+        }
     }
 
     /**
