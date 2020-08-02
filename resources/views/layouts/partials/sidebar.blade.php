@@ -203,6 +203,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{!! route('BankView') !!}" class="nav-link @if(Request::segment(2)=='bank') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Bank</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{!! route('AktifitasView') !!}" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Aktifitas</p>

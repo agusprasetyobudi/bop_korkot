@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
-use App\Models\JabatanModel;
+use App\Models\MasterBank;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class JabatanController extends Controller
+class BankController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,19 +23,19 @@ class JabatanController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = JabatanModel::latest()->get();
+            $data = MasterBank::get();
             return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action',function($row){                 
+            ->addColumn('action',function($row){
                 $btn = '';
-                $btn .= '<a href="'.route('JabatanEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Update Data</a>  '; 
+                $btn .= '<a href="'.route('BankEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Update Data</a>  '; 
                 $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
                 return $btn;
             })
             ->rawColumns(['action'])
             ->make(true);
         }
-        return view('main.data_master.jabatan.index');
+        return view('main.data_master.bank.index');
     }
 
     /**
@@ -45,7 +45,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        return view('main.data_master.jabatan.create');
+        return view('main.data_master.bank.create');
     }
 
     /**
@@ -55,26 +55,20 @@ class JabatanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        try {  
-            $push = [];
-            foreach ($request->post('kode_jabatan') as $key => $value) {
-                $push[$key] = [
-                    'kode_jabatan' => $value
+    { 
+        try {
+            foreach ($request->post('nama_bank') as $key => $value) {
+                // dd($value);
+                $data[] = [
+                    'nama_bank'=> $value
                 ];
-            }
-            foreach ($request->post('nama_jabatan') as $key => $value) {
-                $push[$key]['nama_jabatan'] = $value;
-            }
-            foreach ($request->post('posisi_kantor') as $key => $value) {
-                $push[$key]['posisi_kantor'] = $value;
-            }
-            JabatanModel::insert($push);
-            Alert::success('Data Telah Ditambahkan'); 
-            return redirect()->route('JabatanView');
-        } catch (QueryException $e) {
-            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
-            Alert::error('Data Gagal Ditambahkan'); 
+            } 
+            MasterBank::insert($data);
+            Alert::success('Data Berhasil Ditambahkan');
+            return redirect()->route('BankView');
+        } catch (QueryException $e) { 
+            ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id);
+            Alert::error('Terjadi Kesalahan!!','Silahkan Hubungi Administrator/Superadministrator');
             return redirect()->back();
         }
     }
@@ -87,15 +81,9 @@ class JabatanController extends Controller
      */
     public function show(Request $request)
     {
-        // $data = JabatanModel::all();
-        // // dd($data);
         $data = $request->post('q'); 
-        preg_match('/\d+/', $data, $string); 
-        if($string){
-            $res = JabatanModel::where('kode_jabatan','like','%'.$data.'%')->get();
-        }else{
-            $res = JabatanModel::where('nama_jabatan','like','%'.$data.'%')->get();
-        } 
+        preg_match('/\d+/', $data, $string);  
+        $res = MasterBank::where('nama_bank','like','%'.$data.'%')->get(); 
         return response()->json($res);
     }
 
@@ -105,7 +93,7 @@ class JabatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
         try {
             $decrypted = Crypt::decrypt($id); 
@@ -114,8 +102,8 @@ class JabatanController extends Controller
             Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
             return redirect()->route('home'); 
         } 
-            $data = JabatanModel::find($decrypted);
-            return view('main.data_master.jabatan.update',['data'=>$data]); 
+            $data = MasterBank::find($decrypted);
+            return view('main.data_master.bank.update',['data'=>$data]); 
     }
 
     /**
@@ -135,16 +123,14 @@ class JabatanController extends Controller
             return redirect()->route('home'); 
         }
         try { 
-            $pushData = [ 
-                "kode_jabatan" => $request->post('kode_jabatan'),
-                "nama_jabatan" => $request->post('nama_jabatan'),
-                "posisi_kantor" => $request->post('posisi_kantor'),
+            $pushData = [  
+                "nama_bank" => $request->post('nama_bank'), 
             ];
             // dd($pushData);
-            JabatanModel::where('id',$decrypted)
+            MasterBank::where('id',$decrypted)
                         ->update($pushData);
             Alert::success('Data Telah Diupdate');
-            return redirect()->route('JabatanView');
+            return redirect()->route('BankView');
         } catch (QueryException $e) {
             ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id);
             Alert::error('Terjadi Kesalahan !!','Silahakn Hubungi Admin');
@@ -169,9 +155,9 @@ class JabatanController extends Controller
         }
 
         try { 
-            $data = JabatanModel::destroy($decrypted); 
+            $data = MasterBank::destroy($decrypted); 
             Alert::success('Data Berhasil Dihapus')->persistent('Confirm');
-            return redirect()->route('JabatanView'); 
+            return redirect()->route('BankView'); 
         } catch (QueryException $e) { 
             ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
             Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');

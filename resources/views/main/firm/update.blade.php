@@ -19,12 +19,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>Firm Transfer</h1>
+            <h1>Edit Firm Transfer</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
-                <li class="breadcrumb-item active">Firm Transfer</li>
+                <li class="breadcrumb-item active">Edit Firm Transfer</li>
             </ol>
             </div>
         </div>
@@ -35,25 +35,26 @@
 @section('body')
     <section class="content">
         <div class="container-fluid">
-            <form action="{!! route('firmCreatePost') !!}" method="post">
+            <form action="{!! route('firmEditPost') !!}" method="post">
                 @csrf
+                <input type="hidden"name="urldata" value="{!! Crypt::encrypt($data->id); !!}">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6"> 
                                 <div class="form-group">
                                   <label class="text-uppercase">no bukti transfer</label>
-                                  <input type="text" name="no_bukti_trf" class="form-control">
+                                  <input type="text" name="no_bukti_trf" class="form-control" value="{!! $data->no_bukti !!}">
                                 </div> 
                                 <div class="form-group">
                                   <label class="text-uppercase">tanggal transfer</label>
-                                  <input type="text" name="tanggal_trf" class="form-control" value="{!! $date !!}" readonly>
+                                  <input type="text" name="tanggal_trf" class="form-control" value="{!! $data->tanggal_tf !!}" readonly>
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">jabatan</label>
                                   {{-- <input type="text" class="form-control"> --}}
                                     <select name="jabatan" class="form-control jabatan">
-                                        {{-- <option value="">Test</option>   --}}
+                                        <option selected value="{!! $jabatan->id !!}">{!! $jabatan->nama_data !!}</option>  
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -62,12 +63,12 @@
                                     <div class="row">
                                         <div class="col-sm-2">
                                             <select name="osp" class="form-control osp">
-                                              {{-- <option value="">Test</option>   --}}
+                                              <option selected value="{!! $osp->id !!}">{!! $osp->nama_data !!}</option>  
                                             </select>
                                         </div>
                                         <div class="col-sm-10">
                                             <select name="kantor" class="form-control kantor">
-                                              {{-- <option value="">Test</option>   --}}
+                                              <option selected value="{!! $kantor->id !!}">{!! $kantor->nama_data !!}</option>  
                                             </select>
                                         </div>
                                     </div>
@@ -78,11 +79,12 @@
                                 <div class="row">
                                     <div class="col-sm-2">
                                         <select name="periode_month" class="form-control month"> 
+                                            <option selected value="{!! $data->periode_month !!}">{!! $data->periode_month !!}</option>  
                                         </select>
                                     </div>
                                     <div class="col-sm-10">
                                         <select name="periode_year" class="form-control year">
-                                            {{-- <option value="">Test</option>   --}}
+                                            <option selected value="{!!  $data->periode_year !!}">{!! $data->periode_year !!}</option>  
                                         </select>
                                     </div>
                                 </div>
@@ -90,27 +92,27 @@
                             </div>
                             <div class="col-md-6"> 
                                 <div class="form-group">
-                                  <label class="text-uppercase">bank penerima</label>
-                                  <select name="bank" class="form-control bank">
-                                    {{-- <option value="">Test</option>   --}}
-                                </select>
+                                    <label class="text-uppercase">bank penerima</label>
+                                    <select name="bank" class="form-control bank">
+                                        <option selected value="{!! $bank->id !!}">{!! $bank->nama_data !!}</option>  
+                                    </select>
                                 </div> 
                                 <div class="form-group">
                                   <label class="text-uppercase">nomor rekening penerima</label>
-                                  <input type="text" name="no_rekening" class="form-control">
+                                  <input type="text" name="no_rekening" class="form-control" value="{!! $data->bank_account_number !!}">
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">nama penerima</label>
-                                  <input type="text" name="penerima" class="form-control">
+                                  <input type="text" name="penerima" class="form-control" value="{!! $data->nama_penerima !!}">
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">jumlah ditransfer</label>
-                                  <input type="text" class="form-control uang">
-                                  <input type="hidden" name="jumlah_transfer" class="form-control uang-replace">
+                                  <input type="text" class="form-control uang" value="{!! number_format($data->amount_tf,0,',',',') !!}">
+                                  <input type="hidden" name="jumlah_transfer" class="form-control uang-replace" value="{!! $data->amount_tf !!}">
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">keterangan</label>
-                                  <textarea name="keterangan" class="form-control" rows="3"></textarea>
+                                  <textarea name="keterangan" class="form-control" rows="3">{!! $data->description !!}</textarea>
                                 </div>
                             </div>
                         </div>

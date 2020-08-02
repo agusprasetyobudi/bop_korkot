@@ -11,6 +11,7 @@ use App\Models\ProvinsiModels;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,7 +26,10 @@ class KantorController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = KantorModels::latest()->get();
+            // $data = KantorModels::get();
+            $data = Cache::remember('kantor', env('CACHE_LIFETIME'), function () {
+                return KantorModels::get();
+            });
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('osp',function($row){ 

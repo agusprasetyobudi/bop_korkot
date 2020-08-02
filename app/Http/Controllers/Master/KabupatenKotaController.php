@@ -10,6 +10,7 @@ use App\Models\ProvinsiModels;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,7 +25,10 @@ class KabupatenKotaController extends Controller
     public function index(Request $request)
     {  
         if($request->ajax()){
-            $data = KabupatenModels::latest()->get(); 
+            // $data = KabupatenModels::get(); 
+            $data = Cache::remember('kabupaten', env('CACHE_LIFETIMES'), function () {
+                return KabupatenModels::get(); 
+            }); 
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('provinsi_name',function($row){

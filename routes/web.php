@@ -23,7 +23,12 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('periode/month',function(){
+    return \App\Facades\MonthnYear::getList()->month;
+})->middleware('auth')->name('PeriodeMonthList');
+Route::get('periode/year',function(){
+    return \App\Facades\MonthnYear::getList()->year;
+})->middleware('auth')->name('PeriodeYearList');
 Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/firm', 'FirmController@index')->name('firmView');
 
@@ -55,18 +60,25 @@ Route::group(['prefix' => 'kontrak','middleware' => ['auth']], function () {
 });
 
 #Firm Route
-Route::group(['prefix' => 'firm'], function () {
+Route::group(['prefix' => 'firm','middleware' => ['auth']], function () {
     Route::get('/', 'FirmController@index')->name('firmView');
     Route::get('/create', 'FirmController@create')->name('firmCreateView');
     Route::post('/create', 'FirmController@store')->name('firmCreatePost');
+    Route::get('edit/{id}', 'FirmController@edit')->name('firmEditView');
+    Route::post('edit', 'FirmController@update')->name('firmEditPost');
+    Route::get('delete/{id}', 'FirmController@destroy')->name('firmDestroy');
+    Route::get('get', 'FirmController@api')->name('firmAPI');
 });
 
 #Rekapitulasi Route
 Route::group(['prefix' => 'rekapitulasi', 'middleware'=>['auth']], function () {
     Route::group(['prefix' => 'bukti-transfer'], function () {
-        Route::get('/', 'RekapitulasiController@indexTransfer')->name('buktiTransferView');
-        Route::get('create', 'RekapitulasiController@CreateTransfer')->name('buktiTransferCreate');
-        Route::post('create', 'RekapitulasiController@StoreTransfer')->name('buktiTransferPost');
+        Route::get('/', 'Transfer\RekapitulasiController@index')->name('buktiTransferView');
+        Route::get('create', 'Transfer\RekapitulasiController@create')->name('buktiTransferCreate');
+        Route::post('create', 'Transfer\RekapitulasiController@store')->name('buktiTransferPost');
+        Route::get('edit/{id}', 'Transfer\RekapitulasiController@edit')->name('buktiTransferEdit');
+        Route::post('edit', 'Transfer\RekapitulasiController@update')->name('buktiTransferUpdate');
+        Route::get('destroy/{id}', 'Transfer\RekapitulasiController@destroy')->name('buktiTransferDestroy');
     });
     Route::group(['prefix' => 'bukti-pengeluaran'], function () {
         Route::get('/', 'RekapitulasiController@indexPengeluaran')->name('buktiPengeluaranView');
@@ -144,6 +156,16 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::get('edit/{id}', 'Master\JabatanController@edit')->name('JabatanEditView');
         Route::post('edit', 'Master\JabatanController@update')->name('JabatanEditpost'); 
         Route::get('destroy/{id}', 'Master\JabatanController@destroy')->name('JabatanDestroy');
+        Route::post('list','Master\JabatanController@show')->name('JabatanGetAjax');
+    });
+    Route::group(['prefix' => 'bank'], function () {
+        Route::get('/','Master\BankController@index')->name('BankView');
+        Route::get('create','Master\BankController@create')->name('BankCreate');
+        Route::post('create','Master\BankController@store')->name('BankPost');
+        Route::get('edit/{id}', 'Master\BankController@edit')->name('BankEditView');
+        Route::post('edit', 'Master\BankController@update')->name('BankEditpost'); 
+        Route::get('destroy/{id}', 'Master\BankController@destroy')->name('BankDestroy');
+        Route::post('list','Master\BankController@show')->name('BankGetAjax');
     });
     Route::group(['prefix' => 'komponen'], function () {
         Route::get('/','Master\KomponenBiayaController@index')->name('KomponenBiayaView');

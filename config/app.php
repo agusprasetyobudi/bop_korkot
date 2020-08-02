@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         App\Providers\ErrorRecordingServiceProvider::class,
+        App\Providers\MonthnYearServiceProvider::class,
     ],
 
     /*
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'ErrorReports' => App\Facades\ErrorReport::class,
+        'MonthnYear' => App\Facades\MonthnYear::class,
         
     ],
 

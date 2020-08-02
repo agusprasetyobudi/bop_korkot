@@ -64,39 +64,7 @@
                     <th class="text-center">Keterangan</th> 
                     <th class="text-center">Opsi</th> 
                   </tr>
-                  </thead>
-                  <tbody> 
-                      <tr>
-                          <td>1</td>
-                          <td>10002232</td>
-                          <td>1</td>
-                          <td>Kantor Pusat</td>
-                          <td>{!! now() !!}</td>
-                          <td>Test</td>
-                          <td>Bank Test</td>
-                          <td>1782718728718278178</td>
-                          <td>Test</td>
-                          <td>Rp. 1.000.000 </td>
-                          <td>{!! now() !!}</td>
-                          <td>-</td>
-                          <td>#</td>
-                      </tr>
-                      <tr>
-                          <td>2</td>
-                          <td>10000191</td>
-                          <td>1</td>
-                          <td>Kantor Pusat</td>
-                          <td>{!! now() !!}</td>
-                          <td>Test</td>
-                          <td>Bank Lest</td>
-                          <td>1782718728718278178</td>
-                          <td>Test 1234</td>
-                          <td>Rp. 1.000.000 </td>
-                          <td>{!! now() !!}</td>
-                          <td>-</td>
-                          <td>#</td>
-                      </tr>
-                  </tbody> 
+                  </thead> 
                 </table>
               </div>
               <!-- ./card-body -->              
@@ -125,12 +93,34 @@
       let tables = $("#example2").DataTable({
         responsive: true,
         autoWidth: false,
-        paging: true,
-        lengthChange: true,
-        searching: true, 
-        // autoWidth: true, 
-        // processing: false,
-      });      
+        pagging: true,
+        lengthChange:true,
+        searching: true,
+        ajax:"{!! route('firmView') !!}",
+        columns:[
+            {data:'DT_RowIndex', className: 'text-center text-uppercase'},
+            {data:'no_bukti', className: 'text-center text-uppercase'},  
+            {data:'osp', className: 'text-center text-uppercase'},  
+            {data:'kantor', className: 'text-center text-uppercase'},  
+            {data:'tanggal_tf', className: 'text-center text-uppercase'},  
+            {data:'jabatan', className: 'text-center text-uppercase'},  
+            {data:'bank', className: 'text-center text-uppercase'},  
+            {data:'bank_account_number', className: 'text-center text-uppercase'},  
+            {data:'nama_penerima', className: 'text-center text-uppercase'},  
+            {data:'amount_tf', className: 'text-center text-uppercase'},  
+            {data:'periode', className: 'text-center text-uppercase'},  
+            {data:'description', className: 'text-center text-uppercase'},   
+            {data:'action', className: 'text-center'},
+        ]
+      });   
+      $('#example2 tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('firmDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+    })   
     })
   </script>
 @endsection

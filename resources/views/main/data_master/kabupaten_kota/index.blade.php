@@ -68,6 +68,8 @@
       <script>
       $(()=>{ 
           let tables = $('#tableKabupaten').DataTable({
+                processing: true,
+                serverSide: true,
                 responsive: true,
                 autoWidth: false,
                 paging: true,
@@ -80,6 +82,7 @@
                     {data: 'provinsi_name', className:'text-center'},
                     {data: 'action', className:'text-center'}
                 ],
+                cache: true,
           }) 
           $('#tableKabupaten tbody').on('click', 'button', tables, function () { 
             if(confirm('Anda yakin mau menghapus item ini ?')){
