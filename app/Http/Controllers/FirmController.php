@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Facades\ErrorReport;
 use App\Facades\MonthnYear;
-use App\Models\FirmModels;
-use App\Models\LogFirm;
+use App\Models\FirmModels; 
+use App\Models\LogFirm; 
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert; 
 use Yajra\DataTables\Facades\DataTables;
 
 class FirmController extends Controller
@@ -24,6 +25,7 @@ class FirmController extends Controller
      */
     public function index(Request $request)
     {
+        // dd(Carbon::parse(1)->format('F'));
         if($request->ajax()){
             $data = FirmModels::get();
             return DataTables::of($data)
@@ -41,10 +43,12 @@ class FirmController extends Controller
                 return $row->Jabatan->nama_jabatan;
             })
             ->addColumn('kantor',function($row){
-                return $row->Kantor->nama_kantor;
+                return $row->Kantor->nama_kantor.'/'.$row->Kantor->nama_kabupaten;
             })
             ->addColumn('periode',function($row){
-                return $row->periode_month.' - '.$row->periode_year;
+                // dd((int)$row->periode_month);
+                return Carbon::parse((int)$row->periode_month)->format('F').' - '.$row->periode_year;
+                // return $month;
             })
             ->addColumn('bank',function($row){
                 return $row->Bank->nama_bank;
@@ -120,8 +124,59 @@ class FirmController extends Controller
             $data = FirmModels::where('kantor','like','%'.$request->post('kantor').'%');
         }else if($request->post('user')){
             $data = FirmModels::where('user','like','%'.$request->post('user').'%');
-        }else{
+        }elseif($request->post('from_rekap')){
+            try {
+                $decrypted = Crypt::decrypt($request->post('from_rekap'));
+                // dd($request->from_rekap);
+            } catch (DecryptException $e) {
+                ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);  
+                Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+                return redirect()->route('home');
+            }
+            $res = FirmModels::find($decrypted);
+            $dates = DB::select(DB::raw('select makedate('.$res->periode_year.',((('.$res->periode_month.'-1)*30)+5)) as periode_dates'));
+            $data = array(
+                'no_bukti'=> $res->no_bukti,
+                'tanggal' => $res->tanggal_tf,
+                'amount_tf' => $res->amount_tf ,
+                'jabatan' => $res->Jabatan->nama_jabatan,
+                'osp'       => $res->OSP->osp_name,
+                'kantor'    => $res->Kantor->nama_kantor.'/'.$res->Kantor->nama_kabupaten,
+                'id_kantor' => $res->kantor,
+                'periode'   => Carbon::parse((int)$res->periode_month)->format('F').' - '.$res->periode_year,
+                'periode_by_date' => $dates[0]->periode_dates,
+                'nama_bank' => $res->Bank->nama_bank,
+                'account_bank' => $res->bank_account_number,
+                'nama_penerima' => $res->nama_penerima
+            );
+        }else if($request->ajax()){
+            // dd($request->ajax());
             $data = FirmModels::get();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action',function($row){
+                return '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Pilih</button>';
+                // return $row;
+            })
+            ->addColumn('kantor',function($row){
+                return $row->Kantor->nama_kantor.'/'.$row->Kantor->nama_kabupaten;
+            })
+            ->addColumn('jabatan',function($row){
+                return $row->Jabatan->nama_jabatan;
+            })
+            ->addColumn('amount',function($row){
+                return  "Rp " . number_format($row->amount_tf,0,',','.');;
+            })
+            ->addColumn('nama_bank',function($row){
+                return $row->Bank->nama_bank;
+            })
+            ->addColumn('periode',function($row){
+                return Carbon::parse((int)$row->periode_month)->format('F').' - '.$row->periode_year;
+            })
+            ->rawColumns(['action','jabatan','amount','nama_bank','periode'])
+            ->make(true);
+        }else {
+            $data = FirmModels::get(); 
         }
         return response()->json($data);
     }

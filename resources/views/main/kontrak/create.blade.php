@@ -57,11 +57,11 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">tanggal kontrak dimulai</label>
-                                            <input type="text" class="form-control kontrak-mulai" value="{!! $date_now !!}" readonly>
+                                            <input type="text" class="form-control kontrak-mulai" >
                                         </div>
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">tanggal kontrak akhir</label>
-                                            <input type="text" class="form-control kontrak-akhir" value="{!! $date_now !!}" readonly>
+                                            <input type="text" class="form-control kontrak-akhir" >
                                         </div>
                                     </div>
                                 </div>
@@ -491,17 +491,32 @@
                 $('.dates-start').daterangepicker({ 
                     singleDatePicker:true,
                     locale: {
-                                format: 'DD/MM/YYYY'
+                                format: 'DD-MM-YYYY'
                             },
-                    minDate: moment().format('DD/MM/YYYY')
+                    minDate: moment().format('DD-MM-YYYY')
                 })
                 $('.dates-end').daterangepicker({
                     singleDatePicker:true,
                     locale: {
-                                format: 'DD/MM/YYYY'
+                                format: 'DD-MM-YYYY'
                             },
                     minDate: $('.dates-start').val() 
 
+                })
+                $('.kontrak-mulai').daterangepicker({
+                    singleDatePicker:true,
+                    locale: {
+                                format: 'DD-MM-YYYY'
+                            },
+                    minDate: moment().format('DD-MM-YYYY')
+                })
+                $('.kontrak-akhir').daterangepicker({
+                    singleDatePicker:true,
+                    locale: {
+                                format: 'DD-MM-YYYY'
+                            },
+                    // minDate: moment().format('DD-MM-YYYY')
+                    minDate: $('.kontrak-mulai').val()
                 })
                 let tables = $('#tableTambahDataKontrak').DataTable({
                     responsive: true,
@@ -542,8 +557,8 @@
                             `${$('.komponen').find('option:selected').html()}<input type='hidden' name='komponen[]' value='${komponen}'>`,
                             `${$('.sub-komponen').find('option:selected').html()}<input type='hidden' name='sub_komponen[]' value='${sub_komponen}'>`,
                             `${$('.sub-aktifitas').find('option:selected').html()}<input type='hidden' name='sub_aktifitas[]' value='${sub_aktifitas}'>`, 
-                            `${$('.kabupaten-dari').find('option:selected').html()}<input type='hidden' name='kabupaten_dari[]' value='${kabupaten_dari}'><input type='hidden' name='provinsi_dari[]' value='${provinsi_dari}'>`,
-                            `${$('.kabupaten-ke').find('option:selected').html()}<input type='hidden' name='kabupaten_ke[]' value='${kabupaten_ke}'><input type='hidden' name='provinsi_ke[]' value='${provinsi_ke}'>`,
+                            `${$('.kabupaten-dari').find('option:selected').html()}<input type='hidden' name='kabupaten_dari[]' value='${kabupaten_dari}'><input type='hidden' name='provinsi_dari[]' value='${provinsi_dari}'><input type='hidden' name='kabupaten_dari_value[]' value='${$('.kabupaten-dari').find('option:selected').html()}'>`,
+                            `${$('.kabupaten-ke').find('option:selected').html()}<input type='hidden' name='kabupaten_ke[]' value='${kabupaten_ke}'><input type='hidden' name='provinsi_ke[]' value='${provinsi_ke}'><input type='hidden' name='kabupaten_ke_value[]' value='${$('.kabupaten-ke').find('option:selected').html()}'>`,
                             `${date_start}<input type='hidden' name='periode_start[]' value='${date_start}'>`,
                             `${date_end}<input type='hidden' name='preiode_end[]' value='${date_end}'>`,
                             `${$('.amandemen').find('option:selected').html()}<input type='hidden' name='id_amandemen[]' value='${amandemen}'>`,

@@ -57,8 +57,7 @@ class BankController extends Controller
     public function store(Request $request)
     { 
         try {
-            foreach ($request->post('nama_bank') as $key => $value) {
-                // dd($value);
+            foreach ($request->post('nama_bank') as $key => $value) { 
                 $data[] = [
                     'nama_bank'=> $value
                 ];

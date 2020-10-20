@@ -18,5 +18,8 @@ class SubKomponenActivityModels extends Model
      {
          return $this->belongsTo(KomponenBiaya::class,'id_subkomponen');
      } 
-    
+    public function GetKantor()
+    {
+        return $this->hasOneThrough(KantorModels::class,AktifitasModels::class,'id','id');
+    }
 }

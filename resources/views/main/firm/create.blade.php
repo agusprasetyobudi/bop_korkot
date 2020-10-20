@@ -231,7 +231,8 @@
                         return{
                             results: $.map(data, function(item){ 
                                 return{
-                                    text: item.kode_kantor+' - '+item.nama_kantor,
+                                    text: item.nama_kantor,
+                                    // text: item.kode_kantor+' - '+item.nama_kantor,
                                     id: item.id
                                 }
                             })
@@ -249,11 +250,13 @@
                     dataType: 'json',
                     type: 'GET',
                     processResults: function(data){
+                        // console.log(data)
                         return{
-                            results: $.map(data, function(item){ 
+                            results: $.map(data, function(item,id){ 
+                                // console.log(id)
                                 return{
                                     text: item,
-                                    id: item
+                                    id: id
                                 }
                             })
                         }

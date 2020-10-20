@@ -104,11 +104,17 @@ class KontrakController extends Controller
             foreach ($request->post('provinsi_ke') as $key => $value) {
                 $res[$key]['provinsi_tujuan']= $value;
             }
+            foreach ($request->post('kabupaten_dari_value') as $key => $value) {
+                $res[$key]['kabupaten_asal_value']= $value;
+            }
+            foreach ($request->post('kabupaten_ke_value') as $key => $value) {
+                $res[$key]['kabupaten_tujuan_value']= $value;
+            }
             foreach ($request->post('periode_start') as $key => $value) {
-                $res[$key]['start_periode'] = $value;
+                $res[$key]['start_periode'] = Carbon::parse($value)->format('Y/m/d');
             }
             foreach ($request->post('preiode_end') as $key => $value) {
-                $res[$key]['end_periode'] = $value;
+                $res[$key]['end_periode'] = Carbon::parse($value)->format('Y/m/d');
             }
             foreach ($request->post('id_amandemen') as $key => $value) {
                 $res[$key]['id_amandemen'] = $value;
@@ -122,6 +128,7 @@ class KontrakController extends Controller
             foreach ($request->post('osp') as $key => $value) {
                 $res[$key]['id_osp'] = $value;
             } 
+            // dd($res);
             KontrakModels::insert($res);
             Alert::success('Data Telah Ditambahkan');
             return redirect()->route('KontrakHome');

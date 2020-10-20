@@ -186,7 +186,7 @@
                     `${$('#kode_kantor').val()}<input name='kode_kantor[]' type='hidden' value='${GetKodeKantor}' />`,
                     `${$('#osp option:selected').html()}<input name='osp_id[]' type='hidden' value='${GetOSP}' />`,
                     `${$('#provinsi option:selected').html()}<input name='provinsi_id[]' type='hidden' value='${GetProvinsi}' />`,
-                    `${$('#kabupaten option:selected').html()}<input name='kabupaten_id[]' type='hidden' value='${GetKabupaten}' />`,
+                    `${$('#kabupaten option:selected').html()}<input name='kabupaten_id[]' type='hidden' value='${GetKabupaten}' /><input name='kabupaten_name[]' type='hidden' value='${$('#kabupaten option:selected').html()}' />`,
                     `${$('#nama_kantor').val()}<input name='nama_kantor[]' type='hidden' value='${GetNamaKantor}' />`,
                     `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`,
                 ]).draw(false)

@@ -73,12 +73,12 @@ Route::group(['prefix' => 'firm','middleware' => ['auth']], function () {
 #Rekapitulasi Route
 Route::group(['prefix' => 'rekapitulasi', 'middleware'=>['auth']], function () {
     Route::group(['prefix' => 'bukti-transfer'], function () {
-        Route::get('/', 'Transfer\RekapitulasiController@index')->name('buktiTransferView');
-        Route::get('create', 'Transfer\RekapitulasiController@create')->name('buktiTransferCreate');
-        Route::post('create', 'Transfer\RekapitulasiController@store')->name('buktiTransferPost');
-        Route::get('edit/{id}', 'Transfer\RekapitulasiController@edit')->name('buktiTransferEdit');
-        Route::post('edit', 'Transfer\RekapitulasiController@update')->name('buktiTransferUpdate');
-        Route::get('destroy/{id}', 'Transfer\RekapitulasiController@destroy')->name('buktiTransferDestroy');
+        Route::get('/', 'Rekapitulasi\TransferController@index')->name('buktiTransferView');
+        Route::get('create', 'Rekapitulasi\TransferController@create')->name('buktiTransferCreate');
+        Route::post('create', 'Rekapitulasi\TransferController@store')->name('buktiTransferPost');
+        Route::get('edit/{id}', 'Rekapitulasi\TransferController@edit')->name('buktiTransferEdit');
+        Route::post('edit', 'Rekapitulasi\TransferController@update')->name('buktiTransferUpdate');
+        Route::get('destroy/{id}', 'Rekapitulasi\TransferController@destroy')->name('buktiTransferDestroy');
     });
     Route::group(['prefix' => 'bukti-pengeluaran'], function () {
         Route::get('/', 'RekapitulasiController@indexPengeluaran')->name('buktiPengeluaranView');

@@ -20,6 +20,7 @@ class CreateFirmModelsTable extends Migration
             $table->foreignId('jabatan');
             $table->integer('osp');
             $table->foreignId('kantor');
+            // $table->foreignId('id_kab_kota');
             $table->string('periode_month');
             $table->string('periode_year');
             $table->string('id_bank');
@@ -30,12 +31,13 @@ class CreateFirmModelsTable extends Migration
             $table->foreignId('created_by');
             $table->foreignId('updated_by')->nullable();
             $table->timestamps();
-            // $table->index(['created_by','jabatan','kantor']);
+            // $table->index('id_kab_kota');
             $table->index('created_by');
             $table->index('updated_by');
             $table->index('jabatan');
             $table->index('kantor');
             $table->foreign('jabatan')->references('id')->on('master_jabatan')->onDelete('cascade');
+            // $table->foreign('id_kab_kota')->references('id')->on('master_kabupaten')->onDelete('cascade');
             $table->foreign('kantor')->references('id')->on('master_kantor')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
@@ -54,6 +56,8 @@ class CreateFirmModelsTable extends Migration
             $table->dropForeign('firm_updated_by_foreign');
             $table->dropForeign('firm_jabatan_foreign');
             $table->dropForeign('firm_kantor_foreign');
+            // $table->dropForeign('firm_id_kab_kota_foreign');
+            $table->dropIndex('firm_id_kab_kota_index'); 
             $table->dropIndex('firm_created_by_index'); 
             $table->dropIndex('firm_updated_by_index'); 
             $table->dropIndex('firm_jabatan_index'); 

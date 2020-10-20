@@ -40,7 +40,7 @@
                             <h5>Data Aktifitas</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah Data Aktifitas</a>
+                            <a href="{!! route('AktifitasCreate') !!}" class="btn btn-warning">Tambah Data Aktifitas</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-hover" id="tableAktifitas">

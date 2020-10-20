@@ -6,12 +6,15 @@ use App\Facades\ErrorReport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AktifitasModels;
+use App\Models\KomponenBiaya;
+use App\Models\KontrakModels;
 use App\Models\SubKomponenActivityModels;
 use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -128,12 +131,98 @@ class SubKomponenAktifitasController extends Controller
                 $results[$key]['id'] = $values->id;
                 $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
             }
+            // $results = ['ok 1'];
+        }else if($request->post('kantor') && $request->post('sub_komponen') && $request->post('aktifitas')){
+            $periode_date = $request->post('periode_date');
+            // dd($periode_date);
+            $data = KontrakModels::join('master_aktifitas_subkomponen','kontrak.id_subkomponen_aktifitas','=','master_aktifitas_subkomponen.id')
+            ->join('master_aktifitas','master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
+            ->where(DB::raw('year(kontrak.start_periode)'), '<=', DB::raw("year('$periode_date')"))
+            ->where(DB::raw('month(kontrak.start_periode)'), '<=', DB::raw("month('$periode_date')"))
+            ->where(DB::raw('year(kontrak.end_periode)'), '>=', DB::raw("year('$periode_date')"))
+            ->where(DB::raw('month(kontrak.end_periode)'), '>=', DB::raw("month('$periode_date')"))
+            ->where('kontrak.id_kantor', $request->post('kantor'))
+            ->where('master_aktifitas.id', $request->post('aktifitas'))
+            ->where('master_aktifitas_subkomponen.id_subkomponen', $request->post('sub_komponen'))
+            ->select(['kontrak.id as id_selected','kontrak.parent_id','master_aktifitas.nama_aktifitas','kontrak.nominal as nominal','kontrak.kabupaten_asal_value as kabupaten_asal','kontrak.kabupaten_tujuan_value as kabupaten_tujuan'])
+            ->get();
+            // dd($data);
+            // return $data;
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action',function($row){
+                return '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id_selected).'" >Pilih</button>';
+            })
+            ->addColumn('kode_kontrak',function($row){
+                return KontrakModels::find($row->parent_id)->kode_kontrak;
+            })
+            ->addColumn('aktifitas',function($row){
+                return $row->nama_aktifitas;
+            })
+            ->addColumn('nominal',function($row){
+                return  "Rp " . number_format($row->nominal,0,',','.');;
+            })
+            ->addColumn('asal',function($row){
+                return $row->kabupaten_asal;
+            })
+            ->addColumn('tujuan',function($row){
+                return $row->kabupaten_tujuan;
+            })
+            ->rawColumns(['action','kode_kontrak','aktifitas','nominal','asal','tujuan'])
+            ->make(true);
+
+        }else if($request->post('kontrak')){
+            try {
+                $decrypted = Crypt::decrypt($request->post('kontrak'));
+                // dd($request->post('id'));
+            } catch (DecryptException $e) {
+                ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);  
+                Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
+                return redirect()->route('home');
+            }
+            // // $data = KontrakModels::join('master_aktifitas_subkomponen','kontrak.id_subkomponen_aktifitas','=','master_aktifitas_subkomponen.id')
+            // // ->join('master_aktifitas','master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
+            // // ->where(DB::raw('year(kontrak.start_periode)'), '<=', DB::raw("year('$periode_date')"))
+            // // ->where(DB::raw('month(kontrak.start_periode)'), '<=', DB::raw("month('$periode_date')"))
+            // // ->where(DB::raw('year(kontrak.end_periode)'), '>=', DB::raw("year('$periode_date')"))
+            // // ->where(DB::raw('month(kontrak.end_periode)'), '>=', DB::raw("month('$periode_date')"))
+            // // ->where('kontrak.id', $request->post('kantor'))
+            // // ->where('master_aktifitas.id', $request->post('aktifitas'))
+            // // ->where('master_aktifitas_subkomponen.id_subkomponen', $request->post('sub_komponen'))
+            // // ->select(['kontrak.parent_id as id_selected','master_aktifitas.nama_aktifitas','kontrak.nominal as nominal','kontrak.kabupaten_asal_value as kabupaten_asal','kontrak.kabupaten_tujuan_value as kabupaten_tujuan'])
+            // // ->get();
+
+            // // dd($decrypted);
+            // $data = SubKomponenActivityModels::join('master_komponen', 'master_aktifitas_subkomponen.id_subkomponen','=','master_komponen.id')
+            // ->join('master_aktifitas', 'master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
+            // ->join('kontrak','')
+            // ->where('master_aktifitas_subkomponen.id',$decrypted)
+            // ->where('master_komponen.is_parent','>=',0)
+            // ->select(['master_komponen.parent_id','master_komponen.komponen_biaya',''])
+            // ->get();
+            DB::enableQueryLog();
+            $data = KontrakModels::join('master_aktifitas_subkomponen','kontrak.id_subkomponen_aktifitas','=','master_aktifitas_subkomponen.id')
+            ->join('master_aktifitas','master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
+            ->join('master_komponen','kontrak.id_sub_komponen','=','master_komponen.id')
+            ->where('kontrak.id',$decrypted)
+            ->select(['kontrak.id','master_komponen.parent_id','master_komponen.komponen_biaya','master_aktifitas.nama_aktifitas','kontrak.nominal'])
+            ->get();
+            $results = [
+                'id_kontrak' => $data[0]->id,
+                'nama_komponen' => KomponenBiaya::find($data[0]->parent_id)->komponen_biaya,
+                'sub_komponen' => $data[0]->komponen_biaya,
+                'aktifitas' => $data[0]->nama_aktifitas,
+                'nominal' => $data[0]->nominal
+            ];
+            // dd(DB::getQueryLog());
+
         }else{
             $data = SubKomponenActivityModels::where('id_subkomponen',$request->post('id'))->get();
             foreach ($data as $key => $values) {  
-                $results[$key]['id'] = $values->id;
+                $results[$key]['id'] = $values->id_aktifitas;
                 $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
             }
+            // $results = ['ok 3'];
         }  
         return response()->json($results);
     }

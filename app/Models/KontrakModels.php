@@ -8,7 +8,7 @@ class KontrakModels extends Model
 {
     public  $timestamp = false;
     protected $table = 'kontrak';
-    protected $fillable = ['parent_id','kode_kontrak','tanggal_kontrak','tanggal_kontrak_mulai','tanggal_kontrak_akhir','id_komponen','id_sub_komponen','id_subkomponen_aktifitas','kabupaten_asal','provinsi_asal','kabupaten_tujuan','provinsi_tujuan','start_periode','end_periode','id_amandemen','nominal','id_kantor','id_osp'];
+    protected $fillable = ['parent_id','kode_kontrak','tanggal_kontrak','tanggal_kontrak_mulai','tanggal_kontrak_akhir','id_komponen','id_sub_komponen','id_subkomponen_aktifitas','kabupaten_asal','provinsi_asal','kabupaten_tujuan','kabupaten_asal_value','kabupaten_tujuan_value','provinsi_tujuan','start_periode','end_periode','id_amandemen','nominal','id_kantor','id_osp'];
 
     public function komponen()
     {

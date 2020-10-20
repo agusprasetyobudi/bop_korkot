@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
+use DB;
 
 class KantorController extends Controller
 {
@@ -74,7 +75,7 @@ class KantorController extends Controller
     public function store(Request $request)
     {
         //
-        // dd($request->all());
+        dd($request->all());
         $data = [];
         try {
             foreach ($request->post('kode_kantor') as $key => $value) {
@@ -102,6 +103,11 @@ class KantorController extends Controller
                 $data[$key]['nama_kantor'] = $value;
 
             }
+            foreach ($request->post('kabupaten_name') as $key => $value) {
+                
+                $data[$key]['nama_kabupaten'] = $value;
+
+            }
             // dd($data);
             KantorModels::insert($data);
             Alert::success('Data Telah Ditambahkan');
@@ -121,19 +127,26 @@ class KantorController extends Controller
      */
     public function get(Request $request)
     { 
+        DB::enableQueryLog();
         $data = $request->post('q'); 
         preg_match('/\d+/', $data, $string); 
-        if($string){
-            $res = KantorModels::where('id_osp',$request->post('id'))->where('kode_kantor','like','%'.$data.'%')->get();
-        }else{
-            $res = KantorModels::where('id_osp',$request->post('id'))->where('nama_kantor','like','%'.$data.'%')->get();
-        } 
-        foreach ($res as $key => $value) {
-            $results[$key]['id'] = $value->id;
-            $results[$key]['kode_kantor'] = $value->kode_kantor;
-            $results[$key]['nama_kantor'] = $value->nama_kantor; 
-        }
-        return response()->json($results);
+       try {
+            if($string){
+                $res = KantorModels::where('id_osp',$request->post('id'))->where('kode_kantor','like','%'.$data.'%')->orWhere('nama_kabupaten','like','%'.$data.'%')->get();
+            }else{
+                $res = KantorModels::where('id_osp',$request->post('id'))->where('nama_kabupaten','like','%'.$data.'%')->get();
+            } 
+            // dd($res);
+            // dd(DB::getQueryLog());
+            foreach ($res as $key => $value) {
+                $results[$key]['id'] = $value->id;
+                $results[$key]['kode_kantor'] = $value->kode_kantor;
+                $results[$key]['nama_kantor'] = $value->nama_kantor.' / '.$value->kabupaten->kabupaten_name; 
+            }
+            return response()->json($results);
+       } catch (QueryException $e) {
+           dd($e);
+       }
     }
 
     /**
