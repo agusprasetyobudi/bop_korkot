@@ -165,7 +165,7 @@ class FirmController extends Controller
                 return $row->Jabatan->nama_jabatan;
             })
             ->addColumn('amount',function($row){
-                return  "Rp " . number_format($row->amount_tf,0,',','.');;
+                return  "Rp " . number_format($row->amount_tf,0,',','.');
             })
             ->addColumn('nama_bank',function($row){
                 return $row->Bank->nama_bank;

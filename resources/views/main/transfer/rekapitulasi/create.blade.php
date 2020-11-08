@@ -117,7 +117,7 @@
                                 <input type="number" name="jumlah_diterima" id="" class="form-control input-uang" readonly>
                                 <input type="hidden" name="jumlah_diterima" id="" class="form-control uang-kontrak">
                             </div>  
-                        </div>100000000100000000
+                        </div>
                     </div>
                 </div> 
             </div>
@@ -159,7 +159,13 @@
                                                     <th class="text-center text-uppercase">opsi</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot></tfoot>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="4">Total</th>
+                                                    <th colspan="2"><input type="text" class="form-control" id="total-dana" style="background-color:transparent;border: 0;font-size: 1em;" value="0" readonly></th> 
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -269,12 +275,15 @@
     <script>
         $(()=>{ 
             let tableKomponenKontrak = $('#tableKomponenKontrak').DataTable({
-                responsive: true,
+                // responsive: true,
                 autoWidth: false,
                 paging: false,
                 searching: false,
                 bSort: false, 
-            })
+                columnDefs: [
+                               {"className": "text-center", "targets": "_all"}
+                            ],
+            })            
             let tableBuktiTransfer = $('#tableBuktiTranfer').DataTable({
                 responsive: true,
                 autoWidth: false, 
@@ -371,8 +380,8 @@
                     }
                 })
             })
+            let count = 1
             $('#tableKomponenBiaya tbody').on('click', 'button', tableKomponenBiaya, function(){
-                let count = 1
                 // alert($(this).data('name'))
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -386,12 +395,12 @@
                             `${count}`,
                             `${res.nama_komponen}`,
                             `${res.sub_komponen} / ${res.aktifitas}`,
-                            `${res.nominal}`,
-                            `<input type='text' name='alokasi_dana[]' class='form-control'>`,
+                            `${res.nominalParse}`,
+                            `<input type='text' name='alokasi_dana[]' class='form-control item-dana' value='${format(res.nominal)}'>`,
                             `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`
                         ]).draw(false)
-                        count++
-                        $('#komponen-biaya-modal').modal('hide')
+                        let uangFinal = totalUang(res.nominal)
+                        $('.total-dana').val(format(uangFinal))                         $('#komponen-biaya-modal').modal('hide')
                         tableBuktiTransfer.clear(); 
                         tableKomponenBiaya.search('').draw();
                         tableKomponenBiaya.ajax.reload()
@@ -499,7 +508,65 @@
             $('#select-aktifitas').on("select2:selecting", function(e) { 
                 $('#komponen-biaya').attr('hidden',false)
             }); 
-
+            var format = function(num){
+                // $('#uang-replace').val(num)
+                var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+                if(str.indexOf(".") > 0) {
+                    parts = str.split(".");
+                    str = parts[0];
+                }
+                str = str.split("").reverse();
+                for(var j = 0, len = str.length; j < len; j++) {
+                    if(str[j] != ",") {
+                    output.push(str[j]);
+                    if(i%3 == 0 && j < (len - 1)) {
+                        output.push(",");
+                    }
+                    i++;
+                    }
+                }
+                formatted = output.reverse().join("");
+                return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+                }; 
+            let totalUang = (data)=>{
+                let totalUang = $('#tmp-total').val()
+                let total = parseInt(totalUang) + parseInt(data) 
+                $('#tmp-total').val(total)
+                return total
+            } 
+            var total = 0
+            $('#tableKomponenKontrak tbody').on('keyup','.item-dana',function(e){
+                var val = $(this).val();
+                val = val.replace(/,/g,'');
+                var num = parseFloat(val);
+                $(this).val(format(num));
+                
+                total = 0;
+                $(".item-dana").each(function(){
+                    var val = $(this).val();
+                    val = val.replace(/,/g,'');
+                    var num = parseFloat(val);
+                    total = total + num;
+                });
+                // console.log(total)
+                // $("#total-dana").val(format(total));
+            })
+            $('#tableKomponenKontrak tbody').on('change','.item-dana',function(){
+                var val = $(this).val();
+                val = val.replace(/,/g,'');
+                var num = parseFloat(val);
+                $(this).val(format(num));
+                
+                total = 0;
+                $(".item-dana").each(function(){
+                    var val = $(this).val();
+                    val = val.replace(/,/g,'');
+                    var num = parseFloat(val);
+                    total = total + num;
+                });
+                console.log(total)
+                $("#total-dana").val(format(total));
+            });
         })
     </script>
 @endsection

@@ -175,7 +175,7 @@ class SubKomponenAktifitasController extends Controller
             try {
                 $decrypted = Crypt::decrypt($request->post('kontrak'));
                 // dd($request->post('id'));
-            } catch (DecryptException $e) {
+            } catch ( DecryptException $e) {
                 ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);  
                 Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    
                 return redirect()->route('home');
@@ -212,6 +212,7 @@ class SubKomponenAktifitasController extends Controller
                 'nama_komponen' => KomponenBiaya::find($data[0]->parent_id)->komponen_biaya,
                 'sub_komponen' => $data[0]->komponen_biaya,
                 'aktifitas' => $data[0]->nama_aktifitas,
+                'nominalParse' =>  "Rp " . number_format($data[0]->nominal,0,',','.'),
                 'nominal' => $data[0]->nominal
             ];
             // dd(DB::getQueryLog());
