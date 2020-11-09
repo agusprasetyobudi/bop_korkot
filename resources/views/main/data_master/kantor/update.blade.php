@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="card-footer text-right">
-                                <button class="btn btn-warning btn-add-kantor">Tambah Data Kantor</button>
+                                <button class="btn btn-warning btn-add-kantor">Simpan Data Kantor</button>
                             </div>  
                        </form>
                     </div>

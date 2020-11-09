@@ -28,10 +28,10 @@ class KantorController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = KantorModels::get();
-            // $data = Cache::remember('kantor', env('CACHE_LIFETIME'), function () {
-            //     return KantorModels::get();
-            // });
+            // $data = KantorModels::get();
+            $data = Cache::remember('kantor', env('CACHE_LIFETIME'), function () {
+                return KantorModels::get();
+            });
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('osp',function($row){ 
