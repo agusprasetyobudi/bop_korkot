@@ -9,6 +9,7 @@ use App\Models\KabupatenModels;
 use App\Models\ProvinsiModels;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
@@ -160,6 +161,7 @@ class KabupatenKotaController extends Controller
             ];
             $ResData = KabupatenModels::where('id',$decrypted)
                                         ->update($pushData);
+                    Artisan::call('cache:clear');
                     Alert::success('Data Telah Diupdate');
                     return redirect()->route('KabupatenKotaView');
         } catch (QueryException $e) {
