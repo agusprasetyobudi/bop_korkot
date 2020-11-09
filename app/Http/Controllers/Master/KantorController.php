@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 use DB;
+use Illuminate\Support\Facades\Artisan;
 
 class KantorController extends Controller
 {
@@ -197,6 +198,7 @@ class KantorController extends Controller
             ];
             KantorModels::where('id',$decrypted)
             ->update($push);
+            Artisan::call('cache:clear');
             Alert::success('Data Telah Diupdate');
             return redirect()->route('KantorView');
         } catch (QueryException $e) {
