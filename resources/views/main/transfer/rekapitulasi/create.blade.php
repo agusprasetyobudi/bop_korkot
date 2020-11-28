@@ -143,8 +143,10 @@
                                     </div>
                                 </div>
                             </div>
-                    <form action="" method="post">
+                    <form action="{!! route('buktiTransferPost') !!}" id="form-submit" method="post">
                         @csrf
+                        <input type="hidden" name="firm" id="firm">
+                        <input type="text" name="tanggal_terima" id="tanggal-terima-val">
                             <div class="card-body"> 
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -163,7 +165,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th colspan="4">Total</th>
-                                                    <th colspan="2"><input type="text" class="form-control" id="total-dana" style="background-color:transparent;border: 0;font-size: 1em;" value="0" readonly></th> 
+                                                    <th colspan="2"><input type="text" class="form-control" name="total_dana" id="total-dana" style="background-color:transparent;border: 0;font-size: 1em;" value="0" readonly></th> 
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -171,7 +173,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-block btn-warning">Simpan Data</button>
+                                <button class="btn btn-block btn-warning" id="save-data">Simpan Data</button>
                             </div>
                         </div>
                    </form>
@@ -350,14 +352,15 @@
             })
             $('#tableBuktiTranfer tbody').on('click', 'button', tableBuktiTransfer, function(){
                 // alert($(this).data('name'))
+                $('#firm').val($(this).data('name'))
                 $.ajax({
                     url: "{!! route('firmAPI') !!}",
                     method: 'GET',
                     data:{'from_rekap':$(this).data('name')},
                     cache:false,
                     success: function(res){
-                        // alert(data)
-                        console.log($('.input-uang').val())
+                        console.log(res)
+                        // console.log($('.input-uang').val())
                         $('.uang-kontrak').val(res.amount_tf)
                         $('.bukti-tranfer').val(res.no_bukti)
                         $('.tanggal-tranfer').val(res.tanggal)
@@ -396,11 +399,13 @@
                             `${res.nama_komponen}`,
                             `${res.sub_komponen} / ${res.aktifitas}`,
                             `${res.nominalParse}`,
-                            `<input type='text' name='alokasi_dana[]' class='form-control item-dana' value='${format(res.nominal)}'>`,
+                            `<input type='hidden' name='item_kontrak[]' value='${res.id_kontrak}'><input type='text' name='alokasi_dana[]' class='form-control item-dana' value='${format(res.nominal)}'>`,
                             `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`
                         ]).draw(false)
                         let uangFinal = totalUang(res.nominal)
-                        $('.total-dana').val(format(uangFinal))                         $('#komponen-biaya-modal').modal('hide')
+                        $('#total-dana').val(format(uangFinal))                         
+
+                        $('#komponen-biaya-modal').modal('hide')
                         tableBuktiTransfer.clear(); 
                         tableKomponenBiaya.search('').draw();
                         tableKomponenBiaya.ajax.reload()
@@ -414,11 +419,18 @@
                 },
                 minDate: moment().format('DD/MM/YYYY')
             })
+            $('#tanggal-terima').change(function(){ 
+                $('#tanggal-terima-val').val(this.value)
+            })
+            $('#save-data').click(function(e){ 
+                e.preventDefault()
+                $('#tanggal-terima-val').val($('#tanggal-terima').val())
+                $('#form-submit').trigger('submit')
+            })
             let timerTimeout
             $('.input-uang').keyup(()=>{ 
-                console.log($('.uang-kontrak').val() !=  $('.input-uang').val())
                 if($('.input-uang').val() == 0 || $('.input-uang') == null ){
-                    $('.money-notify').html('Uang Tidak Kosong')
+                    $('.money-notify').html('Uang Tidak Boleh Kosong')
                 }else if($('.uang-kontrak').val() !=  $('.input-uang').val()){
                     clearTimeout(timerTimeout)
                     timerTimeout = setTimeout($('.input-uang').val(), 5000) 
@@ -528,13 +540,14 @@
                 formatted = output.reverse().join("");
                 return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
                 }; 
+            // var total = 0
             let totalUang = (data)=>{
-                let totalUang = $('#tmp-total').val()
-                let total = parseInt(totalUang) + parseInt(data) 
-                $('#tmp-total').val(total)
+                let val = $('#total-dana').val()
+                val = val.replace(/,/g,'');
+                var num = parseFloat(val);
+                let total = num + parseInt(data)  
                 return total
             } 
-            var total = 0
             $('#tableKomponenKontrak tbody').on('keyup','.item-dana',function(e){
                 var val = $(this).val();
                 val = val.replace(/,/g,'');
@@ -549,7 +562,7 @@
                     total = total + num;
                 });
                 // console.log(total)
-                // $("#total-dana").val(format(total));
+                $("#total-dana").val(format(total));
             })
             $('#tableKomponenKontrak tbody').on('change','.item-dana',function(){
                 var val = $(this).val();

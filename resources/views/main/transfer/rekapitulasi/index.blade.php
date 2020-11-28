@@ -92,9 +92,23 @@
       autoWidth: false,
       paging: true,
       lengthChange: true,
-      searching: true, 
-      // autoWidth: true, 
-      // processing: false,
+      searching: true,       
+      processing: true, 
+      // scrollX: true, 
+      ajax:"{!! route('buktiTransferView') !!}",
+      columns:[
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'action', className: 'text-center text-uppercase'},
+      ]
     });      
   })
 </script>

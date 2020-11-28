@@ -8,5 +8,13 @@ class TransferModels extends Model
 {
     public $timestamp = false;
     protected $table = 'transfer';
-    protected $fillable = [];
+    protected $fillable = [
+        'firm_id',
+        'amount',
+        'tanggal_terima',
+        'parent_id',
+        'item_kontrak_id',
+        'amount_item',
+        'created_by'
+    ];
 }
