@@ -134,7 +134,7 @@ class FirmController extends Controller
                 return redirect()->route('home');
             }
             $res = FirmModels::find($decrypted);
-            $dates = DB::select(DB::raw('select makedate('.$res->periode_year.',((('.$res->periode_month.'-1)*30)+5)) as periode_dates'));
+            // $dates = DB::select(DB::raw('select makedate('.$res->periode_year.',((('.$res->periode_month.'-1)*30)+5)) as periode_dates'));
             $data = array(
                 'no_bukti'=> $res->no_bukti,
                 'tanggal' => $res->tanggal_tf,
@@ -144,7 +144,7 @@ class FirmController extends Controller
                 'kantor'    => $res->Kantor->nama_kantor.'/'.$res->Kantor->nama_kabupaten,
                 'id_kantor' => $res->kantor,
                 'periode'   => Carbon::parse((int)$res->periode_month)->format('F').' - '.$res->periode_year,
-                'periode_by_date' => $dates[0]->periode_dates,
+                'periode_by_date' => $res->periode_year.'-'.$res->periode_month.'-01',
                 'nama_bank' => $res->Bank->nama_bank,
                 'account_bank' => $res->bank_account_number,
                 'nama_penerima' => $res->nama_penerima

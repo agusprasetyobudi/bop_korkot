@@ -17,4 +17,17 @@ class TransferModels extends Model
         'amount_item',
         'created_by'
     ];
+
+    public function contracts()
+    {
+        return $this->hasMany(KontrakModels::class,'id','item_kontrak_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function firm()
+    {
+        return $this->belongsTo(FirmModels::class, 'firm_id');
+    }
 }

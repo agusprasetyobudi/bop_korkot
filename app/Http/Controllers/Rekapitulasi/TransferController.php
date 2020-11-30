@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Rekapitulasi;
 
 use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
+use App\Models\KontrakModels;
+use App\Models\MasterBank;
 use App\Models\TransferModels;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -23,19 +26,44 @@ class TransferController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = TransferModels::all();
+            DB::enableQueryLog();
+            $data = TransferModels::where('parent_id',0)->get();
+            // $kontrak = $data[0]->contracts;
+            // dd($kontrak);
+            // dd(DB::getQueryLog());
             return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('no_bukti',function($row){
+                return $row->firm->no_bukti;
+            })
+            ->addColumn('nama_penerima',function($row){
+                return $row->firm->nama_penerima;
+            })
+            ->addColumn('bank_penerima',function($row){
+                $data = MasterBank::where('id',$row->firm->id_bank)->get();
+                return $data[0]->nama_bank;
+            })
+            ->addColumn('no_rekening',function($row){ 
+                return $row->firm->bank_account_number;
+            })
+            ->addColumn('nilai_kontrak',function($row){ 
+                $data = TransferModels::where('parent_id', $row->id)
+                ->select('item_kontrak_id')
+                ->get();
+                dd($data);
+                    // $data = KontrakModels::find($row->item_kontrak);
+                //  return $data;
+            })
             ->addColumn('action',function($row){
                 $btn = '';
                 $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
                 $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
             })
-            ->rawColumns([])
+            ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak'])
             ->make(true);
         }
-        return view('main.transfer.rekapitulasi.index');
+        return view('main.transfer.rekapitulasi.index');  
     }
 
     /**

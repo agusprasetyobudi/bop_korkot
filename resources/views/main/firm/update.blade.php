@@ -252,10 +252,10 @@
                     type: 'GET',
                     processResults: function(data){
                         return{
-                            results: $.map(data, function(item){ 
+                            results: $.map(data, function(item,id){  
                                 return{
                                     text: item,
-                                    id: item
+                                    id: id
                                 }
                             })
                         }
@@ -273,7 +273,7 @@
                     type: 'GET',
                     processResults: function(data){
                         return{
-                            results: $.map(data, function(item){ 
+                            results: $.map(data, function(item,id){  
                                 return{
                                     text: item,
                                     id: item
