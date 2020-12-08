@@ -168,7 +168,7 @@
                     <div class="col-sm-12">
                         <form action="{!! route('KontrakDetailCreatePost',['id'=>Request::segment(2)]) !!}" method="post">
                             @csrf
-                            <input type="hidden" name="urldata" class="kode-kontrak-post" value="{!! Request::segment(2) !!}"> 
+                            <input type="text" name="urldata" class="kode-kontrak-post" value="{!! Request::segment(2) !!}"> 
                             <div class="card"> 
                                 <div class="card-header">
                                     List Data Kontrak
@@ -350,7 +350,7 @@
                     }
                 })
                 $('.kantor').select2({
-                    placeholder: 'Pilih Aktifitas',
+                    placeholder: 'Pilih Kantor',
                     theme: 'bootstrap4',
                     width: '100%',
                     ajax:{
@@ -491,8 +491,7 @@
                     singleDatePicker:true,
                     locale: {
                                 format: 'DD/MM/YYYY'
-                            },
-                    minDate: moment().format('DD/MM/YYYY')
+                            }, 
                 })
                 $('.dates-end').daterangepicker({
                     singleDatePicker:true,
@@ -564,8 +563,6 @@
                         $('.nominal').val(null)
                         $('.dates-start').val(moment().format('DD/MM/YYYY'))
                         $('.dates-end').val(moment().format('DD/MM/YYYY')) 
-                    }else if(kode_kontrak == '' || kode_kontrak == null || kode_kontrak == undefined){
-                        alert('Kode Kontrak Tidak Boleh Kosong');
                     }else if(komponen == '' || komponen == null || komponen == undefined){
                         alert('Komponen Tidak Boleh Kosong');
                     }else if(sub_komponen == '' || sub_komponen == null || sub_komponen == undefined){

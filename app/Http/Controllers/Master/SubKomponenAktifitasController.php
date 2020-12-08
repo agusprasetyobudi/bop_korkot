@@ -130,11 +130,11 @@ class SubKomponenAktifitasController extends Controller
             foreach ($loops as $key => $values) {  
                 $results[$key]['id'] = $values->id;
                 $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
-            }
-            // $results = ['ok 1'];
+            } 
         }else if($request->post('kantor') && $request->post('sub_komponen') && $request->post('aktifitas')){
             $periode_date = $request->post('periode_date');
             // dd($periode_date);
+            DB::enableQueryLog();
             $data = KontrakModels::join('master_aktifitas_subkomponen','kontrak.id_subkomponen_aktifitas','=','master_aktifitas_subkomponen.id')
             ->join('master_aktifitas','master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
             ->where(DB::raw('year(kontrak.start_periode)'), '<=', DB::raw("year('$periode_date')"))
@@ -146,6 +146,8 @@ class SubKomponenAktifitasController extends Controller
             ->where('master_aktifitas_subkomponen.id_subkomponen', $request->post('sub_komponen'))
             ->select(['kontrak.id as id_selected','kontrak.parent_id','master_aktifitas.nama_aktifitas','kontrak.nominal as nominal','kontrak.kabupaten_asal_value as kabupaten_asal','kontrak.kabupaten_tujuan_value as kabupaten_tujuan'])
             ->get();
+
+            // dd(DB::getQueryLog());
             // dd($data);
             // return $data;
             return DataTables::of($data)
@@ -217,13 +219,14 @@ class SubKomponenAktifitasController extends Controller
             ];
             // dd(DB::getQueryLog());
 
-        }else{
+        }else{ 
             $data = SubKomponenActivityModels::where('id_subkomponen',$request->post('id'))->get();
             foreach ($data as $key => $values) {  
                 $results[$key]['id'] = $values->id_aktifitas;
                 $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
             }
             // $results = ['ok 3'];
+            // dd($results);
         }  
         return response()->json($results);
     }

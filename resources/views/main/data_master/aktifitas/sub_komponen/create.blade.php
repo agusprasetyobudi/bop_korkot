@@ -48,8 +48,7 @@
                                 <label for="" class="text-uppercase">nama aktifitas</label>
                                 {{-- <input type="text" name="" id="" class="form-control nama-aktifitas" value="{!! $data !!}"> --}}
                                 <select name="nama_aktifitas" class="form-control nama-aktifitas">
-                                    @foreach ($data as $item)
-                                        <option selected disabled>Pilih Aktifitas</option>
+                                    @foreach ($data as $item) 
                                         <option value="{!! $item->id !!}">{!! $item->nama_aktifitas !!}</option>
                                     @endforeach
                                 </select>

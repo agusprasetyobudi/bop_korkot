@@ -88,13 +88,13 @@
 <script> 
   $(()=>{
     let tables = $("#example2").DataTable({
-      responsive: true,
+      responsive: false,
       autoWidth: false,
       paging: true,
       lengthChange: true,
       searching: true,       
-      processing: true, 
-      // scrollX: true, 
+      processing: true,   
+      scrollX: true,
       ajax:"{!! route('buktiTransferView') !!}",
       columns:[
         {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
@@ -104,9 +104,9 @@
         {data: 'bank_penerima', className: 'text-center text-uppercase'},
         {data: 'no_rekening', className: 'text-center text-uppercase'},
         {data: 'nilai_kontrak', className: 'text-center text-uppercase'},
-        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
-        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
-        {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
+        {data: 'jumlah_diterima', className: 'text-center text-uppercase'},
+        {data: 'selisih', className: 'text-center text-uppercase'},
+        {data: 'periode', className: 'text-center text-uppercase'},
         {data: 'action', className: 'text-center text-uppercase'},
       ]
     });      

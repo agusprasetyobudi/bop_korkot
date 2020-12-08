@@ -24,7 +24,7 @@ class TransferController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    { 
         if($request->ajax()){
             DB::enableQueryLog();
             $data = TransferModels::where('parent_id',0)->get();
@@ -50,9 +50,21 @@ class TransferController extends Controller
                 $data = TransferModels::where('parent_id', $row->id)
                 ->select('item_kontrak_id')
                 ->get();
-                dd($data);
-                    // $data = KontrakModels::find($row->item_kontrak);
-                //  return $data;
+                foreach ($data as $key => $value) {
+                    return  "Rp " . number_format(KontrakModels::where('id',$value->item_kontrak_id)->get()->sum('nominal'),0,',','.');
+                }
+            })
+            ->addColumn('jumlah_diterima', function($row){
+                 return  "Rp " . number_format($row->amount,0,',','.');
+            })
+            ->addColumn('selisih', function($row){
+                $data = TransferModels::where('parent_id', $row->id)
+                ->select('amount_item')
+                ->get();
+                 return  "Rp " . number_format($data->sum('amount_item')-(int)$row->amount,0,',','.');
+            })
+            ->addColumn('periode', function($row){
+                return Carbon::parse($row->firm->periode_year.'-'.$row->firm->periode_month)->isoFormat('MMMM / Y');
             })
             ->addColumn('action',function($row){
                 $btn = '';
@@ -60,7 +72,7 @@ class TransferController extends Controller
                 $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
             })
-            ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak'])
+            ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_diterima','periode','action'])
             ->make(true);
         }
         return view('main.transfer.rekapitulasi.index');  

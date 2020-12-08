@@ -46,8 +46,8 @@ class FirmController extends Controller
                 return $row->Kantor->nama_kantor.'/'.$row->Kantor->nama_kabupaten;
             })
             ->addColumn('periode',function($row){
-                // dd((int)$row->periode_month);
-                return Carbon::parse((int)$row->periode_month)->format('F').' - '.$row->periode_year;
+                // dd(Carbon::parse('2020-4')->format('F-Y'));
+                return Carbon::parse($row->periode_year.'-'.$row->periode_month)->format('F-Y');
                 // return $month;
             })
             ->addColumn('bank',function($row){
@@ -171,7 +171,7 @@ class FirmController extends Controller
                 return $row->Bank->nama_bank;
             })
             ->addColumn('periode',function($row){
-                return Carbon::parse((int)$row->periode_month)->format('F').' - '.$row->periode_year;
+                return Carbon::parse($row->periode_year.'-'.$row->periode_month)->format('F-Y');
             })
             ->rawColumns(['action','jabatan','amount','nama_bank','periode'])
             ->make(true);

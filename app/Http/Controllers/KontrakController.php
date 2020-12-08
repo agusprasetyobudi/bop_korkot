@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\ErrorReport;
+use App\Models\AktifitasModels;
 use App\Models\KomponenBiaya;
 use App\Models\KontrakModels; 
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
@@ -153,8 +155,7 @@ class KontrakController extends Controller
             $decrypted = Crypt::decrypt($id);            
         } catch (DecryptException $e) {
             dd($e);
-        }
-
+        } 
         try {
             if($request->ajax()){
                 $data = KontrakModels::where('parent_id',$decrypted)->get();
@@ -167,16 +168,22 @@ class KontrakController extends Controller
                     return $row->sub_komponen->komponen_biaya;
                 })
                 ->addColumn('aktifitas',function($row){
+                    // return $row;
+                    // $data = AktifitasModels::find($row);
+                    // return $data[0]->nama_aktifitas;
                     return $row->aktifitas->nama_aktifitas;
                 })
                 ->addColumn('osp',function($row){
                     return $row->osp->osp_name;
                 })
                 ->addColumn('kantor',function($row){
-                    return $row->kantor->nama_kantor;
+                    return $row->kantor->kode_kantor.'-'.$row->kantor->nama_kantor;
                 })
                 ->addColumn('provinsi_asal',function($row){
                     return $row->join_provinsi_asal->provinsi_name;
+                })
+                ->addColumn('nominal', function($row){
+                    return "Rp " . number_format($row->nominal,0,',','.');
                 })
                 ->addColumn('kabupaten_asal',function($row){
                     return $row->join_kabupaten_asal->kabupaten_name;
@@ -198,7 +205,7 @@ class KontrakController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-            }
+            } 
             return view('main.kontrak.show');
         } catch (QueryException $th) {
             dd($th);
@@ -232,6 +239,7 @@ class KontrakController extends Controller
             
         }
         try { 
+            // dd($request->post());
             foreach ($request->post('komponen') as $key => $value) { 
                 $res[$key]['parent_id'] = $decrypted;
                 $res[$key]['id_komponen'] = $value;
