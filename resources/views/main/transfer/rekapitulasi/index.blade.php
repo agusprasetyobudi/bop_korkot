@@ -10,6 +10,7 @@
 
 @section('addtionalCSS')
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.css') !!}">
 @endsection
 
 @section('page_header')
@@ -46,23 +47,25 @@
                   <label for=""></label>
                   <input type="text" class="form-control" id="search-box" placeholder="Cari disini">
                 </div>  --}}
-              <table id="example2" class="table table-bordered table-hover">
-                <thead>
-                <tr> 
-                  <th class="text-center text-uppercase">#</th>
-                  <th class="text-center text-uppercase">No Bukti Transfer</th> 
-                  <th class="text-center text-uppercase">Tanggal Transfer</th> 
-                  <th class="text-center text-uppercase">Nama Penerima</th> 
-                  <th class="text-center text-uppercase">Bank Penerima</th> 
-                  <th class="text-center text-uppercase">No. Rekening Penerima</th> 
-                  <th class="text-center text-uppercase">Nilai Kontrak</th> 
-                  <th class="text-center text-uppercase">Jumlah Diterima</th> 
-                  <th class="text-center text-uppercase">selisih</th> 
-                  <th class="text-center text-uppercase">Periode</th> 
-                  <th class="text-center text-uppercase">opsi</th> 
-                </tr>
-                </thead> 
-              </table>
+                <div class="table-responsive">
+                  <table id="example2" class="table table-bordered table-hover" width="100%">
+                    <thead>
+                    <tr> 
+                      <th class="text-center text-uppercase">#</th>
+                      <th class="text-center text-uppercase">No Bukti Transfer</th> 
+                      <th class="text-center text-uppercase">Tanggal Transfer</th> 
+                      <th class="text-center text-uppercase">Nama Penerima</th> 
+                      <th class="text-center text-uppercase">Bank Penerima</th> 
+                      <th class="text-center text-uppercase">No. Rekening Penerima</th> 
+                      <th class="text-center text-uppercase">Nilai Kontrak</th> 
+                      <th class="text-center text-uppercase">Jumlah Diterima</th> 
+                      <th class="text-center text-uppercase">selisih</th> 
+                      <th class="text-center text-uppercase">Periode</th> 
+                      <th class="text-center text-uppercase">opsi</th> 
+                    </tr>
+                    </thead> 
+                  </table>
+                </div>
             </div>
             <!-- ./card-body -->              
           </div>
@@ -87,14 +90,11 @@
 <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
 <script> 
   $(()=>{
-    let tables = $("#example2").DataTable({
-      responsive: false,
-      autoWidth: false,
-      paging: true,
-      lengthChange: true,
-      searching: true,       
-      processing: true,   
-      scrollX: true,
+    let tables = $("#example2").DataTable({     
+      "scrollX": true,
+      "responsive": false,
+      "autoWidth": true,
+      processing: true,     
       ajax:"{!! route('buktiTransferView') !!}",
       columns:[
         {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
