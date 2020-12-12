@@ -36,8 +36,15 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h5>Data Pengguna</h5>
+                        <div class="card-header">  
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h5>Data Pengguna</h5>
+                                </div>
+                                <div class="col-lg-6 text-right">
+                                    <a href="{!! route('PenggunaCreate') !!}" class="btn btn-warning">Tambah Data Pengguna</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <table class="table table-hover table-bordered" id="tableDataPengguna">
