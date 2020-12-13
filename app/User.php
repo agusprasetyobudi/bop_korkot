@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Models\JabatanModel;
+use App\Models\KantorModels;
+use App\Models\OSPModels;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,4 +41,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function osp()
+    {
+        return $this->hasOne(OSPModels::class,'id_osp');
+    }
+    public function kantor()
+    {
+        return $this->hasOne(KantorModels::class, 'id_kantor');
+    }
+
+    public function jabatan()
+    {
+        return $this->hasOne(JabatanModel::class, 'id_jabatan');
+    }
+
+    public function roles()
+    {
+        return $this->hasOne(Role::class, 'id_group');
+    }
 }

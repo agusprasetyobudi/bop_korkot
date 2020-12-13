@@ -217,6 +217,7 @@
             </ul>
           </li>
           <!-- Pengguna -->
+          @role(['administrator'])
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
               <i class="nav-icon fas fa-table"></i>
@@ -240,6 +241,7 @@
               </li>
             </ul>
           </li> 
+          @endrole
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

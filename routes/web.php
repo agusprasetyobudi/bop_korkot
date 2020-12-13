@@ -216,7 +216,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
 });
 
 #Pengguna Route
-Route::group(['prefix' => 'pengguna', 'middleware'=>['auth']], function () {
+Route::group(['prefix' => 'pengguna', 'middleware'=>['auth','role:administrator']], function () {
     Route::group(['prefix' => 'pengguna'], function () {
         Route::get('/','PenggunaController@index')->name('PenggunaView');
         Route::get('create','PenggunaController@create')->name('PenggunaCreate');

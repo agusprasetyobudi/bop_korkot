@@ -51,7 +51,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
-                                        <th class="text-center text-uppercase">nickname</th>
+                                        <th class="text-center text-uppercase">name</th>
                                         <th class="text-center text-uppercase">username</th>
                                         <th class="text-center text-uppercase">osp</th>
                                         <th class="text-center text-uppercase">kantor</th>
@@ -78,9 +78,18 @@
 <script>
   $(()=>{
       let tables = $("#tableDataPengguna").DataTable({
+          responsive: true,
+          autoWidth: false,
           paging: true,
           lengthChange: true,
-          searching: true
+          searching: true,
+          processing: true,
+          ajax: "{!! route('PenggunaView') !!}",
+          columns:[
+              {data: 'DT_RowIndex', className:'text-center text-uppercase'},
+              {data: 'name', className:'text-center text-uppercase'},
+              {data: 'username', className:'text-center text-uppercase'},
+          ]
       })
   })
 </script>    

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PenggunaController extends Controller
 {
@@ -11,8 +13,15 @@ class PenggunaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $data = User::all();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            // ->rawColumn([])
+            ->make(true);
+        }
         return view('main.pengguna.pengguna.index');
     }
 
