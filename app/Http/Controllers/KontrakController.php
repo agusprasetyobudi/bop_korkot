@@ -42,7 +42,7 @@ class KontrakController extends Controller
             ->addColumn('action', function($row){
                 $btn = '';
                 // $btn .= '<a href="" class="btn btn-warning">Update Data</a>  '; 
-                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
+                $btn .= '<button type="button" class="btn btn-warning" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Change Password</button><button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button><button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
                 return $btn;
             })
             ->rawColumns(['kode_kontrak','action'])

@@ -44,20 +44,20 @@ class User extends Authenticatable
 
     public function osp()
     {
-        return $this->hasOne(OSPModels::class,'id_osp');
+        return $this->hasOne(OSPModels::class,'id','id_osp');
     }
     public function kantor()
     {
-        return $this->hasOne(KantorModels::class, 'id_kantor');
+        return $this->hasOne(KantorModels::class, 'id','id_kantor');
     }
 
     public function jabatan()
     {
-        return $this->hasOne(JabatanModel::class, 'id_jabatan');
+        return $this->hasOne(JabatanModel::class, 'id','id_jabatan');
     }
 
     public function roles()
     {
-        return $this->hasOne(Role::class, 'id_group');
+        return $this->hasOne(Role::class, 'id','id_group');
     }
 }

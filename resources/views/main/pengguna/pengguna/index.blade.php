@@ -89,6 +89,11 @@
               {data: 'DT_RowIndex', className:'text-center text-uppercase'},
               {data: 'name', className:'text-center text-uppercase'},
               {data: 'username', className:'text-center text-uppercase'},
+              {data: 'osp', className:'text-center text-uppercase'},
+              {data: 'kantor', className:'text-center text-uppercase'},
+              {data: 'jabatan', className:'text-center text-uppercase'},
+              {data: 'groups', className:'text-center text-uppercase'},
+              {data: 'opsi', className:'text-center text-uppercase'},
           ]
       })
   })

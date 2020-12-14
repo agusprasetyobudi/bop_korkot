@@ -25,222 +25,238 @@
             </a>
           </li>
           <!-- Firm Transfer -->
-          <li class="nav-item">
-            <a href="{!! route('firmView') !!}" class="nav-link @if(Request::segment(1)=='firm') active @endif">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Firm Transfer 
-              </p>
-            </a> 
-          </li> 
+          @role(['administrator','firm'])
+            <li class="nav-item">
+              <a href="{!! route('firmView') !!}" class="nav-link @if(Request::segment(1)=='firm') active @endif">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Firm Transfer 
+                </p>
+              </a> 
+            </li> 
+          @endrole
           <!-- Rekapitulasi -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='rekapitulasi') active @endif">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Rekapitulasi
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{!! route('buktiTransferView') !!}" class="nav-link @if(Request::segment(2)=='bukti-transfer') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bukti Transfer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('buktiPengeluaranView') !!}" class="nav-link @if(Request::segment(2)=='bukti-pengeluaran') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bukti Pengeluaran</p>
-                </a>
-              </li> 
-            </ul>
-          </li>
+          @role(['administrator','korkot','bkm','tp']) 
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link @if(Request::segment(1)=='rekapitulasi') active @endif">
+                <i class="nav-icon fas fa-edit"></i>
+                <p>
+                  Rekapitulasi
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{!! route('buktiTransferView') !!}" class="nav-link @if(Request::segment(2)=='bukti-transfer') active @endif">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Bukti Transfer</p>
+                    </a>
+                  </li> 
+                  <li class="nav-item">
+                    <a href="{!! route('buktiPengeluaranView') !!}" class="nav-link @if(Request::segment(2)=='bukti-pengeluaran') active @endif">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Bukti Pengeluaran</p>
+                    </a>
+                  </li> 
+              </ul>
+            </li>
+          @endrole
           <!-- Buku Kas -->
-          <li class="nav-item">
-            <a href="{!! route('bukuKasView') !!}" class="nav-link @if(Request::segment(1)=='buku-kas') active @endif">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Buku Kas 
-              </p>
-            </a> 
-          </li>
+          @role(['administrator','korkot'])
+            <li class="nav-item">
+              <a href="{!! route('bukuKasView') !!}" class="nav-link @if(Request::segment(1)=='buku-kas') active @endif">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>
+                  Buku Kas 
+                </p>
+              </a> 
+            </li>
+          @endrole
           <!-- Buku Bank -->
-          <li class="nav-item">
-            <a href="{!! route('bukuBankView') !!}" class="nav-link @if(Request::segment(1)=='buku-bank') active @endif">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Buku Bank
-              </p>
-            </a> 
-          </li>
+          @role(['administrator','korkot'])
+            <li class="nav-item">
+              <a href="{!! route('bukuBankView') !!}" class="nav-link @if(Request::segment(1)=='buku-bank') active @endif">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>
+                  Buku Bank
+                </p>
+              </a> 
+            </li>
+          @endrole
           <!-- Kontrak -->
-          <li class="nav-item">
-            <a href="{!! route('KontrakHome') !!}" class="nav-link @if(Request::segment(1)=='kontrak') active @endif">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Kontrak 
-              </p>
-            </a> 
-          </li>
+          @role(['administrator'])
+            <li class="nav-item">
+              <a href="{!! route('KontrakHome') !!}" class="nav-link @if(Request::segment(1)=='kontrak') active @endif">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>
+                  Kontrak 
+                </p>
+              </a> 
+            </li>
+          @endrole
           <!-- Level PMU -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='pmu') active @endif">
-              <i class="nav-icon fas fa-tree"></i>
-              <p>
-                Level PMU
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{!! route('rekapInputView') !!}" class="nav-link @if(Request::segment(2)=='rekap-input') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Rekapitulasi Input </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('invoiceTerakhirView') !!}" class="nav-link @if(Request::segment(2)=='invoice-terakhir') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Invoice Terakhir</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('rekapKontrakView') !!}" class="nav-link @if(Request::segment(2)=='rekap-kontrak') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Rekapitulasi Sisa Kontrak</p>
-                </a>
-              </li> 
-            </ul>
-          </li>
+          @role(['administrator','pmu'])
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link @if(Request::segment(1)=='pmu') active @endif">
+                <i class="nav-icon fas fa-tree"></i>
+                <p>
+                  Level PMU
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{!! route('rekapInputView') !!}" class="nav-link @if(Request::segment(2)=='rekap-input') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rekapitulasi Input </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('invoiceTerakhirView') !!}" class="nav-link @if(Request::segment(2)=='invoice-terakhir') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Invoice Terakhir</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('rekapKontrakView') !!}" class="nav-link @if(Request::segment(2)=='rekap-kontrak') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rekapitulasi Sisa Kontrak</p>
+                  </a>
+                </li> 
+              </ul>
+            </li>
+          @endrole
           <!-- Report -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='report') active @endif">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Report
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{!! route('firmTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='firm-transfer') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Firm Transfer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('penerimaTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='penerimaan-transfer') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Penerimaan Transfer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('pengeluaranTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='pengeluaran-transfer') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pengeluaran Transfer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('bukuBankReporting') !!}" class="nav-link @if(Request::segment(2)=='buku-bank') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Buku Bank</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          @role(['administrator'])
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link @if(Request::segment(1)=='report') active @endif">
+                <i class="nav-icon fas fa-edit"></i>
+                <p>
+                  Report
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{!! route('firmTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='firm-transfer') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Firm Transfer</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('penerimaTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='penerimaan-transfer') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Penerimaan Transfer</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('pengeluaranTransferReporting') !!}" class="nav-link @if(Request::segment(2)=='pengeluaran-transfer') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengeluaran Transfer</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('bukuBankReporting') !!}" class="nav-link @if(Request::segment(2)=='buku-bank') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Buku Bank</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          @endrole 
           <!-- Data Master -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='master') active @endif">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Data Master
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{!! route('provinsiView') !!}" class="nav-link @if(Request::segment(2)=='provinsi') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Provinsi</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('KabupatenKotaView') !!}" class="nav-link @if(Request::segment(2)=='kabupaten') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Kabupaten / Kota</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('OSPView') !!}" class="nav-link @if(Request::segment(2)=='osp') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>OSP</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('KantorView') !!}" class="nav-link @if(Request::segment(2)=='kantor') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Kantor</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('JabatanView') !!}" class="nav-link @if(Request::segment(2)=='jabatan') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Jabatan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('KomponenBiayaView') !!}" class="nav-link @if(Request::segment(2)=='komponen') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Komponen Biaya</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('AmandemenView') !!}" class="nav-link @if(Request::segment(2)=='amandemen') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Amandemen</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('BankView') !!}" class="nav-link @if(Request::segment(2)=='bank') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bank</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('AktifitasView') !!}" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Aktifitas</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          @role(['administrator'])
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link @if(Request::segment(1)=='master') active @endif">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Data Master
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{!! route('provinsiView') !!}" class="nav-link @if(Request::segment(2)=='provinsi') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Provinsi</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('KabupatenKotaView') !!}" class="nav-link @if(Request::segment(2)=='kabupaten') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kabupaten / Kota</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('OSPView') !!}" class="nav-link @if(Request::segment(2)=='osp') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>OSP</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('KantorView') !!}" class="nav-link @if(Request::segment(2)=='kantor') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kantor</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('JabatanView') !!}" class="nav-link @if(Request::segment(2)=='jabatan') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Jabatan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('KomponenBiayaView') !!}" class="nav-link @if(Request::segment(2)=='komponen') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Komponen Biaya</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('AmandemenView') !!}" class="nav-link @if(Request::segment(2)=='amandemen') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Amandemen</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('BankView') !!}" class="nav-link @if(Request::segment(2)=='bank') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Bank</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('AktifitasView') !!}" class="nav-link @if(Request::segment(2)=='aktifitas') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aktifitas</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          @endrole
           <!-- Pengguna -->
           @role(['administrator'])
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Pengguna
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{!! route('KelompokPenggunaView') !!}" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Kelompok Pengguna</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='user') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pengguna</p>
-                </a>
-              </li>
-            </ul>
-          </li> 
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Pengguna
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{!! route('KelompokPenggunaView') !!}" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kelompok Pengguna</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='user') active @endif">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengguna</p>
+                  </a>
+                </li>
+              </ul>
+            </li> 
           @endrole
         </ul>
       </nav>

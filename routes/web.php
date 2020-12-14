@@ -157,6 +157,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
         Route::post('edit', 'Master\JabatanController@update')->name('JabatanEditpost'); 
         Route::get('destroy/{id}', 'Master\JabatanController@destroy')->name('JabatanDestroy');
         Route::post('list','Master\JabatanController@show')->name('JabatanGetAjax');
+        Route::post('roles/api','Master\JabatanController@rolesApi')->name('RolesGetAjax');
     });
     Route::group(['prefix' => 'bank'], function () {
         Route::get('/','Master\BankController@index')->name('BankView');

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Master;
 use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
 use App\Models\JabatanModel;
+use App\Role;
+use Exception;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -177,5 +179,27 @@ class JabatanController extends Controller
             Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');
             return redirect()->back(); 
         }  
-    }
+    } 
+    
+    /**
+     * Role Api
+     */
+
+     public function rolesApi(Request $request)
+     {
+        //  dd($request->post('q'));
+         try {
+             $res = Role::where('name','like','%'.$request->post('q').'%')->get();
+             foreach ($res as $key => $value) {
+                 $resulst[$key]['id'] = $value->id;
+                 $resulst[$key]['name'] = strtoupper($value->name);
+             }             
+             return response()->json($resulst, 200);
+         } catch (Exception $th) {
+             return response()->json([
+                'error'=> true,
+                'message' => "Something Went Wrong"
+             ], 400);
+         }
+     }     
 }
