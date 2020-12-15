@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ErrorReport;
+use App\Models\RolesUserModels;
 use App\User;
 use Exception;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
 class PenggunaController extends Controller
@@ -61,7 +66,7 @@ class PenggunaController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->post());
+        // dd($request->post());
         try {
             $useriD = User::create([
                 'name'=> $request->post('name'),
@@ -72,9 +77,17 @@ class PenggunaController extends Controller
                 'id_jabatan'=> $request->post('jabatan'),
                 'id_group'=> $request->post('pengguna'),
                 ]);
-            
-        } catch (Exception $th) {
-            //throw $th;
+            RolesUserModels::create([
+                'role_id'=>$request->post('pengguna'),
+                'user_id'=> $useriD->id,
+                'user_type' => 'App\User'
+            ]);
+            Alert::success('Pengguna Telah Ditambahkan');
+            return redirect()->route('PenggunaView');
+        } catch (Exception $e) {
+            ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Pengguna Gagal Ditambahkan'); 
+            return redirect()->back();
         }
     }
 
@@ -118,8 +131,25 @@ class PenggunaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);              
+            Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');            
+            return redirect()->back();
+        }
+
+        try { 
+           User::where('id', $decrypted)->delete(); 
+           RolesUserModels::where('user_id',$decrypted)->delete();
+            Alert::success('Pengguna Berhasil Dihapus')->persistent('Confirm');
+            return redirect()->route('PenggunaView'); 
+        } catch (Exception $e) { 
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Pengguna Gagal Dihapus','Harap Kontak Administrator/Superadmin');
+            return redirect()->back(); 
+        }  
     }
 }

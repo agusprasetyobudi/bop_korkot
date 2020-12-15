@@ -96,6 +96,14 @@
               {data: 'opsi', className:'text-center text-uppercase'},
           ]
       })
+      $('#tableDataPengguna tbody').on('click', '#delete-confirm', tables, function () { 
+            if(confirm('Anda yakin mau menghapus Pengguna ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('PenggunaDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+    })   
   })
 </script>    
 @endsection

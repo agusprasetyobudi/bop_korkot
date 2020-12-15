@@ -224,7 +224,7 @@ Route::group(['prefix' => 'pengguna', 'middleware'=>['auth','role:administrator'
         Route::post('create','PenggunaController@store')->name('PenggunaPost');
         Route::get('edit', 'PenggunaController@edit')->name('PenggunaEditView');
         Route::post('edit', 'PenggunaController@update')->name('PenggunaEditpost'); 
-        Route::get('destroy', 'PenggunaController@destory')->name('PenggunaDestroy');
+        Route::get('destroy/{id}', 'PenggunaController@destroy')->name('PenggunaDestroy');
     });
     Route::group(['prefix' => 'kelompok-pengguna'], function () {
         Route::get('/','KelompokPenggunaController@index')->name('KelompokPenggunaView');
@@ -232,7 +232,7 @@ Route::group(['prefix' => 'pengguna', 'middleware'=>['auth','role:administrator'
         Route::post('create','KelompokPenggunaController@store')->name('KelompokPenggunaPost');
         Route::get('edit', 'KelompokPenggunaController@edit')->name('KelompokPenggunaEditView');
         Route::post('edit', 'KelompokPenggunaController@update')->name('KelompokPenggunaEditpost'); 
-        Route::get('destroy', 'KelompokPenggunaController@destory')->name('KelompokPenggunaDestroy');
+        Route::get('destroy', 'KelompokPenggunaController@destroy')->name('KelompokPenggunaDestroy');
     });
 });
 Route::get('/logout', 'HomeController@logout')->name('logout');
