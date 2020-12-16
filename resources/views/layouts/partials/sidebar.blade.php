@@ -25,7 +25,7 @@
             </a>
           </li>
           <!-- Firm Transfer -->
-          @role(['administrator','firm'])
+          @role(['administrator','superadministrator','firm'])
             <li class="nav-item">
               <a href="{!! route('firmView') !!}" class="nav-link @if(Request::segment(1)=='firm') active @endif">
                 <i class="nav-icon fas fa-copy"></i>
@@ -36,7 +36,7 @@
             </li> 
           @endrole
           <!-- Rekapitulasi -->
-          @role(['administrator','korkot','bkm','tp']) 
+          @role(['administrator','superadministrator','korkot','bkm','tp']) 
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link @if(Request::segment(1)=='rekapitulasi') active @endif">
                 <i class="nav-icon fas fa-edit"></i>
@@ -62,7 +62,7 @@
             </li>
           @endrole
           <!-- Buku Kas -->
-          @role(['administrator','korkot'])
+          @role(['administrator','superadministrator','korkot'])
             <li class="nav-item">
               <a href="{!! route('bukuKasView') !!}" class="nav-link @if(Request::segment(1)=='buku-kas') active @endif">
                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -73,7 +73,7 @@
             </li>
           @endrole
           <!-- Buku Bank -->
-          @role(['administrator','korkot'])
+          @role(['administrator','superadministrator','korkot'])
             <li class="nav-item">
               <a href="{!! route('bukuBankView') !!}" class="nav-link @if(Request::segment(1)=='buku-bank') active @endif">
                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -84,7 +84,7 @@
             </li>
           @endrole
           <!-- Kontrak -->
-          @role(['administrator'])
+          @role(['administrator','superadministrator'])
             <li class="nav-item">
               <a href="{!! route('KontrakHome') !!}" class="nav-link @if(Request::segment(1)=='kontrak') active @endif">
                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -95,7 +95,7 @@
             </li>
           @endrole
           <!-- Level PMU -->
-          @role(['administrator','pmu'])
+          @role(['administrator','superadministrator','pmu'])
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link @if(Request::segment(1)=='pmu') active @endif">
                 <i class="nav-icon fas fa-tree"></i>
@@ -127,7 +127,7 @@
             </li>
           @endrole
           <!-- Report -->
-          @role(['administrator'])
+          @role(['administrator','superadministrator'])
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link @if(Request::segment(1)=='report') active @endif">
                 <i class="nav-icon fas fa-edit"></i>
@@ -165,7 +165,7 @@
             </li>
           @endrole 
           <!-- Data Master -->
-          @role(['administrator'])
+          @role(['administrator','superadministrator'])
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link @if(Request::segment(1)=='master') active @endif">
                 <i class="nav-icon fas fa-table"></i>
@@ -233,7 +233,7 @@
             </li>
           @endrole
           <!-- Pengguna -->
-          @role(['administrator'])
+          @role(['administrator','superadministrator'])
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
                 <i class="nav-icon fas fa-table"></i>
@@ -243,12 +243,14 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{!! route('KelompokPenggunaView') !!}" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Kelompok Pengguna</p>
-                  </a>
-                </li>
+               @role(['superadministrator'])
+               <li class="nav-item">
+                <a href="{!! route('KelompokPenggunaView') !!}" class="nav-link @if(Request::segment(2)=='kelompok-pengguna') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kelompok Pengguna</p>
+                </a>
+              </li>
+               @endrole
                 <li class="nav-item">
                   <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='user') active @endif">
                     <i class="far fa-circle nav-icon"></i>
@@ -257,6 +259,16 @@
                 </li>
               </ul>
             </li> 
+          @endrole
+          @role(['superadministrator'])
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
+              <i class="nav-icon fas fa-bug"></i> 
+              <p>
+                Web Error Reporting  
+              </p>
+            </a> 
+          </li>
           @endrole
         </ul>
       </nav>
