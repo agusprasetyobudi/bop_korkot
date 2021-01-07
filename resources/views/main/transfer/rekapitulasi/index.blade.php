@@ -40,7 +40,7 @@
           <div class="card"> 
             <!-- /.card-header -->
             <div class="card-body text-right">
-              <a href="{!! route('buktiTransferCreate') !!}" class="btn btn-default">Tambah Data Rekapitulasi Bukti Transfer</a>
+              <a href="{!! route('buktiTransferCreate') !!}" class="btn btn-default">Tambah Data Rekapitulasi Transfer</a>
             </div> 
             <div class="card-body"> 
                 {{-- <div class="form-group">

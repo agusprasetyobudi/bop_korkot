@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class KelompokPenggunaController extends Controller
 {
@@ -11,9 +13,18 @@ class KelompokPenggunaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $data = Role::all();
+            return DataTables::of($data)
+            ->addIndexColumn() 
+            ->addColumn('opsi',function($row){
+                return '<button type="button" class="btn btn-warning" id="change-password" data-name="'.Crypt::encrypt($row->id).'" >Change Password</button> <a href="'.route('PenggunaEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn  btn-primary">Update Pengguna</a> <button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
+            })
+            ->rawColumns(['opsi'])
+            ->make(true);
+        }
         return view('main.pengguna.kelompok_pengguna.index');
     }
 

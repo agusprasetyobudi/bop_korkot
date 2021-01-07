@@ -32,7 +32,7 @@ class FirmController extends Controller
             ->addIndexColumn()
             ->addColumn('action',function($row){
                 $btn = '';
-                $btn .= '<a href="'.route('firmEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-sm btn-warning">Update</a>  '; 
+                $btn .= '<a href="'.route('firmEditViews',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-sm btn-warning">Update</a>  '; 
                 $btn .= '<button type="button" class="btn btn-sm btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
             })
@@ -144,7 +144,7 @@ class FirmController extends Controller
                 'kantor'    => $res->Kantor->nama_kantor.'/'.$res->Kantor->nama_kabupaten,
                 'id_kantor' => $res->kantor,
                 'periode'   => Carbon::parse((int)$res->periode_month)->format('F').' - '.$res->periode_year,
-                'periode_by_date' => $res->periode_year.'-'.$res->periode_month.'-01',
+                'periode_by_date' => $res->periode_year.'-'.Carbon::parse((int)$res->periode_month)->format('m').'-01',
                 'nama_bank' => $res->Bank->nama_bank,
                 'account_bank' => $res->bank_account_number,
                 'nama_penerima' => $res->nama_penerima
@@ -187,11 +187,10 @@ class FirmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
-    {
+    public function edit($id,Request $request)
+    { 
         try {
-            $decrypted = Crypt::decrypt($id);
-            // dd($decrypted);
+            $decrypted = Crypt::decrypt($id); 
         } catch (DecryptException $e) {
             ErrorReport::ErrorRecords(103,$e,$request->url(),Auth::user()->id);  
             Alert::error('Anda Tidak Mempunya Akses Ke Halaman Ini');    

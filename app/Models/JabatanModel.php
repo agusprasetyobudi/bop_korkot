@@ -9,4 +9,5 @@ class JabatanModel extends Model
     //
     public $timestamp=false;
     protected $table = 'master_jabatan';
+    protected $fillable = [''];
 }

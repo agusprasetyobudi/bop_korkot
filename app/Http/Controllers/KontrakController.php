@@ -42,7 +42,7 @@ class KontrakController extends Controller
             ->addColumn('action', function($row){
                 $btn = '';
                 // $btn .= '<a href="" class="btn btn-warning">Update Data</a>  '; 
-                $btn .= '<button type="button" class="btn btn-warning" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Change Password</button><button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button><button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
+                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
                 return $btn;
             })
             ->rawColumns(['kode_kontrak','action'])
@@ -140,6 +140,21 @@ class KontrakController extends Controller
             return redirect()->back();
         }
     }
+    /**
+     * Edit the form for editing specified resource
+     */
+    public function edit(Request $request)
+    {
+        
+    }
+
+    /**
+     * Edit the form for editing specified resource
+     */
+    public function update(Request $request)
+    {
+        # code...
+    }
 
     /**
      * Display the specified resource.
@@ -158,7 +173,11 @@ class KontrakController extends Controller
         } 
         try {
             if($request->ajax()){
+                DB::enableQueryLog();
                 $data = KontrakModels::where('parent_id',$decrypted)->get();
+                // $lara = $data[0]->aktifitas;
+                // dd($lara);
+                // dd(DB::getQueryLog());
                 return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('komponen',function($row){
@@ -264,10 +283,12 @@ class KontrakController extends Controller
                 $res[$key]['provinsi_tujuan']= $value;
             }
             foreach ($request->post('periode_start') as $key => $value) {
-                $res[$key]['start_periode'] = $value;
+                // $res[$key]['start_periode'] = $value;
+                $res[$key]['start_periode'] = Carbon::createFromFormat('d/m/Y',$value)->format('Y/m/d');
             }
             foreach ($request->post('preiode_end') as $key => $value) {
-                $res[$key]['end_periode'] = $value;
+                // $res[$key]['end_periode'] = $value;
+                $res[$key]['end_periode'] = Carbon::createFromFormat('d/m/Y',$value)->format('Y/m/d');
             }
             foreach ($request->post('id_amandemen') as $key => $value) {
                 $res[$key]['id_amandemen'] = $value;

@@ -47,30 +47,14 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">Nama Pengguna</label>
-                                            <input type="text" class="form-control nama-pengguna" name="name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="" class="text-uppercase">password</label>
-                                            <input type="password" class="form-control" id="password" required>
-                                        </div>
-                                         
+                                            <input type="text" class="form-control nama-pengguna" name="name" value="{!! $data->name !!}">
+                                        </div>  
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">Username</label>
-                                            <input type="text" class="form-control username" name="username" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <label for="" class="text-uppercase">Konfirmasi Password</label>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <span class="text-right" style="font-weight: bold;" id='message'></span>
-                                                </div>
-                                            </div>
-                                            <input type="password" class="form-control" id="confirm_password" name="password" required>
-                                        </div>
+                                            <input type="text" class="form-control username" name="username" value="{!! $data->username !!}">
+                                        </div> 
                                     </div>
                                 </div>
                             </div> 
@@ -86,13 +70,13 @@
                                             <label for="" class="text-uppercase">kantor</label>
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <select class="form-control osp" name="osp" required>
-                                                        {{-- <option value="">1</option> --}}
+                                                    <select class="form-control osp" name="osp">
+                                                        <option value="{!! $data->id_osp !!}" selected>{!! $data->osp->osp_name !!}</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control kantor" name="kantor" required>
-                                                        {{-- <option value="">2</option> --}}
+                                                <div class="col-sm-9"> 
+                                                    <select class="form-control kantor" name="kantor">
+                                                        <option value="{!! $data->id_kantor !!}" selected>{!! $data->kantor->kode_kantor.' - '.$data->kantor->nama_kantor.' / '.$kab_name!!}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -101,7 +85,9 @@
                                     <div class="col-sm-6"> 
                                         <div class="form-group">  
                                             <label for="" class="text-uppercase">Jabatan</label>
-                                            <select class="form-control text-uppercase jabatan" name="jabatan" required></select>     
+                                            <select class="form-control text-uppercase jabatan" name="jabatan">
+                                                <option value="{!! $data->id_jabatan !!}" selected>{!! $data->jabatan->nama_jabatan !!}</option>
+                                            </select>     
                                         </div> 
                                     </div>
                                 </div>
@@ -117,7 +103,9 @@
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">Kelompok Pengguna</label>
                                             {{-- <label for="" class="text-uppercase">Jabatan</label> --}}
-                                            <select class="form-control text-uppercase pengguna" name="pengguna" required></select>     
+                                            <select class="form-control text-uppercase pengguna" name="pengguna">
+                                                <option value="{!! $roles->role_id !!}" selected>{!! $roles->role_name !!}</option>
+                                            </select>     
                                         </div> 
                                     </div>
                                 </div>

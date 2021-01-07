@@ -168,7 +168,7 @@
                     <div class="col-sm-12">
                         <form action="{!! route('KontrakDetailCreatePost',['id'=>Request::segment(2)]) !!}" method="post">
                             @csrf
-                            <input type="text" name="urldata" class="kode-kontrak-post" value="{!! Request::segment(2) !!}"> 
+                            <input type="hidden" name="urldata" class="kode-kontrak-post" value="{!! Request::segment(2) !!}"> 
                             <div class="card"> 
                                 <div class="card-header">
                                     List Data Kontrak

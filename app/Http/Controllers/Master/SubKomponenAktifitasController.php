@@ -6,6 +6,7 @@ use App\Facades\ErrorReport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AktifitasModels;
+use App\Models\KabupatenModels;
 use App\Models\KomponenBiaya;
 use App\Models\KontrakModels;
 use App\Models\SubKomponenActivityModels;
@@ -144,7 +145,7 @@ class SubKomponenAktifitasController extends Controller
             ->where('kontrak.id_kantor', $request->post('kantor'))
             ->where('master_aktifitas.id', $request->post('aktifitas'))
             ->where('master_aktifitas_subkomponen.id_subkomponen', $request->post('sub_komponen'))
-            ->select(['kontrak.id as id_selected','kontrak.parent_id','master_aktifitas.nama_aktifitas','kontrak.nominal as nominal','kontrak.kabupaten_asal_value as kabupaten_asal','kontrak.kabupaten_tujuan_value as kabupaten_tujuan'])
+            ->select(['kontrak.id as id_selected','kontrak.parent_id','master_aktifitas.nama_aktifitas','kontrak.nominal as nominal','kontrak.kabupaten_asal as kabupaten_asal','kontrak.kabupaten_tujuan as kabupaten_tujuan'])
             ->get();
 
             // dd(DB::getQueryLog());
@@ -165,10 +166,10 @@ class SubKomponenAktifitasController extends Controller
                 return  "Rp " . number_format($row->nominal,0,',','.');;
             })
             ->addColumn('asal',function($row){
-                return $row->kabupaten_asal;
+                return KabupatenModels::find($row->kabupaten_asal)->kabupaten_name;
             })
             ->addColumn('tujuan',function($row){
-                return $row->kabupaten_tujuan;
+                return KabupatenModels::find($row->kabupaten_tujuan)->kabupaten_name;
             })
             ->rawColumns(['action','kode_kontrak','aktifitas','nominal','asal','tujuan'])
             ->make(true);
@@ -222,7 +223,8 @@ class SubKomponenAktifitasController extends Controller
         }else{ 
             $data = SubKomponenActivityModels::where('id_subkomponen',$request->post('id'))->get();
             foreach ($data as $key => $values) {  
-                $results[$key]['id'] = $values->id_aktifitas;
+                $results[$key]['sub_activity'] = $values->id_aktifitas;
+                $results[$key]['id'] = $values->id;
                 $results[$key]['nama_aktifitas'] = $values->activity->nama_aktifitas;
             }
             // $results = ['ok 3'];

@@ -146,7 +146,7 @@
                     <form action="{!! route('buktiTransferPost') !!}" id="form-submit" method="post">
                         @csrf
                         <input type="hidden" name="firm" id="firm">
-                        <input type="text" name="tanggal_terima" id="tanggal-terima-val">
+                        <input type="hidden" name="tanggal_terima" id="tanggal-terima-val">
                             <div class="card-body"> 
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -380,6 +380,11 @@
                             $('.input-uang').val(null)
                             $('.uang-kontrak').val("")
                         }
+                        $('#select-komponen-biaya').val('').trigger('change')
+                        $('#select-sub-komponen').val('').trigger('change')
+                        $('#select-aktifitas').val('').trigger('change')
+                        tableKomponenKontrak.clear().draw()
+                        $('#total-dana').val(0)
                     }
                 })
             })
@@ -510,7 +515,7 @@
                                 // console.log(item)
                                 return {
                                     text: item.nama_aktifitas,
-                                    id: item.id
+                                    id: item.sub_activity
                                 }
                             })
                         }
