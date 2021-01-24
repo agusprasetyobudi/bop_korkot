@@ -585,6 +585,13 @@
                 console.log(total)
                 $("#total-dana").val(format(total));
             });
+            $('#tableKomponenKontrak tbody').on( 'click', '.btn-delete-row', function () {
+                tableKomponenKontrak
+                .row( $(this).parents('tr') )
+                .remove()
+                .draw();
+                count--
+                })
         })
     </script>
 @endsection

@@ -163,7 +163,7 @@ class SubKomponenAktifitasController extends Controller
                 return $row->nama_aktifitas;
             })
             ->addColumn('nominal',function($row){
-                return  "Rp " . number_format($row->nominal,0,',','.');;
+                return  "Rp " . number_format($row->nominal,0,',','.');
             })
             ->addColumn('asal',function($row){
                 return KabupatenModels::find($row->kabupaten_asal)->kabupaten_name;

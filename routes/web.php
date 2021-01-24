@@ -84,7 +84,7 @@ Route::group(['prefix' => 'rekapitulasi', 'middleware'=>['auth']], function () {
     });
     Route::group(['prefix' => 'bukti-pengeluaran'], function () {
         Route::get('/', 'Pengeluaran\RekapitulasiController@index')->name('buktiPengeluaranView');
-        Route::get('create', 'Pengeluaran\RekapitulasiController@create')->name('buktiPengeluaranCreate');
+        Route::get('create/{id}', 'Pengeluaran\RekapitulasiController@create')->name('buktiPengeluaranCreate');
         Route::post('create', 'Pengeluaran\RekapitulasiController@store')->name('buktiPengeluaranPost');
         Route::get('edit/{id}', 'Pengeluaran\RekapitulasiController@edit')->name('buktiPengeluaranEdit');
         Route::post('edit', 'Pengeluaran\RekapitulasiController@update')->name('buktiPengeluaranUpdate');

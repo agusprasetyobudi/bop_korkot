@@ -139,7 +139,7 @@
           "responsive": false,
           "autoWidth": true,
           processing: true,     
-          ajax:"{!! route('getMainApiDatatables') !!}",
+          ajax:"{!! route('buktiPengeluaranView') !!}",
           columns:[
             {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
             {data:'bukti_transfer', className:'text-cemter text-uppercase'},
@@ -163,7 +163,8 @@
           ajax: "{!! route('getApiBuktiTransfer') !!}",
           columns:[
             {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
-            {data:'bukti_transfer', className:'text-cemter text-uppercase'},
+            {data:'no_bukti', className:'text-cemter text-uppercase'},
+            {data:'tanggal_transfer', className:'text-cemter text-uppercase'},
             {data:'nama_penerima', className:'text-cemter text-uppercase'},
             {data:'bank_penerima', className:'text-cemter text-uppercase'},
             {data:'no_rekening', className:'text-cemter text-uppercase'},
@@ -171,14 +172,13 @@
             {data:'jumlah_terima', className:'text-cemter text-uppercase'},
             {data:'selisih', className:'text-cemter text-uppercase'},
             {data:'tanggal_terima', className:'text-cemter text-uppercase'},
-            {data:'periode', className:'text-cemter text-uppercase'},
-            {data:'implementasi', className:'text-cemter text-uppercase'},
-            {data:'selisih', className:'text-cemter text-uppercase'},
+            {data:'periode', className:'text-cemter text-uppercase'}, 
             {data:'action', className:'text-cemter text-uppercase'} ,
           ]
         });        
         $('#btn-list').click(function(){
-            $('#bukti-tf-modal').modal('show')
+            $('#bukti-tf-modal').modal({backdrop:'static',keyboard:false})
+            tableBuktiTf.ajax.reload()
         })
       })
     </script>
