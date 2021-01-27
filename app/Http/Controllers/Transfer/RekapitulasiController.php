@@ -110,9 +110,7 @@ class RekapitulasiController extends Controller
         // id
         // firm_id
         // amount
-        // Tanggal Terima 
-        dd($request->post());
-        die;
+        // Tanggal Terima   
         $parent = TransferModels::create([
             'firm_id' => $decrypted,
             'amount' => preg_replace('/,/','',$request->post('total_dana')),
