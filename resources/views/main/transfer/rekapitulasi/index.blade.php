@@ -88,7 +88,7 @@
 <script src="{!! asset('assets/adminlte/plugins/datatables/jquery.dataTables.min.js') !!}"></script>
 <script src="{!! asset('assets/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}"></script>
 <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}"></script>
-<script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script>
+{{-- <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script> --}}
 <script src="{!! asset('assets/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js') !!}"></script>
 <script src="{!! asset('assets/adminlte/plugins/datatables-buttons/js/buttons.html5.js') !!}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -97,10 +97,10 @@
 <script src="{!! asset('assets/adminlte/plugins/datatables-buttons/js/buttons.print.min.js') !!}"></script>
 <script> 
   $(()=>{
-    let tables = $("#example2").DataTable({    
-      "scrollX": true,
-      "responsive": false,
-      "autoWidth": true,
+    let tables = $("#example2").DataTable({     
+      "initComplete": function (settings, json) {  
+        $("#example2").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+      },
       dom: 'Bfrtip',
     buttons:  [
     { 
