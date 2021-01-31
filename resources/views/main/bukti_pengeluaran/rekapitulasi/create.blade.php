@@ -132,8 +132,16 @@
                                                 <tfoot>
                                                     <tr>
                                                         <th colspan="4">Total</th>
-                                                        <th>Total</th>
-                                                        <th>Total</th>
+                                                        <th>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" value="{!! "Rp " . number_format($data->jumlah_terima,0,',','.') !!}" readonly>
+                                                            </div>
+                                                        </th>
+                                                        <th>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" id="total-nominal" value="0">
+                                                            </div>
+                                                        </th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -161,7 +169,8 @@
 
     <script>
         $(function(){
-            $('#tableKomponenBiaya').DataTable({
+            var total = 0;
+            var table = $('#tableKomponenBiaya').DataTable({
                 autoWidth: false,
                 paging: false,
                 searching: false,
@@ -181,9 +190,49 @@
                     {data:'sub_komponen', className: 'text-uppercase'},
                     {data:'nilai_kontrak', className: 'text-uppercase'},
                     {data:'alokasi', className: 'text-uppercase'},
-                    {data:'implementasi', className: 'text-uppercase'},
+                    {data:'implementasi', className: 'text-uppercase'}, 
                 ]
             })
+            
+            $('#tableKomponenBiaya tbody').on('keyup','.nominal-kontrak', function (params) {
+               let num = convert($(this).val())
+                $(this).val(format(num)); 
+
+                total = 0;
+                $('.nominal-kontrak').each(function(){
+                    var num = convert($(this).val()) 
+                    total = total + num;
+                })
+                $('#total-nominal').val(format(total))
+            }) 
+            var convert = function(num){
+                if(num != undefined && num != null && num != ''){
+                    let val = num.replace(/,/g,'');
+                    return parseFloat(val)
+                }else{
+                    return 0
+                }
+            }
+            var format = function(num){
+                    var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+                if(str.indexOf(".") > 0) {
+                    parts = str.split(".");
+                    str = parts[0];
+                }
+                str = str.split("").reverse();
+                for(var j = 0, len = str.length; j < len; j++) {
+                    if(str[j] != ",") {
+                    output.push(str[j]);
+                    if(i%3 == 0 && j < (len - 1)) {
+                        output.push(",");
+                    }
+                    i++;
+                    }
+                }
+                formatted = output.reverse().join("");
+                return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : "")); 
+                }; 
+            
         })
     </script>
 @endsection

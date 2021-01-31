@@ -20,7 +20,7 @@ class CreateTransferModelsTable extends Migration
             $table->foreignId('item_kontrak_id')->nullable();
             $table->integer('amount')->nullable();
             $table->integer('amount_item')->nullable();
-            $table->date('tanngal_terima')->nullable();
+            $table->date('tanggal_terima')->nullable();
             $table->foreignId('created_by');
             $table->index('parent_id');
             $table->index('firm_id');
