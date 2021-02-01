@@ -249,7 +249,77 @@ class RekapitulasiController extends Controller
             }) 
             ->rawColumns(['total_alokasi','komponen','sub_komponen','nilai_kontrak','alokasi','implementasi'])
             ->make(true);
-        }else{ 
+        }else{
+            // $data = TransferModels::where('parent_id','<',1)
+            // ->whereNotIn('id',function($query){
+            //     $query->select('id_item_transfer')->from('pengeluaran');
+            // }) 
+            // ->get();
+            // return DataTables::of($data)
+            // ->addIndexColumn()
+            // ->addColumn('no_bukti',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return $firm->no_bukti;
+    
+            // })
+            // ->addColumn('tanggal_transfer',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return $firm->tanggal_tf;
+    
+            // })
+            // ->addColumn('nama_penerima',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return $firm->nama_penerima;
+    
+            // })
+            // ->addColumn('bank_penerima',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return $firm->Bank->nama_bank;
+    
+            // })
+            // ->addColumn('no_rekening',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return $firm->bank_account_number;
+    
+            // })
+            // ->addColumn('nilai_kontrak',function($row){
+            //     return $row->sum('amount_item');
+    
+            // })
+            // ->addColumn('jumlah_terima',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     // $firm = FirmModels::find($transfer->firm_id);
+            //     return $transfer->amount;
+    
+            // })
+            // ->addColumn('selisih',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     // $firm = FirmModels::find($transfer->firm_id);
+            //     return $row->sum('amount_item')-$transfer->amount;
+    
+            // })
+            // ->addColumn('tanggal_terima',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     return $transfer->tanggal_terima;
+    
+            // })
+            // ->addColumn('periode',function($row){
+            //     $transfer = TransferModels::find($row->parent_id);
+            //     $firm = FirmModels::find($transfer->firm_id);
+            //     return Carbon::parse((int)$firm->periode_month)->format('F').'/'.(int)$firm->periode_year;            
+    
+            // })
+            // ->addColumn('action',function($row){
+            //     return '<a href="'.route('buktiPengeluaranCreate',['id'=>Crypt::encrypt((object)['parent_id'=>$row->parent_id,'id'=>$row->id])]).'" class="btn btn-primary">Pilih</a>  ';  
+            // })
+            // ->rawColumns(['no_bukti','tanggal_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','action',])
+            // ->make(true);
+
             $data = TransferModels::where('parent_id','<',1)
             ->whereNotIn('id', function($query){
                 $query->select('id_parent_transfer')->from('pengeluaran');
