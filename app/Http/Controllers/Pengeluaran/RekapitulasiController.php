@@ -140,7 +140,7 @@ class RekapitulasiController extends Controller
             $stored[$key]['id_parent_transfer'] = $request->post('something_like_this');
         }
         foreach ($request->post('data_value') as $key => $value) {
-            $stored[$key]['jumlah'] = $value;
+            $stored[$key]['jumlah'] = preg_replace('/\D/', '',$value);
             $stored[$key]['created_by'] = Auth::user()->id;
         } 
         try {
