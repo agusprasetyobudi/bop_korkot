@@ -30,24 +30,38 @@ class RekapitulasiController extends Controller
      */
     public function index(Request $request)
     {
+        DB::enableQueryLog();
         if($request->ajax()){
-            $data = PengeluaranModels::all();
+            $data = TransferModels::whereIn('id',function($query){
+                $query->select('id_item_transfer')->from('pengeluaran');
+            }) 
+            ->get();
+            // dd(DB::getQueryLog());
+            // dd($data);
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('bukti_transfer',function($row){
-                return '19823190912';
+                $data = TransferModels::find($row->parent_id);
+                return $data->firm->no_bukti;
+            })
+            ->addColumn('tanggal_transfer',function($row){
+                $data = TransferModels::find($row->parent_id);
+                return $data->firm->tanggal_tf;
             })
             ->addColumn('nama_penerima',function($row){
-                return 'test';
+                $data = TransferModels::find($row->parent_id);
+                return $data->firm->nama_penerima;
             })
             ->addColumn('bank_penerima',function($row){
-                return 'Bank Test';
+                $data = TransferModels::find($row->parent_id);
+                return $data->firm->Bank->nama_bank;
             })
             ->addColumn('no_rekening',function($row){
-                return '12982391098';
+                $data = TransferModels::find($row->parent_id);
+                return $data->firm->bank_account_number;
             })
             ->addColumn('nilai_kontrak',function($row){
-                return 'Rp. 102.901.001';
+                return $row;
             })
             ->addColumn('jumlah_terima',function($row){
                 return 'Rp. 102.901.001';
@@ -58,7 +72,7 @@ class RekapitulasiController extends Controller
             })
             ->addColumn('tanggal_terima',function($row){
                 return '19-12-2020';
-            })
+            }) 
             ->addColumn('periode',function($row){
                 return 'Januari';
             })
@@ -74,7 +88,7 @@ class RekapitulasiController extends Controller
                 $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
             })
-            ->rawColumns(['bukti_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','implementasi','selisih','action',])
+            ->rawColumns(['bukti_transfer','tanggal_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','implementasi','selisih','action',])
             ->make(true);
         }
         return view('main.bukti_pengeluaran.rekapitulasi.index');

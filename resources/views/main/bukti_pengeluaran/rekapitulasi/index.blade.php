@@ -143,6 +143,7 @@
           columns:[
             {data: 'DT_RowIndex', className: 'text-center text-uppercase'},
             {data:'bukti_transfer', className:'text-cemter text-uppercase'},
+            {data:'tanggal_transfer', className:'text-cemter text-uppercase'},
             {data:'nama_penerima', className:'text-cemter text-uppercase'},
             {data:'bank_penerima', className:'text-cemter text-uppercase'},
             {data:'no_rekening', className:'text-cemter text-uppercase'},
@@ -153,7 +154,7 @@
             {data:'periode', className:'text-cemter text-uppercase'},
             {data:'implementasi', className:'text-cemter text-uppercase'},
             {data:'selisih', className:'text-cemter text-uppercase'},
-            {data:'action', className:'text-cemter text-uppercase'} ,
+            // {data:'action', className:'text-cemter text-uppercase'} ,
           ]
         });        
         let tableBuktiTf = $("#tableBuktiTranfer").DataTable({
