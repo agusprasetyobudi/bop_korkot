@@ -32,63 +32,83 @@ class RekapitulasiController extends Controller
     {
         DB::enableQueryLog();
         if($request->ajax()){
-            $data = TransferModels::whereIn('id',function($query){
-                $query->select('id_item_transfer')->from('pengeluaran');
+            $data = TransferModels::where('parent_id','=',0)
+                ->whereIn('id',function($query){
+                $query->select('id_parent_transfer')->from('pengeluaran');
             }) 
             ->get();
             // dd(DB::getQueryLog());
             // dd($data);
             return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('bukti_transfer',function($row){
-                $data = TransferModels::find($row->parent_id);
-                return $data->firm->no_bukti;
+            ->addColumn('bukti_transfer',function($row){ 
+                return $row->firm->no_bukti;
             })
-            ->addColumn('tanggal_transfer',function($row){
-                $data = TransferModels::find($row->parent_id);
-                return $data->firm->tanggal_tf;
+            ->addColumn('tanggal_transfer',function($row){ 
+                return $row->firm->tanggal_tf;
             })
-            ->addColumn('nama_penerima',function($row){
-                $data = TransferModels::find($row->parent_id);
-                return $data->firm->nama_penerima;
+            ->addColumn('nama_penerima',function($row){ 
+                return $row->firm->nama_penerima;
             })
-            ->addColumn('bank_penerima',function($row){
-                $data = TransferModels::find($row->parent_id);
-                return $data->firm->Bank->nama_bank;
+            ->addColumn('bank_penerima',function($row){ 
+                return $row->firm->Bank->nama_bank;
             })
-            ->addColumn('no_rekening',function($row){
-                $data = TransferModels::find($row->parent_id);
-                return $data->firm->bank_account_number;
+            ->addColumn('no_rekening',function($row){ 
+                return $row->firm->bank_account_number;
             })
             ->addColumn('nilai_kontrak',function($row){
-                return $row;
+                $transfer = TransferModels::where('parent_id',$row->id)
+                        ->select(['item_kontrak_id'])
+                        ->get();
+                $data = KontrakModels::join('transfer','kontrak.id','=','transfer.item_kontrak_id') 
+                        ->where('transfer.parent_id',$row->id)
+                        ->get();           
+                        // return $data;
+                        return number_format($data->sum('nominal'),0,',','.');
             })
             ->addColumn('jumlah_terima',function($row){
-                return 'Rp. 102.901.001';
+                return number_format($row->amount,0,',','.');
 
             })
             ->addColumn('selisih',function($row){
-                return '0';
+                $data = TransferModels::where('parent_id', $row->id)
+                ->get();  
+                return number_format($data->sum('amount_item')-$row->amount,0,',','.');
             })
             ->addColumn('tanggal_terima',function($row){
-                return '19-12-2020';
+                // $terima = FirmModels::find($row->firm_id);
+                // return $terima->tanngal_tf;
+                return Carbon::parse($row->tanggal_terima)->format('d-m-Y');
+                return $row->tanggal_terima;
             }) 
             ->addColumn('periode',function($row){
-                return 'Januari';
+                // return 'Januari';
+                $firm = FirmModels::find($row->firm_id);
+                return Carbon::parse((int)$firm->periode_month)->format('F').'/'.(int)$firm->periode_year;            
             })
             ->addColumn('implementasi',function($row){
-                return 'Rp. 102.901.001';
+                // return 'Rp. 102.901.001';
+                $data = KontrakModels::join('pengeluaran','kontrak.id','=','pengeluaran.id_item_transfer')
+                ->where('pengeluaran.id_parent_transfer',$row->id)
+                ->select(['pengeluaran.jumlah'])
+                ->get();  
+                return number_format($data->sum('jumlah'),0,',','.');
             })
-            ->addColumn('selisih',function($row){
-                return '0';
+            ->addColumn('selisihb',function($row){
+                $data = KontrakModels::join('transfer','kontrak.id','=','transfer.item_kontrak_id')
+                        ->join('pengeluaran','transfer.id','=','pengeluaran.id_item_transfer','left')
+                        ->where('transfer.parent_id',$row->id) 
+                        ->get();           
+                        return number_format($data->sum('jumlah')-$data->sum('amount_item'),0,',','.');
+                        // return number_format($data->sum('nominal')-$data->sum('amount_item'),0,',','.');
             })
-            ->addColumn('action',function($row){
+            ->addColumn('action',function($row){ 
                 $btn = '';
-                $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
-                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
+                $btn .= '<a href="'.route('buktiPengeluaranEdit',['id'=>Crypt::encrypt((object)['firm'=>$row->firm_id,'id'=>$row->id])]).'" class="btn btn-warning">Edit</a>  '; 
+                // $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
             })
-            ->rawColumns(['bukti_transfer','tanggal_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','implementasi','selisih','action',])
+            ->rawColumns(['bukti_transfer','tanggal_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','implementasi','selisih','selisihb','action',])
             ->make(true);
         }
         return view('main.bukti_pengeluaran.rekapitulasi.index');
@@ -121,13 +141,10 @@ class RekapitulasiController extends Controller
                 'jumlah_terima' => $TransferModel->amount
             ];
             $kontrak = (object)[
-                'id' => $decrypted->id,
-                'komponen'=>1,
-                'sub_komponen' => 1,
-                'nilai_kontrak' => '1.000.000',
-                'alokasi' => '1.000.000'
+                'id' => $decrypted->id, 
             ];
-            // dd($data);
+            
+
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             
         }
@@ -185,9 +202,84 @@ class RekapitulasiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        try {
+            $decrypted = Crypt::decrypt($id);
+            $TransferModel = TransferModels::find($decrypted->id);
+            $firm = FirmModels::find($decrypted->firm);
+            $kantor = KantorModels::find($firm->kantor);
+            $data = (object)[
+                'id'=> $decrypted->id,
+                'no_bukti'=> $firm->no_bukti,
+                'tanggal_transfer' => $firm->tanggal_tf,
+                'jabatan' => JabatanModel::find($firm->jabatan)->nama_jabatan,
+                'osp' => OSPModels::find($firm->osp)->osp_name,
+                'kantor' => $kantor->nama_kantor.' - '.$kantor->nama_kabupaten,
+                'periode' => Carbon::parse((int)$firm->periode_month)->format('F').' / '.(int)$firm->periode_year,
+                'bank' => MasterBank::find($firm->id_bank)->nama_bank,
+                'nama_penerima' => $firm->nama_penerima,
+                'no_rekening' => $firm->bank_account_number,
+                'tanggal_terima' => $TransferModel->tanggal_terima,
+                'jumlah_terima' => $TransferModel->amount
+            ];
+            $total_pengeluaran = TransferModels::join('pengeluaran','transfer.id','=','pengeluaran.id_parent_transfer')
+                ->where('transfer.id',$decrypted->id)  
+                ->get(); 
+            $kontrak = (object)[
+                'id' => $decrypted->id, 
+                'total_kontrak'=>number_format($total_pengeluaran->sum('jumlah'),0,',',',')
+            ];
+            if($request->ajax()){
+                $data = TransferModels::join('pengeluaran','transfer.id','=','pengeluaran.id_item_transfer')
+                ->where('parent_id',$request->post('id')) 
+                ->whereIn('transfer.id',function($query){
+                    $query->select('id_item_transfer')->from('pengeluaran');
+                })
+                ->select(['pengeluaran.id as id_pengeluaran','transfer.item_kontrak_id','transfer.amount_item','pengeluaran.jumlah']) 
+                ->get();
+                return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('komponen',function($row){
+                    $kontrak = KontrakModels::find($row->item_kontrak_id);
+                    $komponen = KomponenBiaya::find($kontrak->id_komponen);
+                    $btn = '';
+                    $btn .= '<input type="hidden" name="data_set[]" value="'.Crypt::encrypt($row->id_pengeluaran).'">';
+                    $btn .= $komponen->komponen_biaya;
+                    return $btn;
+                }) 
+                ->addColumn('sub_komponen',function($row){
+                    $data = KontrakModels::join('master_aktifitas_subkomponen','kontrak.id_subkomponen_aktifitas','=','master_aktifitas_subkomponen.id')
+                    ->join('master_aktifitas','master_aktifitas_subkomponen.id_aktifitas','=','master_aktifitas.id')
+                    ->join('master_komponen','kontrak.id_sub_komponen','=','master_komponen.id')                
+                    ->where('kontrak.id', $row->item_kontrak_id)
+                    ->select(['master_komponen.komponen_biaya as sub_komponen','master_aktifitas.nama_aktifitas as nama_aktifitas'])
+                    ->get(); 
+                    return $data[0]->sub_komponen.' / '.$data[0]->nama_aktifitas;
+                }) 
+                ->addColumn('nilai_kontrak',function($row){
+                    $kontrak = KontrakModels::find($row->item_kontrak_id); 
+                    return "Rp " . number_format($kontrak->nominal,0,',','.');
+                }) 
+                ->addColumn('alokasi',function($row){
+                    $kontrak = KontrakModels::find($row->item_kontrak_id); 
+                    return"Rp " . number_format( $kontrak->nominal,0,',','.');
+                }) 
+                ->addColumn('total_alokasi',function($row){
+                    return "Rp " . number_format( $row->sum('amount_item'),0,',','.');
+                }) 
+                ->addColumn('implementasi',function($row){
+                    // return $row;
+                    return '<div class="form-group"><input type="text" name="data_value[]" class="form-control nominal-kontrak" value="'.number_format($row->jumlah,0,',',',').'"></div>';
+                }) 
+                ->rawColumns(['total_alokasi','komponen','sub_komponen','nilai_kontrak','alokasi','implementasi'])
+                ->make(true);
+            }
+            return view('main.bukti_pengeluaran.rekapitulasi.update',['data'=>$data,'kontrak'=>$kontrak]);
+            // dd($data);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            
+        }
     }
 
     /**
@@ -197,9 +289,34 @@ class RekapitulasiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        DB::beginTransaction(); 
+        $stored = [];
+        foreach ($request->post('data_set') as $key => $value) {
+            try {
+                $id_items = Crypt::decrypt($value);
+            } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                
+            }
+            $stored[$key]['id'] = $id_items;
+        }
+        foreach ($request->post('data_value') as $key => $value) {
+            $stored[$key]['jumlah'] = preg_replace('/\D/', '',$value);
+            $stored[$key]['created_by'] = Auth::user()->id;
+        } 
+        try {
+           foreach ($stored as $key => $value) { 
+            DB::enableQueryLog();
+            PengeluaranModels::where('id',$value['id'])->update(['jumlah'=>$value['jumlah']]); 
+           }
+            DB::commit();
+            Alert::success('Data Telah Diupdate');
+             return redirect()->route('buktiPengeluaranView');
+        } catch (Exception $th) {
+            DB::rollback();
+            dd($th);
+        }
     }
 
     /**
@@ -334,7 +451,7 @@ class RekapitulasiController extends Controller
             // ->rawColumns(['no_bukti','tanggal_transfer','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_terima','selisih','tanggal_terima','periode','action',])
             // ->make(true);
 
-            $data = TransferModels::where('parent_id','<',1)
+            $data = TransferModels::where('parent_id','=',0)
             ->whereNotIn('id', function($query){
                 $query->select('id_parent_transfer')->from('pengeluaran');
             })->get(); 
@@ -385,8 +502,8 @@ class RekapitulasiController extends Controller
                   
             })
             ->addColumn('tanggal_terima',function($row){
-                $transfer = TransferModels::where('parent_id',$row->id)->first();
-                return $transfer->tanggal_terima;
+                // $transfer = TransferModels::where('parent_id',$row->id)->first();
+                return $row->tanggal_terima;
     
             })
             ->addColumn('periode',function($row){ 

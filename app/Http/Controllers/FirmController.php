@@ -143,12 +143,12 @@ class FirmController extends Controller
                 'osp'       => $res->OSP->osp_name,
                 'kantor'    => $res->Kantor->nama_kantor.'/'.$res->Kantor->nama_kabupaten,
                 'id_kantor' => $res->kantor,
-                'periode'   => Carbon::parse((int)$res->periode_month)->format('F').' - '.$res->periode_year,
-                'periode_by_date' => $res->periode_year.'-'.Carbon::parse((int)$res->periode_month)->format('m').'-01',
+                'periode'   => Carbon::parse($res->periode_year.'-'.$res->periode_month)->format('F-Y'),
+                'periode_by_date' => Carbon::parse($res->periode_year.'-'.$res->periode_month.'-01')->format('Y-m-d'),
                 'nama_bank' => $res->Bank->nama_bank,
                 'account_bank' => $res->bank_account_number,
                 'nama_penerima' => $res->nama_penerima
-            );
+            ); 
         }else if($request->ajax()){
             // dd($request->ajax());
             $data = FirmModels::get();
