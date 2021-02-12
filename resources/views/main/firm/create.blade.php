@@ -12,6 +12,7 @@
     {{-- <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css') !!}">     --}}
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/select2/css/select2.min.css') !!}">    
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/daterangepicker/daterangepicker.css') !!}">
 @endsection
 
 @section('page_header')
@@ -47,7 +48,8 @@
                                 </div> 
                                 <div class="form-group">
                                   <label class="text-uppercase">tanggal transfer</label>
-                                  <input type="text" name="tanggal_trf" class="form-control" value="{!! $date !!}" readonly>
+                                  {{-- <input type="text" name="tanggal_trf" class="form-control" value="{!! $date !!}" readonly> --}}
+                                  <input type="text" name="tanggal_trf" class="form-control" id="tanggal-tf">
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">jabatan</label>
@@ -124,14 +126,11 @@
     </section>
 @endsection
 
-@section('addtionalJS')
-<!-- DataTables -->
-    {{-- <script src="{!! asset('assets/adminlte/plugins/datatables/jquery.dataTables.min.js') !!}"></script>
-    <script src="{!! asset('assets/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') !!}"></script>
-    <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') !!}"></script>
-    <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script> --}}
+@section('addtionalJS') 
     <script src="{!! asset('assets/adminlte/plugins/select2/js/select2.full.min.js') !!}"></script>
     <script src="{!! asset('assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
+    <script src="{!! asset('assets/adminlte/plugins/moment/moment.min.js') !!}"></script>
+    <script src="{!! asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js') !!}"></script> 
     <script>
         $(()=>{
             $('.jabatan').select2({
@@ -284,6 +283,12 @@
                     }
                 }
             }) 
+            $('#tanggal-tf').daterangepicker({
+                singleDatePicker: true,
+                locale:{
+                    format: 'DD/MM/YYYY'
+                }, 
+            })
         })
         $(function(){
         $(".uang").keyup(function(e){
@@ -292,24 +297,24 @@
         });
         });
         var format = function(num){
-        // $('#uang-replace').val(num)
-        var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
-        if(str.indexOf(".") > 0) {
-            parts = str.split(".");
-            str = parts[0];
-        }
-        str = str.split("").reverse();
-        for(var j = 0, len = str.length; j < len; j++) {
-            if(str[j] != ",") {
-            output.push(str[j]);
-            if(i%3 == 0 && j < (len - 1)) {
-                output.push(",");
+            // $('#uang-replace').val(num)
+            var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+            if(str.indexOf(".") > 0) {
+                parts = str.split(".");
+                str = parts[0];
             }
-            i++;
+            str = str.split("").reverse();
+            for(var j = 0, len = str.length; j < len; j++) {
+                if(str[j] != ",") {
+                output.push(str[j]);
+                if(i%3 == 0 && j < (len - 1)) {
+                    output.push(",");
+                }
+                i++;
+                }
             }
-        }
-        formatted = output.reverse().join("");
-        return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-        };
+            formatted = output.reverse().join("");
+            return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+            };
     </script>
 @endsection

@@ -12,6 +12,7 @@
     {{-- <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css') !!}">     --}}
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/select2/css/select2.min.css') !!}">    
     <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/adminlte/plugins/daterangepicker/daterangepicker.css') !!}">
 @endsection
 
 @section('page_header')
@@ -48,7 +49,8 @@
                                 </div> 
                                 <div class="form-group">
                                   <label class="text-uppercase">tanggal transfer</label>
-                                  <input type="text" name="tanggal_trf" class="form-control" value="{!! $data->tanggal_tf !!}" readonly>
+                                  {{-- <input type="text" name="tanggal_trf" class="form-control" value="{!! $data->tanggal_tf !!}" readonly> --}}
+                                  <input type="text" name="tanggal_trf" class="form-control" id="tanggal-tf" value="{!! $data->tanggal_tf !!}" readonly>
                                 </div>
                                 <div class="form-group">
                                   <label class="text-uppercase">jabatan</label>
@@ -134,8 +136,16 @@
     <script src="{!! asset('assets/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') !!}"></script> --}}
     <script src="{!! asset('assets/adminlte/plugins/select2/js/select2.full.min.js') !!}"></script>
     <script src="{!! asset('assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
+    <script src="{!! asset('assets/adminlte/plugins/moment/moment.min.js') !!}"></script>
+    <script src="{!! asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js') !!}"></script> 
     <script>
         $(()=>{
+            $('#tanggal-tf').daterangepicker({
+                singleDatePicker: true,
+                locale:{
+                    format: 'DD/MM/YYYY'
+                }, 
+            })
             $('.jabatan').select2({
                 placeholder: 'Pilih Jabatan',
                 theme: 'bootstrap4',
