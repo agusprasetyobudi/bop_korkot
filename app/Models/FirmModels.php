@@ -9,7 +9,7 @@ class FirmModels extends Model
     //
     public $timestamp = false;
     protected $table = 'firm';
-    protected $fillable = ['no_bukti','tanggal_tf','jabatan','osp','kantor','periode_month','periode_year','id_bank','nama_penerima','bank_account_number','amount_tf','description','created_by','updated_by'];
+    protected $fillable = ['no_bukti','tanggal_tf','jabatan','osp','kantor','periode_month','periode_year','id_bank','nama_penerima','bank_account_number','amount_tf','description','created_by','updated_by','has_inserted'];
 
     public function OSP()
     {

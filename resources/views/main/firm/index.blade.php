@@ -261,7 +261,26 @@
             {data:'periode', className: 'text-center text-uppercase'},  
             {data:'description', className: 'text-center text-uppercase'},   
             {data:'action', className: 'text-center'},
-        ]
+        ],
+        createdRow: function ( row, data, index ) { 
+          console.log(data['approval'] == 1);
+            if ( data['approval'] == 1 ) {
+                $('td', row).eq(1).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(2).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(3).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(4).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(5).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(6).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(7).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(8).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(9).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(10).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(11).css({'background-color':'#28a745','color':'white'});
+            } 
+            // else {
+            //     $('td', row).eq(5).css({'background-color':'red'});
+            // } 
+        },
       });   
       $('#example2 tbody').on('click', 'button', tables, function () { 
             if(confirm('Anda yakin mau menghapus item ini ?')){

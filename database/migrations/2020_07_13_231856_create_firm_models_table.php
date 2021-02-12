@@ -27,6 +27,7 @@ class CreateFirmModelsTable extends Migration
             $table->string('nama_penerima');
             $table->unsignedBigInteger('bank_account_number');
             $table->string('amount_tf');
+            $table->integer('has_inserted');
             $table->text('description');
             $table->foreignId('created_by');
             $table->foreignId('updated_by')->nullable();

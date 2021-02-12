@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Transfer;
 
 use App\Facades\ErrorReport;
 use App\Http\Controllers\Controller;
+use App\Models\FirmModels;
 use App\Models\KontrakModels;
 use App\Models\MasterBank;
 use App\Models\TransferModels;
@@ -69,10 +70,14 @@ class RekapitulasiController extends Controller
                 return Carbon::parse($row->firm->periode_year.'-'.$row->firm->periode_month)->isoFormat('MMMM / Y');
             })
             ->addColumn('action',function($row){
-                $btn = '';
-                $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
-                $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
-                return $btn;
+            //    if($row->has_inserted !=0){
+            //         return 'Data Has Approved';
+            //    }else{
+                    $btn = '';
+                    $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
+                    $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
+                    return $btn;
+            //    }
             })
             ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_diterima','periode','action'])
             ->make(true);
@@ -99,12 +104,13 @@ class RekapitulasiController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        DB::beginTransaction();
         try {
             $decrypted = Crypt::decrypt($request->post('firm'));
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             
         }
-        // dd();
+        // dd($request->post());
         try {
             //  Untuk Rekap Transfer Parent
         // id
@@ -134,9 +140,12 @@ class RekapitulasiController extends Controller
             $data[$key]["created_by"]=  Auth::user()->id;
         }
         TransferModels::insert($data);
+        FirmModels::where('no_bukti',$request->post('no_bukti'))->update(['has_inserted'=>1]);
+        DB::commit();
         Alert::success('Data Telah Ditambahkan');
         return redirect()->route('buktiTransferView');
         } catch (QueryException $e) {
+            DB::rollBack();
             ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
             Alert::error('Data Gagal Ditambahkan');
             return redirect()->back();

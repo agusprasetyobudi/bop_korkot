@@ -147,6 +147,7 @@
                         @csrf
                         <input type="hidden" name="firm" id="firm">
                         <input type="hidden" name="tanggal_terima" id="tanggal-terima-val">
+                        <input type="hidden" name="no_bukti" id="no_bukti_tf">
                             <div class="card-body"> 
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -363,6 +364,7 @@
                         // console.log($('.input-uang').val())
                         $('.uang-kontrak').val(res.amount_tf)
                         $('.bukti-tranfer').val(res.no_bukti)
+                        $('#no_bukti_tf').val(res.no_bukti)
                         $('.tanggal-tranfer').val(res.tanggal)
                         $('.jabatan').val(res.jabatan)
                         $('.osp').val(res.osp)

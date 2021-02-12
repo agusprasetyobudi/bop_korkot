@@ -31,10 +31,14 @@ class FirmController extends Controller
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action',function($row){
+                if($row->has_inserted !=0){
+                    return 'Approved';
+               }else{
                 $btn = '';
                 $btn .= '<a href="'.route('firmEditViews',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-sm btn-warning">Update</a>  '; 
                 $btn .= '<button type="button" class="btn btn-sm btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                 return $btn;
+               }
             })
             ->addColumn('osp', function($row){
                 return $row->OSP->osp_name;
@@ -56,7 +60,13 @@ class FirmController extends Controller
             ->addColumn('amount_tf',function($row){
                 return  "Rp " . number_format($row->amount_tf,0,',','.');;
             })
-            ->rawColumns(['action','osp','jabatan','kantor','amount_tf'])
+            ->addColumn('approval',function($row){
+                if($row->has_inserted !=0){
+                    return 1;
+                } 
+                return 0;
+            })
+            ->rawColumns(['action','osp','jabatan','kantor','amount_tf','approval'])
             ->make(true);
         }
         return view('main.firm.index');
