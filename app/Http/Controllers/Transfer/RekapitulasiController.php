@@ -69,17 +69,23 @@ class RekapitulasiController extends Controller
             ->addColumn('periode', function($row){
                 return Carbon::parse($row->firm->periode_year.'-'.$row->firm->periode_month)->isoFormat('MMMM / Y');
             })
+            ->addColumn('approval', function($row){
+                if($row->has_inserted){
+                    return 1;
+                }
+                return 0;
+            })
             ->addColumn('action',function($row){
-            //    if($row->has_inserted !=0){
-            //         return 'Data Has Approved';
-            //    }else{
+               if($row->has_inserted !=0){
+                    return 'Data Has Approved';
+               }else{
                     $btn = '';
                     $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
                     $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                     return $btn;
-            //    }
+               }
             })
-            ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_diterima','periode','action'])
+            ->rawColumns(['no_bukti','nama_penerima','bank_penerima','no_rekening','nilai_kontrak','jumlah_diterima','periode','action','approval'])
             ->make(true);
         }
         return view('main.transfer.rekapitulasi.index');  

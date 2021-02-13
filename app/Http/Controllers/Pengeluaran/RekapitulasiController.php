@@ -176,6 +176,7 @@ class RekapitulasiController extends Controller
         } 
         try {
             PengeluaranModels::insert($stored);
+            TransferModels::find($request->post('something_like_this'))->update(['has_inserted'=>1]);
             DB::commit();
             Alert::success('Data Telah Ditambahkan');
              return redirect()->route('buktiPengeluaranView');

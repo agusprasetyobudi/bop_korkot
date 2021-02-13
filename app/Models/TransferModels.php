@@ -15,7 +15,8 @@ class TransferModels extends Model
         'parent_id',
         'item_kontrak_id',
         'amount_item',
-        'created_by'
+        'created_by',
+        'has_inserted'
     ];
 
     public function contracts()

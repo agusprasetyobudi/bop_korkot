@@ -247,7 +247,20 @@
           {data: 'selisih', className: 'text-center text-uppercase'},
           {data: 'periode', className: 'text-center text-uppercase'},
           {data: 'action', className: 'text-center text-uppercase'},
-        ]
+        ],
+        createdRow: function ( row, data, index ) {  
+            if ( data['approval'] == 1 ) {
+                $('td', row).eq(1).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(2).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(3).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(4).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(5).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(6).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(7).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(8).css({'background-color':'#28a745','color':'white'});
+                $('td', row).eq(9).css({'background-color':'#28a745','color':'white'});
+            }
+        }
       });   
       $('.search').keyup(function(){
         let i = $(this).attr('id')
