@@ -127,7 +127,8 @@ class RekapitulasiController extends Controller
             'firm_id' => $decrypted,
             'amount' => preg_replace('/,/','',$request->post('total_dana')),
             'tanggal_terima' =>  Carbon::parse(str_replace("/", "-", $request->post('tanggal_terima')))->format('Y/m/d'),
-            'created_by'=> Auth::user()->id
+            'created_by'=> Auth::user()->id,
+            'has_inserted' => 0
         ]);
        
 
