@@ -227,7 +227,7 @@ Route::group(['prefix' => 'master', 'middleware'=>['auth']], function () {
 
 #Pengguna Route
 Route::group(['prefix' => 'pengguna', 'middleware'=>['auth','role:administrator|superadministrator']], function () {
-    Route::group(['prefix' => 'pengguna'], function () {
+    Route::group(['prefix' => 'pengguna','middleware'=>['auth','role:administrator|superadministrator']], function () {
         Route::get('/','PenggunaController@index')->name('PenggunaView');
         Route::get('create','PenggunaController@create')->name('PenggunaCreate');
         Route::post('create','PenggunaController@store')->name('PenggunaPost');
@@ -236,14 +236,21 @@ Route::group(['prefix' => 'pengguna', 'middleware'=>['auth','role:administrator|
         Route::post('reset-password', 'PenggunaController@PasswordReset')->name('KelompokPenggunaResetPassword');
         Route::get('destroy/{id}', 'PenggunaController@destroy')->name('PenggunaDestroy');
     });
-    Route::group(['prefix' => 'kelompok-pengguna'], function () {
+    Route::group(['prefix' => 'kelompok-pengguna','middleware'=>['auth','role:administrator|superadministrator']], function () {
         Route::get('/','KelompokPenggunaController@index')->name('KelompokPenggunaView');
         Route::get('create','KelompokPenggunaController@create')->name('KelompokPenggunaCreate');
         Route::post('create','KelompokPenggunaController@store')->name('KelompokPenggunaPost');
-        Route::get('edit', 'KelompokPenggunaController@edit')->name('KelompokPenggunaEditView');
+        Route::get('edit/{id}', 'KelompokPenggunaController@edit')->name('KelompokPenggunaEditView');
         Route::post('edit', 'KelompokPenggunaController@update')->name('KelompokPenggunaEditpost'); 
-        Route::get('destroy', 'KelompokPenggunaController@destroy')->name('KelompokPenggunaDestroy');
+        Route::get('destroy/{id}', 'KelompokPenggunaController@destroy')->name('KelompokPenggunaDestroy');
     });
 });
+Route::group(['prefix' => 'error-reporting', 'middleware'=>['auth','role:superadministrator']], function () {
+        Route::get('/','WebErrorReporting@index')->name('ListWebErrorReporting');
+        Route::get('edit/{id}', 'WebErrorReporting@show')->name('WebErrorReportingView');
+        Route::post('edit', 'WebErrorReporting@show')->name('WebErrorReportingPost');
+});
+
+
 Route::get('/logout', 'HomeController@logout')->name('logout');
 // Route::get('/rekapitulasi/bukti-transfer', 'FirmController@index')->name('buktiTransferView');

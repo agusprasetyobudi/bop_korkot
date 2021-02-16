@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-hover table-bordered" id="tableDataPengguna">
+                            <table id="tableDataPengguna"  class="table table-bordered table-hover " width="100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
@@ -111,13 +111,10 @@
 <script>
   $(()=>{
       let tables = $("#tableDataPengguna").DataTable({ 
-            "scrollX": true, 
-            responsive: true,
-            autoWidth: false,
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            processing: true,  
+          initComplete: function(settings, json){
+            $('#tableDataPengguna').wrap("<div style='overflow:auto; width:100%;position:relative;'></div>")
+          }, 
+          processing: true,  
           ajax: "{!! route('PenggunaView') !!}",
           columns:[
               {data: 'DT_RowIndex', className:'text-center text-uppercase'},
@@ -128,7 +125,11 @@
               {data: 'jabatan', className:'text-center text-uppercase'},
               {data: 'groups', className:'text-center text-uppercase'},
               {data: 'opsi', className:'text-center'},
-          ]
+          ],
+          createdRow: function ( row, data, index ) {
+            $('td', row).eq(4).css({'width':'20%'});
+            $('td', row).eq(7).css({'width':'50%'});
+          }
       })
       $('#tableDataPengguna tbody').on('click', '#delete-confirm', tables, function () { 
             if(confirm('Anda yakin mau menghapus Pengguna ini ?')){

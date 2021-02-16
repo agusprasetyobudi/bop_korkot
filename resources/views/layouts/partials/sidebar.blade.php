@@ -252,7 +252,7 @@
               </li>
                @endrole
                 <li class="nav-item">
-                  <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='user') active @endif">
+                  <a href="{!! route('PenggunaView') !!}" class="nav-link @if(Request::segment(2)=='pengguna') active @endif">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pengguna</p>
                   </a>
@@ -262,7 +262,7 @@
           @endrole
           @role(['superadministrator'])
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link @if(Request::segment(1)=='pengguna') active @endif">
+            <a href="{!! route('ListWebErrorReporting') !!}" class="nav-link @if(Request::segment(1)=='error-reporting') active @endif">
               <i class="nav-icon fas fa-bug"></i> 
               <p>
                 Web Error Reporting  

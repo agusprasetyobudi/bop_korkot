@@ -40,14 +40,15 @@
                             <h5>Data Group Pengguna</h5>
                         </div>
                         <div class="card-body text-right">
-                            <a href="#" class="btn btn-warning">Tambah Data Group Pengguna</a>
+                            {{-- <a href="#" class="btn btn-warning">Tambah Data Group Pengguna</a> --}}
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-hover" id="tableGroupPengguna">
+                            <table class="table table-bordered table-hover" id="tableGroupPengguna"  width="100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
                                         <th class="text-center text-uppercase">Kelompok Pengguna</th>
+                                        <th class="text-center text-uppercase">Opsi</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -68,10 +69,25 @@
 <script>
   $(()=>{
       let tables = $("#tableGroupPengguna").DataTable({
-          paging: true,
-          lengthChange: true,
-          searching: true
+        initComplete: function(settings, json){
+            $('#tableGroupPengguna').wrap("<div style='overflow:auto; width:100%;position:relative;'></div>")
+          }, 
+          processing: true,  
+          ajax: "{!! route('KelompokPenggunaView') !!}",
+          columns:[
+              {data: 'DT_RowIndex', className:'text-center text-uppercase'}, 
+              {data: 'display_name', className:'text-center text-uppercase'}, 
+              {data: 'opsi', className:'text-center'},
+          ]
       })
+        $('#tableGroupPengguna tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('KelompokPenggunaDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+        })   
   })
 </script>    
 @endsection

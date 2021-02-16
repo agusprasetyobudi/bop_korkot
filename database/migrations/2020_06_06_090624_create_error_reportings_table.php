@@ -17,6 +17,7 @@ class CreateErrorReportingsTable extends Migration
             $table->id();
             $table->string('error_code');
             $table->text('message_error');
+            $table->integer('error_solved')->default('0');
             $table->text('url');
             $table->string('user_id');
             $table->timestamp('created_at')->useCurrent();

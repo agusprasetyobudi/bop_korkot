@@ -290,7 +290,7 @@
                         document.location.href=url; 
                 } 
     })   
-    $('.search').keyup(function(){
+      $('.search').keyup(function(){
         let i = $(this).attr('id')
         let v = this.value 
         tables.columns(i).search(v).draw()

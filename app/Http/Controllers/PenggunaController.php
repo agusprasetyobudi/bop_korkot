@@ -130,7 +130,7 @@ class PenggunaController extends Controller
      */
     public function edit($id)
     {
-        try {
+        try { 
             $decrypted = Crypt::decrypt($id); 
             $data = User::find($decrypted); 
             $roles = RolesUserModels::join('roles','role_user.role_id','=','roles.id')
@@ -153,8 +153,46 @@ class PenggunaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
-    {
-        //
+    { 
+        try { 
+            $validate = Validator::make($request->all(),[
+                'name'      => 'required',
+                'username'  => 'required', 
+                'osp'       => 'required',
+                'kantor'    => 'required',
+                'jabatan'   => 'required',
+                'pengguna'  => 'required',
+            ]);
+            if(!$validate->fails()){
+                 $id = Crypt::decrypt($request->post('something_like_this')); 
+                $data = [
+                    "name"       => $request->post('name'),
+                    "username"   => $request->post('username'),
+                    "id_kantor"  => $request->post('kantor'),
+                    "id_jabatan" => $request->post('jabatan'),
+                    "id_osp"     => $request->post('osp'),
+                    "id_group"   => $request->post('pengguna'),
+                ];
+                User::find($id)->update($data);
+                RolesUserModels::where('user_id',$id)->update([
+                    'role_id'=>$request->post('pengguna'),
+                    'user_id'=> $id,
+                    'user_type' => 'App\User'
+                ]);
+                Alert::success('Pengguna Telah Diupdate');
+                return redirect()->route('PenggunaView');
+
+            }else{
+                Alert::error($this->_parseError($validate->errors()->getMessages())); 
+                return redirect()->back()->withInput();
+            }
+            
+        } catch (Exception $e) {
+            ErrorReport::ErrorRecords(101,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Diupdate');
+            return redirect()->back();
+        }
+        
     }
 
     /**

@@ -18,13 +18,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Tambah Data Pengguna</h1>
+                <h1>Update Data Pengguna</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{!! URL::to('/') !!}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{!! route('PenggunaView') !!}">Pengguna</a></li>
-                    <li class="breadcrumb-item active">Tambah Data Pengguna</li>
+                    <li class="breadcrumb-item active">Update Data Pengguna</li>
                 </ol>
             </div>
         </div>
@@ -36,7 +36,7 @@
 <section class="content">
     <div class="row">
         <div class="col-lg-12">
-            <form action="{!! route('PenggunaPost') !!}" method="POST">
+            <form action="{!! route('PenggunaEditpost') !!}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-sm-12">
@@ -47,6 +47,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="" class="text-uppercase">Nama Pengguna</label>
+                                            <input type="hidden" name="something_like_this" value="{!! Crypt::encrypt($data->id)!!}">
                                             <input type="text" class="form-control nama-pengguna" name="name" value="{!! $data->name !!}">
                                         </div>  
                                     </div>
@@ -111,7 +112,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <input type="submit" value="Tambah Pengguna" class="btn btn-warning  btn-block" id="btn-tambag" style="font-weight: bold">
+                                <input type="submit" value="Simpan Perubahan" class="btn btn-warning  btn-block" id="btn-tambag" style="font-weight: bold">
                             </div>
                         </div>
                     </div> 

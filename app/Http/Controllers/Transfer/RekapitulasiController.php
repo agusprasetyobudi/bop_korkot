@@ -135,7 +135,7 @@ class RekapitulasiController extends Controller
         //  Untuk Rekap Transfer Child
         // id
         // Parent_id
-        //item_kontrak_id
+        // item_kontrak_id
         // amount_item
          $data = [];
         foreach ($request->post('item_kontrak') as $key => $value) {

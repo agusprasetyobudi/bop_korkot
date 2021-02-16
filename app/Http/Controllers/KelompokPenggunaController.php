@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Role;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
 class KelompokPenggunaController extends Controller
@@ -20,7 +23,7 @@ class KelompokPenggunaController extends Controller
             return DataTables::of($data)
             ->addIndexColumn() 
             ->addColumn('opsi',function($row){
-                return '<button type="button" class="btn btn-warning" id="change-password" data-name="'.Crypt::encrypt($row->id).'" >Change Password</button> <a href="'.route('PenggunaEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn  btn-primary">Update Pengguna</a> <button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
+                return '<a href="'.route('KelompokPenggunaEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn  btn-warning">Update Data</a> <button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete Data</button>';
             })
             ->rawColumns(['opsi'])
             ->make(true);
@@ -67,9 +70,10 @@ class KelompokPenggunaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        Alert::error('Fungsi Masih Dalam Proses Pembuatan'); 
+        return redirect()->back();
     }
 
     /**
@@ -92,6 +96,14 @@ class KelompokPenggunaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // try {
+        //     $decrypted = Crypt::decrypt($id);
+        //     dd($decrypted);
+        // } catch (Exception $th) {
+        //     //throw $th;
+        // }
+
+        Alert::error('Fungsi Masih Dalam Proses Pembuatan'); 
+        return redirect()->back();
     }
 }
