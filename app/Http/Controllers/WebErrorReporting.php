@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ErrorReporting;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -18,32 +19,38 @@ class WebErrorReporting extends Controller
      */
     public function index(Request $request)
     {
-        Alert::error('Fungsi Error Reporting Masih Dalam Proses Pembuatan'); 
-        return redirect()->back();
-        // if($request->ajax()){
-        //     $data = ErrorReporting::all();
-        //    return DataTables::of($data)
-        //    ->addIndexColumn()
-        //    ->addcolumn('error_code', function($row){
-        //        if($row->error_code == 100){
-        //            return '100 - Error Create';
-        //        }else if($row->error_code == 101){
-        //             return '101 - Error Edit  ';
-        //        }else if($row->error_code == 102){
-        //             return '102 - Error Delete  ';
-        //        }else if($row->error_code == 103){
-        //             return '103 - Error Decrypt';
-        //         }else if($row->error_code == 104){
-        //             return '104 - Error Another';
-        //         }
-        //    })
-        //    ->addColumn('action',function($row){
-        //        return '<a href="'.route('WebErrorReportingView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>';
-        //    })
-        //    ->rawColumn(['error_code','action'])
-        //    ->make(true);
-        // }
-        // return view('main.errors_reporting.index');
+        // Alert::error('Fungsi Error Reporting Masih Dalam Proses Pembuatan'); 
+        // return redirect()->back();
+        if($request->ajax()){
+            $data = ErrorReporting::all();
+           return DataTables::of($data)
+           ->addIndexColumn()
+           ->addcolumn('error_code', function($row){
+               if($row->error_code == 100){
+                   return '100 - Error Create';
+               }else if($row->error_code == 101){
+                    return '101 - Error Edit  ';
+               }else if($row->error_code == 102){
+                    return '102 - Error Delete  ';
+               }else if($row->error_code == 103){
+                    return '103 - Error Decrypt';
+                }else if($row->error_code == 104){
+                    return '104 - Error Another';
+                }
+           })
+           ->addColumn('action',function($row){
+               return '<a href="'.route('WebErrorReportingView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>';
+           }) 
+           ->addColumn('on_user_error',function($row){
+                return User::find($row->user_id)->name;
+           })
+           ->addColumn('error_solved',function($row){
+                return $row->error_solved != 1 ? 'Unsolved': 'Solved';
+           })
+           ->rawColumns(['error_code','action','on_user_error','error_solved'])
+           ->make(true);
+        }
+        return view('main.errors_reporting.index');
     }
 
     /**

@@ -28,12 +28,17 @@ class RekapitulasiController extends Controller
      */
     public function index(Request $request)
     { 
-        if($request->ajax()){
-            DB::enableQueryLog();
-            $data = TransferModels::where('parent_id',0)->get();
-            // $kontrak = $data[0]->contracts;
-            // dd($kontrak);
-            // dd(DB::getQueryLog());
+        if($request->ajax()){ 
+            if(Auth::user()->roles->id == 1 || Auth::user()->roles->id == 2){
+                $data = TransferModels::where('parent_id',0) 
+                ->get();
+            }else{
+                $data = TransferModels::join('users','transfer.created_by','=','users.id')
+                ->where('parent_id',0)
+                ->where('users.id_kantor', Auth::user()->id_kantor)
+                ->select(['transfer.id as id','transfer.firm_id','transfer.amount as amount','transfer.amount_item as amount_item','transfer.tanggal_terima as tanggal_terima','transfer.created_by as created_by','transfer.has_inserted as has_inserted'])
+                ->get();
+            } 
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('no_bukti',function($row){
@@ -108,8 +113,7 @@ class RekapitulasiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // dd($request->all());
+    { 
         DB::beginTransaction();
         try {
             $decrypted = Crypt::decrypt($request->post('firm'));
@@ -118,11 +122,15 @@ class RekapitulasiController extends Controller
         }
         // dd($request->post());
         try {
-            //  Untuk Rekap Transfer Parent
-        // id
-        // firm_id
-        // amount
-        // Tanggal Terima   
+            /** Untuk Rekap Transfer Parent
+             * 
+             * - id
+             * - firm_id
+             * - amount
+             * - Tanggal Terima   
+             * 
+             */
+            
         $parent = TransferModels::create([
             'firm_id' => $decrypted,
             'amount' => preg_replace('/,/','',$request->post('total_dana')),
@@ -131,12 +139,13 @@ class RekapitulasiController extends Controller
             'has_inserted' => 0
         ]);
        
+            /** Untuk Rekap Transfer Child
+             * - id
+             * - Parent_id
+             * - item_kontrak_id
+             * - amount_item
+             */ 
 
-        //  Untuk Rekap Transfer Child
-        // id
-        // Parent_id
-        // item_kontrak_id
-        // amount_item
          $data = [];
         foreach ($request->post('item_kontrak') as $key => $value) {
             $data[$key]["parent_id"]= $parent->id;

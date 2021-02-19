@@ -45,10 +45,10 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
-                                        <th class="text-center text-uppercase">Error Code</th>
-                                        <th class="text-center text-uppercase">Message Error</th>
+                                        <th class="text-center text-uppercase">Error Code</th> 
                                         <th class="text-center text-uppercase">Url</th>
-                                        <th class="text-center text-uppercase">Has User Error</th> 
+                                        <th class="text-center text-uppercase">On User Error</th> 
+                                        <th class="text-center text-uppercase">Solved Status</th> 
                                         <th class="text-center text-uppercase">Action</th>
                                     </tr>
                                 </thead> 
@@ -171,13 +171,13 @@
             columns: [0,1,2,3,4,5,6,7,8,9]
           }
         }],
-        ajax:"{!! route('firmView') !!}",
+        ajax:"{!! route('ListWebErrorReporting') !!}",
         columns:[
             {data:'DT_RowIndex', className: 'text-center text-uppercase'},
             {data:'error_code', className: 'text-center text-uppercase'},  
-            {data:'message_error', className: 'text-center text-uppercase'},  
             {data:'url', className: 'text-center text-uppercase'},     
             {data:'error_solved', className: 'text-center text-uppercase'},    
+            {data:'on_user_error', className: 'text-center text-uppercase'},    
             {data:'action', className: 'text-center'},
         ],
         createdRow: function ( row, data, index ) { 
