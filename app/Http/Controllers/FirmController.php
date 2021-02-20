@@ -24,10 +24,13 @@ class FirmController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        // dd(Carbon::parse(1)->format('F'));
+    { 
         if($request->ajax()){
-            $data = FirmModels::get();
+            if(Auth::user()->roles-> id === 1 || Auth::user()->roles-> id === 2){
+                $data = FirmModels::get();
+            }else{
+                $data = FirmModels::where('created_by',Auth::user()->id)->get();
+            }
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action',function($row){
