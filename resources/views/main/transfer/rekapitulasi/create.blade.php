@@ -166,7 +166,11 @@
                                             <tfoot>
                                                 <tr>
                                                     <th colspan="4">Total</th>
-                                                    <th colspan="2"><input type="text" class="form-control" name="total_dana" id="total-dana" style="background-color:transparent;border: 0;font-size: 1em;" value="0" readonly></th> 
+                                                    <th colspan="2">
+                                                        <input type="text" class="form-control" name="total_dana" id="total-dana" style="background-color:transparent;border: 0;font-size: 1em;" value="0" readonly>
+                                                        <input type="hidden" id="finalDana">
+                                                    </th> 
+
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -405,7 +409,7 @@
                             `${count}`,
                             `${res.nama_komponen}`,
                             `${res.sub_komponen} / ${res.aktifitas}`,
-                            `${res.nominalParse}`,
+                            `${res.nominalParse} <input type='hidden' class='nominalMurni' value='${res.nominal}'>`,
                             `<input type='hidden' name='item_kontrak[]' value='${res.id_kontrak}'><input type='text' name='alokasi_dana[]' class='form-control item-dana' value='${format(res.nominal)}'>`,
                             `<button data-id='${count}' data-val='${count}' type='button' class='btn circle btn-danger btn-delete-row'><i class='fa fa-trash'></i></button>`
                         ]).draw(false)
@@ -567,9 +571,17 @@
                     val = val.replace(/,/g,'');
                     var num = parseFloat(val);
                     total = total + num;
+                    let murni = $('.nominalMurni').val()
+                    if(total > parseFloat(murni)){
+                        alert('Alokasi dana melebihi nilai kontrak')
+                        $(this).val(0)
+                        $("#total-dana").val(format(total)); 
+                    }else{
+                        $("#total-dana").val(format(total));
+                    }
                 });
                 // console.log(total)
-                $("#total-dana").val(format(total));
+                
             })
             $('#tableKomponenKontrak tbody').on('change','.item-dana',function(){
                 var val = $(this).val();
@@ -586,6 +598,7 @@
                 });
                 console.log(total)
                 $("#total-dana").val(format(total));
+                $('#finalDana').val(total)
             });
             $('#tableKomponenKontrak tbody').on( 'click', '.btn-delete-row', function () {
                 tableKomponenKontrak
