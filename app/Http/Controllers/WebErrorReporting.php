@@ -84,9 +84,10 @@ class WebErrorReporting extends Controller
     {
         try {
             $decrypted = Crypt::decrypt($id);
-            $data = ErrorReporting::find($decrypted);
-            dd($data);
-            return view('main.error_reporting.show');
+            $data = ErrorReporting::find($decrypted); 
+            Alert::error('Fungsi ini sedang tahap perbaikan');
+            return redirect()->back();
+            // return view('main.error_reporting.show');
         } catch (Exception $e) {
             
         }
