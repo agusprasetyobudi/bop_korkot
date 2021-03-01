@@ -11,6 +11,7 @@ class TransferModels extends Model
     protected $fillable = [
         'firm_id',
         'amount',
+        'amount_terima',
         'tanggal_terima',
         'parent_id',
         'item_kontrak_id',

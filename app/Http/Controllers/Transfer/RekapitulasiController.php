@@ -10,6 +10,7 @@ use App\Models\KontrakModels;
 use App\Models\MasterBank;
 use App\Models\TransferModels;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,7 +86,7 @@ class RekapitulasiController extends Controller
                     return 'Data Has Approved';
                }else{
                     $btn = '';
-                    $btn .= '<a href="'.route('KantorEditView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
+                    $btn .= '<a href="'.route('buktiTransferEdit',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>  '; 
                     $btn .= '<button type="button" class="btn btn-danger" id="delete-confirm" data-name="'.Crypt::encrypt($row->id).'" >Delete</button>';
                     return $btn;
                }
@@ -120,46 +121,62 @@ class RekapitulasiController extends Controller
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             
         }
+
+
+
         // dd($request->post());
         try {
-            /** Untuk Rekap Transfer Parent
-             * 
-             * - id
-             * - firm_id
-             * - amount
-             * - Tanggal Terima   
-             * 
-             */
-            
-        $parent = TransferModels::create([
-            'firm_id' => $decrypted,
-            'amount' => preg_replace('/,/','',$request->post('total_dana')),
-            'tanggal_terima' =>  Carbon::parse(str_replace("/", "-", $request->post('tanggal_terima')))->format('Y/m/d'),
-            'created_by'=> Auth::user()->id,
-            'has_inserted' => 0
-        ]);
-       
-            /** Untuk Rekap Transfer Child
-             * - id
-             * - Parent_id
-             * - item_kontrak_id
-             * - amount_item
-             */ 
+           
+            $id = [];
+             foreach ($request->post('item_kontrak') as $key => $value) {
+                $id[$key]["item_kontrak_id"] = $value;
+             }
+             $data = KontrakModels::find($id);
+             $total_dana = preg_replace('/,/','',$request->post('total_dana')); 
 
-         $data = [];
-        foreach ($request->post('item_kontrak') as $key => $value) {
-            $data[$key]["parent_id"]= $parent->id;
-            $data[$key]["item_kontrak_id"] = $value;                
-        }
-        foreach ($request->post('alokasi_dana') as $key => $value) {
-            $data[$key]["amount_item"]= preg_replace('/,/','',$value);
-            $data[$key]["created_by"]=  Auth::user()->id;
-        }
-        TransferModels::insert($data);
-        FirmModels::where('no_bukti',$request->post('no_bukti'))->update(['has_inserted'=>1]);
-        DB::commit();
-        Alert::success('Data Telah Ditambahkan');
-        return redirect()->route('buktiTransferView');
+            if((int)$total_dana > $data->sum('nominal')){
+                Alert::error('Data Gagal Ditambahkan, Jumlah Nominal Tidak Relevan Dengan Jumlah Nominal Kontrak');
+                return redirect()->back();
+            }else{
+                /** Untuk Rekap Transfer Parent
+                 * 
+                 * - id
+                 * - firm_id
+                 * - amount
+                 * - Tanggal Terima   
+                 * 
+                 */ 
+                $parent = TransferModels::create([
+                    'firm_id' => $decrypted,
+                    'amount' => preg_replace('/,/','',$request->post('total_dana')),
+                    'amount_terima' => preg_replace('/,/','',$request->post('amount_terima')),
+                    'tanggal_terima' =>  Carbon::parse(str_replace("/", "-", $request->post('tanggal_terima')))->format('Y/m/d'),
+                    'created_by'=> Auth::user()->id,
+                    'has_inserted' => 0
+                ]);
+        
+                /** Untuk Rekap Transfer Child
+                 * - id
+                 * - Parent_id
+                 * - item_kontrak_id
+                 * - amount_item
+                 */ 
+
+                $data = [];
+                foreach ($request->post('item_kontrak') as $key => $value) {
+                    $data[$key]["parent_id"]= $parent->id;
+                    $data[$key]["item_kontrak_id"] = $value;                
+                }
+                foreach ($request->post('alokasi_dana') as $key => $value) {
+                    $data[$key]["amount_item"]= preg_replace('/,/','',$value);
+                    $data[$key]["created_by"]=  Auth::user()->id;
+                }
+                TransferModels::insert($data);
+                FirmModels::where('no_bukti',$request->post('no_bukti'))->update(['has_inserted'=>1]);
+                DB::commit();
+                Alert::success('Data Telah Ditambahkan');
+                return redirect()->route('buktiTransferView');
+            } 
         } catch (QueryException $e) {
             DB::rollBack();
             ErrorReport::ErrorRecords(100,$e,$request->url(),Auth::user()->id); 
@@ -187,7 +204,14 @@ class RekapitulasiController extends Controller
      */
     public function edit($id)
     {
-        //
+      try {
+          $decrypted = Crypt::decrypt($id);
+          $data = TransferModels::find($decrypted);
+          Alert::error('Fungsi ini sedang tahap perbaikan');
+          return redirect()->back();
+      } catch (Exception $e) {
+          
+      }
     }
 
     /**
@@ -208,9 +232,19 @@ class RekapitulasiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        try {
+            $decrypted = Crypt::decrypt($id);
+            TransferModels::destroy($decrypted);
+            TransferModels::where('parent_id',$decrypted)->delete();
+            Alert::success('Data Berhasil Dihapus');
+            return redirect()->route('buktiTransferView');  
+        } catch (Exception $e) {
+            ErrorReport::ErrorRecords(102,$e,$request->url(),Auth::user()->id); 
+            Alert::error('Data Gagal Dihapus','Harap Kontak Administrator/Superadmin');
+            return redirect()->back(); 
+        }
     }
 
     /**

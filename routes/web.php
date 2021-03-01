@@ -44,6 +44,8 @@ Route::group(['prefix'=>'buku-bank','middleware' => ['auth']], function () {
     Route::get('/','BukuBankController@index')->name('bukuBankView');
     Route::get('create','BukuBankController@create')->name('bukuBankCreate');
     Route::post('create','BukuBankController@store')->name('bukuBankStore');
+    Route::post('edit/{id}','BukuBankController@edit')->name('bukuBankEdit');
+    Route::post('edit','BukuBankController@update')->name('bukuBankUpdate');
 });
 
 #Kontrak Route

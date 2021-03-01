@@ -114,8 +114,8 @@
                             </div> 
                             <div class="form-group">
                                 <label for="" class="text-uppercase">jumlah diterima </label> <b style="color:red; padding-left:10%; text-transform: uppercase;" class="money-notify"></b>
-                                <input type="text" name="amount_terima" id="" class="form-control input-uang" readonly>
-                                <input type="hidden" name="amount_kontrak" id="" class="form-control uang-kontrak">
+                                <input type="number" name="jumlah_diterima" id="" class="form-control input-uang" readonly>
+                                <input type="hidden" name="jumlah_diterima" id="" class="form-control uang-kontrak">
                             </div>  
                         </div>
                     </div>
@@ -148,7 +148,6 @@
                         <input type="hidden" name="firm" id="firm">
                         <input type="hidden" name="tanggal_terima" id="tanggal-terima-val">
                         <input type="hidden" name="no_bukti" id="no_bukti_tf">
-                        <input type="hidden" name="amount_terima" id="amount_terima">
                             <div class="card-body"> 
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -448,48 +447,19 @@
                 $('#tanggal-terima-val').val($('#tanggal-terima').val())
                 $('#form-submit').trigger('submit')
             })
-
-            
-            var format = function(num){
-                // $('#uang-replace').val(num)
-                var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
-                if(str.indexOf(".") > 0) {
-                    parts = str.split(".");
-                    str = parts[0];
-                }
-                str = str.split("").reverse();
-                for(var j = 0, len = str.length; j < len; j++) {
-                    if(str[j] != ",") {
-                    output.push(str[j]);
-                    if(i%3 == 0 && j < (len - 1)) {
-                        output.push(",");
-                    }
-                    i++;
-                    }
-                }
-                formatted = output.reverse().join("");
-                return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-            }; 
-
             let timerTimeout
-            $('.input-uang').keyup(function(){ 
-                var val = $(this).val();
-                val = val.replace(/,/g,'');
-                console.log(val)
-                var num = parseFloat(val);
-                $(this).val(format(num));
-                $('#amount_terima').val(format(num))
-                console.log(num == 0 || num == null)
-                if(num == 0 || num == null ){
+            $('.input-uang').keyup(()=>{ 
+                if($('.input-uang').val() == 0 || $('.input-uang') == null ){
                     $('.money-notify').html('Uang Tidak Boleh Kosong')
-                }else if(num != parseFloat($('.uang-kontrak').val()) ){
+                }else if($('.uang-kontrak').val() !=  $('.input-uang').val()){
                     clearTimeout(timerTimeout)
-                    timerTimeout = setTimeout($('.input-uang').val(), 5000)  
+                    timerTimeout = setTimeout($('.input-uang').val(), 5000) 
+                    console.log($('.input-uang').val())
                     $('.money-notify').html('Uang Tidak Sesuai') 
                 }else{
                     $('.money-notify').html('')
                 }
-            }) 
+            })
             $('#select-komponen-biaya').select2({
                 placeholder: 'Pilih Komponen Biaya',
                 theme: 'bootstrap4',
@@ -570,6 +540,26 @@
             $('#select-aktifitas').on("select2:selecting", function(e) { 
                 $('#komponen-biaya').attr('hidden',false)
             }); 
+            var format = function(num){
+                // $('#uang-replace').val(num)
+                var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+                if(str.indexOf(".") > 0) {
+                    parts = str.split(".");
+                    str = parts[0];
+                }
+                str = str.split("").reverse();
+                for(var j = 0, len = str.length; j < len; j++) {
+                    if(str[j] != ",") {
+                    output.push(str[j]);
+                    if(i%3 == 0 && j < (len - 1)) {
+                        output.push(",");
+                    }
+                    i++;
+                    }
+                }
+                formatted = output.reverse().join("");
+                return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+                }; 
             // var total = 0
             let totalUang = (data)=>{
                 let val = $('#total-dana').val()

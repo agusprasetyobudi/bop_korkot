@@ -41,7 +41,7 @@
                             <a href="{!! route('bukuBankCreate') !!}" class="btn btn-default">Tambah Data Buku Bank</a>
                         </div>
                         <div class="card-body">
-                            <table id="tableBukuBank" class="table table-bordered table-hover">
+                            <table id="tableBukuBank" class="table table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center text-uppercase">#</th>
@@ -84,9 +84,25 @@
   <script>
       $(()=>{
           let tables = $("#tableBukuBank").DataTable({
-              paging: true,
-              lengthChange: true,
-              searching: true
+            initComplete: function(settings, json){
+            $('#tableBukuBank').wrap("<div style='overflow:auto; width:100%;position:relative;'></div>")
+            }, 
+            processing: true,  
+            ajax: "{!! route('bukuBankView') !!}",
+            columns:[
+                {data: 'DT_RowIndex', className:'text-center text-uppercase'},
+                {data: 'name', className:'text-center text-uppercase'},
+                {data: 'username', className:'text-center text-uppercase'},
+                {data: 'osp', className:'text-center text-uppercase'},
+                {data: 'kantor', className:'text-center text-uppercase'},
+                {data: 'jabatan', className:'text-center text-uppercase'},
+                {data: 'groups', className:'text-center text-uppercase'},
+                {data: 'opsi', className:'text-center'},
+            ],
+            createdRow: function ( row, data, index ) {
+                $('td', row).eq(4).css({'width':'20%'});
+                $('td', row).eq(7).css({'width':'50%'});
+            }
           })
       })
   </script>

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BukuBankModels;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Yajra\DataTables\Facades\DataTables;
 
 class BukuBankController extends Controller
 {
@@ -11,8 +15,27 @@ class BukuBankController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            if(Auth::user()->roles->id === 1 || Auth::user()->roles->id === 2){
+                $data = BukuBankModels::join('firm','buku_bank.id_firm','=','firm.id')
+                        ->join('transfer','buku_bank.id_item_transfer','=','transfer.id')
+                        
+                        ->get();
+            }else{
+                $data = BukuBankModels::all();
+            }
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action',function($row){
+                $btn = '';
+                $btn .= '<a href="'.route('bukuBankEdit',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-sm btn-warning">Update</a>  ';
+                return $btn;
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+        }
         return view('main.buku_bank.index');
     }
 

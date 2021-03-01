@@ -290,6 +290,14 @@
         
         tables.columns(2).search('').draw()
       })   
+      $('#example2 tbody').on('click', 'button', tables, function () { 
+            if(confirm('Anda yakin mau menghapus item ini ?')){
+                    const id = $(this).data('name');
+                    let url = "{{ route('buktiTransferDestroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        document.location.href=url; 
+                } 
+            })
   })
 </script>
 @endsection

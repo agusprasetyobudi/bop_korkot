@@ -39,7 +39,7 @@ class WebErrorReporting extends Controller
                 }
            })
            ->addColumn('action',function($row){
-               return '<a href="'.route('WebErrorReportingView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Edit</a>';
+               return '<a href="'.route('WebErrorReportingView',['id'=>Crypt::encrypt($row->id)]).'" class="btn btn-warning">Show Data</a>';
            }) 
            ->addColumn('on_user_error',function($row){
                 return User::find($row->user_id)->name;
@@ -84,6 +84,8 @@ class WebErrorReporting extends Controller
     {
         try {
             $decrypted = Crypt::decrypt($id);
+            $data = ErrorReporting::find($decrypted);
+            dd($data);
             return view('main.error_reporting.show');
         } catch (Exception $e) {
             
